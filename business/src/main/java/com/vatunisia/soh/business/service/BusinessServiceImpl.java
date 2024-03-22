@@ -26,7 +26,6 @@ public class BusinessServiceImpl implements BusinessService {
         if (businessOptional.isPresent()) {
             Business businessToUpdate = businessOptional.get();
             businessToUpdate.setIndustry(business.getIndustry());
-            businessToUpdate.setDescription(business.getDescription());
             businessToUpdate.setName(business.getName());
             businessRepository.save(businessToUpdate);
             return true;
