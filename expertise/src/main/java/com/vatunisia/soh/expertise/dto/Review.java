@@ -1,6 +1,5 @@
-package com.vatunisia.soh.business.entity;
+package com.vatunisia.soh.expertise.dto;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -8,15 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Business {
+@NoArgsConstructor
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String industry;
+    private String title;
+    private String description;
+    private double rating;
+    private Long businessId;
 }
-

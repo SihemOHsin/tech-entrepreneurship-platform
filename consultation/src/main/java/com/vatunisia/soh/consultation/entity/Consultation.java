@@ -1,4 +1,4 @@
-package com.vatunisia.soh.business.entity;
+package com.vatunisia.soh.consultation.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,11 +12,18 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Business {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String industry;
-}
+public class Consultation {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String consultationName;
+
+    private String consultationDescription;
+
+    private Long price;
+
+    private Long businessId;
+
+}
