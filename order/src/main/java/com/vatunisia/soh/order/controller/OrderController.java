@@ -52,7 +52,9 @@ public class OrderController {
         List<OrderDTO> orders = orderService.findAll();
         return ResponseEntity.ok(orders);
     }
-
+    //    public ResponseEntity<List<ExpertiseDTO>> findAll(){
+    //        return ResponseEntity.ok(expertiseService.findAll());
+    //    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderById(@PathVariable String id) {
         boolean deleted = orderService.deleteOrderById(id);
@@ -70,7 +72,11 @@ public class OrderController {
 
     @PostMapping("/pdf")
     public ResponseEntity<byte[]> generatePdf(@RequestBody Map<String, Object> requestMap) {
-        ResponseEntity<byte[]> response = orderService.getPdf(requestMap);
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+        return orderService.getPdf(requestMap);
+        //ResponseEntity<byte[]> response = orderService.getPdf(requestMap);
+        //return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
+
 }
+
+

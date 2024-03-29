@@ -156,8 +156,12 @@ public class OrderServiceImpl implements OrderService {
                 return ResponseEntity.badRequest().body("Required data not found.");
             }
 
+            // String fileName = "Order_Report_" + System.currentTimeMillis() + ".pdf";
+//OR
+            // Set the directory where you want to save the PDF file
+            String directoryPath = "C:\\Users\\USER\\Desktop\\PFE\\ProjectCode\\order\\generated_files\\";
             // Generate a unique file name for the report
-            String fileName = "Order_Report_" + System.currentTimeMillis() + ".pdf";
+            String fileName = directoryPath + "Order_Report_" + System.currentTimeMillis() + ".pdf";
 
             // Create a new PDF document
             Document document = new Document();
@@ -183,6 +187,7 @@ public class OrderServiceImpl implements OrderService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to generate report.");
         }
     }
+
 
     private void addOrderDetails(Document document, Map<String, Object> requestMap) throws DocumentException {
         // Add order information
