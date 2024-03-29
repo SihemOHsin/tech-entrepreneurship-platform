@@ -7,23 +7,31 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="consultation" />
         <module name="business" />
-        <module name="expertise" />
         <module name="eureka" />
         <module name="review" />
+        <module name="consultation" />
+        <module name="expertise" />
+        <module name="user" />
         <module name="order" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="consulation-order" target="17" />
+      <module name="consultation-order" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="business" options="-parameters" />
+      <module name="consulation-order" options="-parameters" />
       <module name="consultation" options="-parameters" />
+      <module name="consultation-order" options="-parameters" />
       <module name="eureka" options="-parameters" />
       <module name="expertise" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="review" options="-parameters" />
+      <module name="user" options="-parameters" />
     </option>
   </component>
 </project>

@@ -10,7 +10,14 @@
         <option value="$PROJECT_DIR$/../expertise/pom.xml" />
         <option value="$PROJECT_DIR$/../review/pom.xml" />
         <option value="$PROJECT_DIR$/../order/pom.xml" />
+        <option value="$PROJECT_DIR$/../user/pom.xml" />
+        <option value="$PROJECT_DIR$/../consulation-order/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/../consulation-order/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK" />
