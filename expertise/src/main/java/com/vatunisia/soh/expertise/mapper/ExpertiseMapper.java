@@ -17,7 +17,6 @@ public class ExpertiseMapper {
         expertiseDTO.setTitle(expertise.getTitle());
         expertiseDTO.setEntrepreneurshipNeeds(expertise.getEntrepreneurshipNeeds());
         expertiseDTO.setTechExpertise(expertise.getTechExpertise());
-        expertiseDTO.setLocation(expertise.getLocation());
         expertiseDTO.setMaxProposedPrice(expertise.getMaxProposedPrice());
         expertiseDTO.setMinProposedPrice(expertise.getMinProposedPrice());
         expertiseDTO.setBusiness(business);

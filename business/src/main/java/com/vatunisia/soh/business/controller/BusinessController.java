@@ -18,9 +18,21 @@ public class BusinessController {
         this.businessService = businessService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Business>> getAllBusinesses(){
         return new ResponseEntity<>(businessService.getAllBusinesses(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/it-experts")
+    public ResponseEntity<List<Business>> getITExperts(){
+        return new ResponseEntity<>(businessService.getITExperts(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/entrepreneurs")
+    public ResponseEntity<List<Business>> getEntrepreneurs(){
+        return new ResponseEntity<>(businessService.getEntrepreneurs(),
                 HttpStatus.OK);
     }
 

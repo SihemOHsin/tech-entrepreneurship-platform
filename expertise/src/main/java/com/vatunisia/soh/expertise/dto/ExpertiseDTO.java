@@ -8,7 +8,6 @@ public class ExpertiseDTO {
     private String entrepreneurshipNeeds;
     private String minProposedPrice;
     private String maxProposedPrice;
-    private String location;
     private String techExpertise;
     private Business business;
     private List<Review> reviews;
@@ -52,14 +51,6 @@ public class ExpertiseDTO {
 
     public void setMaxProposedPrice(String maxProposedPrice) {
         this.maxProposedPrice = maxProposedPrice;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getTechExpertise() {

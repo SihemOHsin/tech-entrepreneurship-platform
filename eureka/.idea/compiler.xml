@@ -12,13 +12,13 @@
         <module name="review" />
         <module name="consultation" />
         <module name="expertise" />
-        <module name="user" />
         <module name="order" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="consulation-order" target="17" />
       <module name="consultation-order" target="17" />
+      <module name="user" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
