@@ -19,5 +19,5 @@ public class Review {
     private String title;
     private String description;
     private double rating;
-    private Long businessId;
+    private Long businessId; //Reviewer ( a business can be entrepreneur or tech business)
 }

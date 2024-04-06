@@ -10,4 +10,8 @@ public interface BusinessService {
     void createBusiness(Business business);
     boolean deleteBusinessById(Long id);
     Business getBusinessById(Long id);
+
+    List<Business> getITExperts();
+
+    List<Business> getEntrepreneurs();
 }

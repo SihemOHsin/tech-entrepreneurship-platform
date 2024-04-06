@@ -92,7 +92,6 @@ public class ExpertiseServiceImpl implements ExpertiseService {
             expertise.setTechExpertise(updatedExpertise.getTechExpertise());
             expertise.setMinProposedPrice(updatedExpertise.getMinProposedPrice());
             expertise.setMaxProposedPrice(updatedExpertise.getMaxProposedPrice());
-            expertise.setLocation(updatedExpertise.getLocation());
             expertiseRepository.save(expertise);
             return true;
         }
