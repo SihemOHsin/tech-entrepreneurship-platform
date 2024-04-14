@@ -88,8 +88,7 @@ public class ExpertiseServiceImpl implements ExpertiseService {
         if (expertiseOptional.isPresent()) {
             Expertise expertise = expertiseOptional.get();
             expertise.setTitle(updatedExpertise.getTitle());
-            expertise.setEntrepreneurshipNeeds(updatedExpertise.getEntrepreneurshipNeeds());
-            expertise.setTechExpertise(updatedExpertise.getTechExpertise());
+            expertise.setDescription(updatedExpertise.getDescription());
             expertise.setMinProposedPrice(updatedExpertise.getMinProposedPrice());
             expertise.setMaxProposedPrice(updatedExpertise.getMaxProposedPrice());
             expertiseRepository.save(expertise);

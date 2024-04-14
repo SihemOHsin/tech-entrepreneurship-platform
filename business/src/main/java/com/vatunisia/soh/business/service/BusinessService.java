@@ -11,7 +11,7 @@ public interface BusinessService {
     boolean deleteBusinessById(Long id);
     Business getBusinessById(Long id);
 
-    List<Business> getITExperts();
+    //List<Business> getITExperts();
 
-    List<Business> getEntrepreneurs();
+    //List<Business> getEntrepreneurs();
 }

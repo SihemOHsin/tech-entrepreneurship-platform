@@ -24,6 +24,7 @@ public class BusinessController {
                 HttpStatus.OK);
     }
 
+    /*
     @GetMapping("/it-experts")
     public ResponseEntity<List<Business>> getITExperts(){
         return new ResponseEntity<>(businessService.getITExperts(),
@@ -35,6 +36,7 @@ public class BusinessController {
         return new ResponseEntity<>(businessService.getEntrepreneurs(),
                 HttpStatus.OK);
     }
+    */
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateBusiness(@PathVariable Long id,
