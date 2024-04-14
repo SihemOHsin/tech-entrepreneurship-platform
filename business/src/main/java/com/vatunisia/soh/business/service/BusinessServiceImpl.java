@@ -25,14 +25,9 @@ public class BusinessServiceImpl implements BusinessService {
         Optional<Business> businessOptional = businessRepository.findById(id);
         if (businessOptional.isPresent()) {
             Business businessToUpdate = businessOptional.get();
-            businessToUpdate.setUsername(business.getUsername());
-            businessToUpdate.setPassword(business.getPassword());
-            businessToUpdate.setEmail(business.getEmail());
             businessToUpdate.setBuzame(business.getBuzame());
             businessToUpdate.setIndustry(business.getIndustry());
             businessToUpdate.setLocation(business.getLocation());
-            businessToUpdate.setRole(business.getRole());
-
             businessRepository.save(businessToUpdate);
             return true;
         } else {
@@ -61,15 +56,13 @@ public class BusinessServiceImpl implements BusinessService {
         return businessRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public List<Business> getITExperts() {
-        return businessRepository.findByRole("IT EXPERT");
-    }
+    //public List<Business> getITExperts() {
+       // return businessRepository.findByRole("IT EXPERT");
+    //}
 
-    @Override
-    public List<Business> getEntrepreneurs() {
-        return businessRepository.findByRole("ENTREPRENEUR");
-    }
+    //public List<Business> getEntrepreneurs() {
+        //return businessRepository.findByRole("ENTREPRENEUR");
+   // }
 
 
 }

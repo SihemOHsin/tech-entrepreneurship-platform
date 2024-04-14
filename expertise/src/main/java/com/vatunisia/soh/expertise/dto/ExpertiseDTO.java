@@ -5,10 +5,9 @@ import java.util.List;
 public class ExpertiseDTO {
     private Long id;
     private String title;
-    private String entrepreneurshipNeeds;
+    private String description;
     private String minProposedPrice;
     private String maxProposedPrice;
-    private String techExpertise;
     private Business business;
     private List<Review> reviews;
 
@@ -29,12 +28,12 @@ public class ExpertiseDTO {
         this.title = title;
     }
 
-    public String getEntrepreneurshipNeeds() {
-        return entrepreneurshipNeeds;
+    public String getDescription() {
+        return description;
     }
 
-    public void setEntrepreneurshipNeeds(String entrepreneurshipNeeds) {
-        this.entrepreneurshipNeeds = entrepreneurshipNeeds;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getMinProposedPrice() {
@@ -51,14 +50,6 @@ public class ExpertiseDTO {
 
     public void setMaxProposedPrice(String maxProposedPrice) {
         this.maxProposedPrice = maxProposedPrice;
-    }
-
-    public String getTechExpertise() {
-        return techExpertise;
-    }
-
-    public void setTechExpertise(String techExpertise) {
-        this.techExpertise = techExpertise;
     }
 
     public Business getBusiness() {

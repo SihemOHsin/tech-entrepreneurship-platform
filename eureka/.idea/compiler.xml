@@ -10,12 +10,14 @@
         <module name="business" />
         <module name="eureka" />
         <module name="review" />
+        <module name="Authentication" />
         <module name="consultation" />
         <module name="expertise" />
         <module name="order" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Authentication-authorization" target="17" />
       <module name="consulation-order" target="17" />
       <module name="consultation-order" target="17" />
       <module name="user" target="17" />
@@ -23,6 +25,8 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Authentication" options="-parameters" />
+      <module name="Authentication-authorization" options="-parameters" />
       <module name="business" options="-parameters" />
       <module name="consulation-order" options="-parameters" />
       <module name="consultation" options="-parameters" />

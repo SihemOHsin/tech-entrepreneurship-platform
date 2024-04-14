@@ -17,9 +17,7 @@ public class Expertise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String entrepreneurshipNeeds;
-    private String techExpertise;
+    private String description;
     private String minProposedPrice;
     private String maxProposedPrice;
-    private String location;
     private Long businessId; }

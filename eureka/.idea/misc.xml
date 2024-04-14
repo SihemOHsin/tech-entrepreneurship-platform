@@ -12,10 +12,13 @@
         <option value="$PROJECT_DIR$/../order/pom.xml" />
         <option value="$PROJECT_DIR$/../user/pom.xml" />
         <option value="$PROJECT_DIR$/../consulation-order/pom.xml" />
+        <option value="$PROJECT_DIR$/../Authentication-authorization/pom.xml" />
+        <option value="$PROJECT_DIR$/../Authentication/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/../Authentication-authorization/pom.xml" />
         <option value="$PROJECT_DIR$/../consulation-order/pom.xml" />
         <option value="$PROJECT_DIR$/../user/pom.xml" />
       </set>
