@@ -18,8 +18,10 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Authentication-authorization" target="17" />
+      <module name="book-network" target="17" />
       <module name="consulation-order" target="17" />
       <module name="consultation-order" target="17" />
+      <module name="security" target="17" />
       <module name="user" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -27,6 +29,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Authentication" options="-parameters" />
       <module name="Authentication-authorization" options="-parameters" />
+      <module name="book-network" options="-parameters" />
       <module name="business" options="-parameters" />
       <module name="consulation-order" options="-parameters" />
       <module name="consultation" options="-parameters" />
@@ -35,6 +38,7 @@
       <module name="expertise" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="review" options="-parameters" />
+      <module name="security" options="-parameters" />
       <module name="user" options="-parameters" />
     </option>
   </component>

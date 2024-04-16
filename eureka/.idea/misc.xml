@@ -14,12 +14,16 @@
         <option value="$PROJECT_DIR$/../consulation-order/pom.xml" />
         <option value="$PROJECT_DIR$/../Authentication-authorization/pom.xml" />
         <option value="$PROJECT_DIR$/../Authentication/pom.xml" />
+        <option value="$PROJECT_DIR$/../spring-security-jwt-api-main/pom.xml" />
+        <option value="$PROJECT_DIR$/../spring-boot-3-jwt-security-main/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/../Authentication-authorization/pom.xml" />
         <option value="$PROJECT_DIR$/../consulation-order/pom.xml" />
+        <option value="$PROJECT_DIR$/../spring-boot-3-jwt-security-main/pom.xml" />
+        <option value="$PROJECT_DIR$/../spring-security-jwt-api-main/pom.xml" />
         <option value="$PROJECT_DIR$/../user/pom.xml" />
       </set>
     </option>
