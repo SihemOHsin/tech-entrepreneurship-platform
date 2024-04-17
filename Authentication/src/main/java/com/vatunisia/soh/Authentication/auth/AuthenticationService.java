@@ -1,5 +1,7 @@
 package com.vatunisia.soh.Authentication.auth;
 
+import com.vatunisia.soh.Authentication.email.EmailService;
+import com.vatunisia.soh.Authentication.email.EmailTemplateName;
 import com.vatunisia.soh.Authentication.role.RoleRepository;
 import com.vatunisia.soh.Authentication.security.JwtService;
 import com.vatunisia.soh.Authentication.user.Token;
@@ -20,6 +22,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +33,10 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
+    private final EmailService emailService;
     private final TokenRepository tokenRepository;
 
+    //    @Value("${application.mailing.frontend.activation-url}")
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
@@ -39,6 +44,16 @@ public class AuthenticationService {
         var userRole = roleRepository.findByName("USER")
                 // todo - better exception handling
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initiated"));
+
+        //***** added to get role names -- try other version next
+        /*var roleNames = List.of("ADMIN", "ENTREPRENEUR", "ITEXPERT");
+        var roles = roleNames.stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new IllegalStateException("Role " + roleName + " not found")))
+                .collect(Collectors.toList());
+*/
+        //*****
+
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -106,7 +121,14 @@ public class AuthenticationService {
     private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);
 
-//send mail
+        emailService.sendEmail(
+                user.getEmail(),
+                user.getFullName(),
+                EmailTemplateName.ACTIVATE_ACCOUNT,
+                activationUrl,
+                newToken,
+                "Account activation"
+        );
     }
 
     private String generateActivationCode(int length) {
