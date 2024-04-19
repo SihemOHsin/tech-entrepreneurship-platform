@@ -1,5 +1,7 @@
 package com.vatunisia.soh.Authentication.auth;
 
+import com.vatunisia.soh.Authentication.user.User;
+import com.vatunisia.soh.Authentication.user.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
+
 @RestController
 @RequestMapping("auth")
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     private final AuthenticationService service;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -43,6 +49,18 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(service.authenticate(request));
+    }
+
+    @GetMapping("/entrepreneurs")
+    public ResponseEntity<List<User>> getEntrepreneurs() {
+        List<User> entrepreneurs = userRepository.findByRoles_Name("ENTREPRENEUR");
+        return ResponseEntity.ok(entrepreneurs);
+    }
+
+    @GetMapping("/it-experts")
+    public ResponseEntity<List<User>> getItExperts() {
+        List<User> itExperts = userRepository.findByRoles_Name("ITEXPERT");
+        return ResponseEntity.ok(itExperts);
     }
 
 

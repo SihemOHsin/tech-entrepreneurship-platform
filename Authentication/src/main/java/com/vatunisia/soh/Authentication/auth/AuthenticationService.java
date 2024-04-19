@@ -2,6 +2,7 @@ package com.vatunisia.soh.Authentication.auth;
 
 import com.vatunisia.soh.Authentication.email.EmailService;
 import com.vatunisia.soh.Authentication.email.EmailTemplateName;
+import com.vatunisia.soh.Authentication.role.Role;
 import com.vatunisia.soh.Authentication.role.RoleRepository;
 import com.vatunisia.soh.Authentication.security.JwtService;
 import com.vatunisia.soh.Authentication.user.Token;
@@ -20,8 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,19 +41,10 @@ public class AuthenticationService {
     private String activationUrl;
 
     public void register(RegistrationRequest request) throws MessagingException {
-        var userRole = roleRepository.findByName("USER")
+        String roleName = request.getRole();
+        var userRole = roleRepository.findByName(roleName)
                 // todo - better exception handling
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initiated"));
-
-        //***** added to get role names -- try other version next
-        /*var roleNames = List.of("ADMIN", "ENTREPRENEUR", "ITEXPERT");
-        var roles = roleNames.stream()
-                .map(roleName -> roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new IllegalStateException("Role " + roleName + " not found")))
-                .collect(Collectors.toList());
-*/
-        //*****
-
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
