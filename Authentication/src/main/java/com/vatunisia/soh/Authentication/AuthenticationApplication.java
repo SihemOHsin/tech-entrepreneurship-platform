@@ -18,19 +18,9 @@ public class AuthenticationApplication {
 		SpringApplication.run(AuthenticationApplication.class, args);
 	}
 
-	//just to initialize the roles inside user table :
+	// Initialize roles during application startup
 	@Bean
-	public CommandLineRunner runner(RoleRepository roleRepository) {
-		return args -> {
-			if (roleRepository.findByName("USER").isEmpty()) {
-				roleRepository.save(Role.builder().name("USER").build());
-			}
-		};
-	}
-}
-
-	/*
-	public CommandLineRunner runner(RoleRepository roleRepository) {
+	public CommandLineRunner initializeRoles(RoleRepository roleRepository) {
 		return args -> {
 			initializeRoleIfNotExists(roleRepository, "ADMIN");
 			initializeRoleIfNotExists(roleRepository, "ENTREPRENEUR");
@@ -44,4 +34,3 @@ public class AuthenticationApplication {
 		}
 	}
 }
-*/
