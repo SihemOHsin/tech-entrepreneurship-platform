@@ -8,15 +8,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -51,17 +48,47 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
+    // NOT USED
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
+    }
+
+    // NOT USED
     @GetMapping("/entrepreneurs")
     public ResponseEntity<List<User>> getEntrepreneurs() {
         List<User> entrepreneurs = userRepository.findByRoles_Name("ENTREPRENEUR");
         return ResponseEntity.ok(entrepreneurs);
     }
-
+    // NOT USED
     @GetMapping("/it-experts")
     public ResponseEntity<List<User>> getItExperts() {
         List<User> itExperts = userRepository.findByRoles_Name("ITEXPERT");
         return ResponseEntity.ok(itExperts);
     }
 
+    //GENERIC ONE USED IN BUSINESS
+    @GetMapping("/role/{userRole}")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable String userRole) {
+        // Find users by role : ENTREPRENEUR / ITEXPERT
+        List<User> usersWithRole = userRepository.findByRoles_Name(userRole);
+        return ResponseEntity.ok(usersWithRole);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable Integer userId) {
+        // Find user by ID
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        // Check if user exists
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return ResponseEntity.ok(user);
+        } else {
+            // Return 404 Not Found if user is not found
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

@@ -1,7 +1,5 @@
 server:
   port: 9096
-  servlet:
-    context-path: /api/v1/
 
 eureka:
   client:

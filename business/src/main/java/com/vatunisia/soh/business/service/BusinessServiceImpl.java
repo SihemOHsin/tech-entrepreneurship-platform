@@ -1,24 +1,29 @@
 package com.vatunisia.soh.business.service;
 
 import com.vatunisia.soh.business.dto.BusinessDTO;
-import com.vatunisia.soh.business.entity.Business;
-import com.vatunisia.soh.business.repository.BusinessRepository;
-import com.vatunisia.soh.business.mapper.BusinessMapper;
 import com.vatunisia.soh.business.dto.User;
+import com.vatunisia.soh.business.entity.Business;
+import com.vatunisia.soh.business.mapper.BusinessMapper;
+import com.vatunisia.soh.business.repository.BusinessRepository;
 import com.vatunisia.soh.business.service.BusinessService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class BusinessServiceImpl implements BusinessService {
-    private List<User> userList;
-
 
     private final BusinessRepository businessRepository;
     private final RestTemplate restTemplate;
@@ -29,87 +34,119 @@ public class BusinessServiceImpl implements BusinessService {
         this.restTemplate = restTemplate;
     }
 
-    @Override
-    public BusinessDTO createBusiness(BusinessDTO businessDTO) {
-        Business business = BusinessMapper.businessDTOToBusiness(businessDTO);
-        business = businessRepository.save(business);
-        User user = businessDTO.getUser();
+    private BusinessDTO convertToDto(Business business) {
+        User user = restTemplate.getForObject(
+                "http://AUTHENTICATION:9096/auth/users/" + business.getUserId(),
+                User.class);
+
         return BusinessMapper.mapToBusinessWithUserDto(business, user);
+    }
+
+    @Override
+    public List<BusinessDTO> findAll() {
+        List<Business> businesses = businessRepository.findAll();
+        List<BusinessDTO> expertiseDTOs = new ArrayList<>();
+        return businesses.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createBusiness(Business business) {
+        businessRepository.save(business);
     }
 
     @Override
     public BusinessDTO getBusinessById(Integer id) {
         Business business = businessRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Business not found with id: " + id));
-
-        // Fetch the user associated with the business
-        User user = findUserById(userList, business.getUserId());
-
-        return convertToDto(business, user);
+                .orElseThrow(() -> new EntityNotFoundException("Business not found with id: " + id));
+        return convertToDto(business);
     }
 
-
     @Override
-    public boolean deleteBusiness(Integer id) {
+    public boolean deleteBusinessById(Integer id) {
         try {
-            businessRepository.deleteById(id);
-            return true; // Deletion successful
-        } catch (EmptyResultDataAccessException ex) {
-            // Entity with the given ID not found
+            businessRepository.existsById(id);
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }
 
     @Override
-    public void updateBusiness(BusinessDTO businessDTO, Integer id) {
-        Business existingBusiness = businessRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Business not found with id: " + id));
+    public boolean updateBusiness(Integer id, Business updatedBusiness) {
+        Optional<Business> businessOptional = businessRepository.findById(id);
+        if (businessOptional.isPresent()) {
+            Business business = businessOptional.get();
+            business.setBizname(updatedBusiness.getBizname());
+            business.setDateOfBizCreation(updatedBusiness.getDateOfBizCreation());
+            business.setIndustry(updatedBusiness.getIndustry());
+            business.setLocation(updatedBusiness.getLocation());
 
-        // Update the existing business with new values from businessDTO
-        existingBusiness.setBizname(businessDTO.getBizname());
-        existingBusiness.setDateOfBizCreation(businessDTO.getDateOfBizCreation());
-        existingBusiness.setIndustry(businessDTO.getIndustry());
-        existingBusiness.setLocation(businessDTO.getLocation());
-
-        businessRepository.save(existingBusiness);
+            businessRepository.save(updatedBusiness);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<BusinessDTO> getEntrepreneursBusinesses() {
-        List<User> entrepreneurs = Arrays.asList(restTemplate.getForObject(
-                "http://localhost:9096/api/v1/auth/entrepreneurs",
-                User[].class));
-
-        List<Integer> entrepreneurIds = entrepreneurs.stream().map(User::getId).collect(Collectors.toList());
-        List<Business> entrepreneurBusinesses = businessRepository.findByUserIdIn(entrepreneurIds);
-
-        return entrepreneurBusinesses.stream()
-                .map(business -> convertToDto(business, findUserById(entrepreneurs, business.getUserId())))
+    public List<BusinessDTO> findBusinessByUserID(Integer userID) {
+        List<Business> businesses = businessRepository.findByUserId(userID);
+        List<BusinessDTO> expertiseDTOs = new ArrayList<>();
+        return businesses.stream()
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
+/*
+    @Override
+    public List<BusinessDTO> findBusinessByUserRole(String userRole) {
+        // Retrieve users with the specified role from the authentication service
+        List<User> users = restTemplate.getForObject(
+                "http://AUTHENTICATION:9096/auth/role/" + userRole,
+                List.class);
+
+        // Extract user IDs from the retrieved users
+        List<Integer> userIds = users.stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+
+        // Retrieve businesses associated with the extracted user IDs
+        List<Business> businesses = businessRepository.findByUserIdIn(userIds);
+
+        // Convert businesses to DTOs
+        return businesses.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }*/
 
     @Override
-    public List<BusinessDTO> getItExpertsBusinesses() {
-        List<User> itExperts = Arrays.asList(restTemplate.getForObject(
-                "http://localhost:9096/api/v1/auth/it-experts",
-                User[].class));
+    public List<BusinessDTO> findBusinessByUserRole(String userRole) {
+        // Retrieve users with the specified role from the authentication service
+        ResponseEntity<List<User>> response = restTemplate.exchange(
+                "http://AUTHENTICATION:9096/auth/role/" + userRole,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<User>>() {});
 
-        List<Integer> itExpertIds = itExperts.stream().map(User::getId).collect(Collectors.toList());
-        List<Business> itExpertBusinesses = businessRepository.findByUserIdIn(itExpertIds);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            List<User> users = response.getBody();
+            if (users != null) {
+                // Extract user IDs from the retrieved users
+                List<Integer> userIds = users.stream()
+                        .map(User::getId)
+                        .collect(Collectors.toList());
 
-        return itExpertBusinesses.stream()
-                .map(business -> convertToDto(business, findUserById(itExperts, business.getUserId())))
-                .collect(Collectors.toList());
+                // Retrieve businesses associated with the extracted user IDs
+                List<Business> businesses = businessRepository.findByUserIdIn(userIds);
+
+                // Convert businesses to DTOs
+                return businesses.stream()
+                        .map(this::convertToDto)
+                        .collect(Collectors.toList());
+            }
+        }
+
+        return Collections.emptyList(); // Return empty list if no users found or error occurred
     }
 
-    private BusinessDTO convertToDto(Business business, User user) {
-        return BusinessMapper.mapToBusinessWithUserDto(business, user);
-    }
-
-    private User findUserById(List<User> userList, Integer userId) {
-        return userList.stream()
-                .filter(user -> user.getId().equals(userId))
-                .findFirst()
-                .orElse(null);
-    }
 }
