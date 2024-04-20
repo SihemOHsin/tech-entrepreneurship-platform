@@ -9,11 +9,12 @@ public class BusinessMapper {
                                                     ) {
         BusinessDTO businessDTO = new BusinessDTO();
         businessDTO.setId(business.getId());
-        businessDTO.setUser(user);
         businessDTO.setBizname(business.getBizname());
         businessDTO.setDateOfBizCreation(business.getDateOfBizCreation());
         businessDTO.setIndustry(business.getIndustry());
         businessDTO.setLocation(business.getLocation());
+        businessDTO.setUser(user);
+
         return businessDTO;
     }
 
