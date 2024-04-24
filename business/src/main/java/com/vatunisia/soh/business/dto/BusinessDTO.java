@@ -9,6 +9,15 @@ public class BusinessDTO {
     private LocalDate dateOfBizCreation;
     private String industry;
     private String location;
+    private byte[] businessLogo;
+
+    public byte[] getBusinessLogo() {
+        return businessLogo;
+    }
+
+    public void setBusinessLogo(byte[] businessLogo) {
+        this.businessLogo = businessLogo;
+    }
 
     public Integer getId() {
         return id;
@@ -57,5 +66,7 @@ public class BusinessDTO {
     public void setLocation(String location) {
         this.location = location;
     }
+
+
 }
 

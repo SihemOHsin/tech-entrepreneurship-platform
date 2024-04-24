@@ -3,6 +3,9 @@ package com.vatunisia.soh.business.mapper;
 import com.vatunisia.soh.business.dto.BusinessDTO;
 import com.vatunisia.soh.business.dto.User;
 import com.vatunisia.soh.business.entity.Business;
+import com.vatunisia.soh.business.file.FileUtils;
+
+import java.util.Arrays;
 
 public class BusinessMapper {
     public static BusinessDTO mapToBusinessWithUserDto(Business business , User user
@@ -13,7 +16,12 @@ public class BusinessMapper {
         businessDTO.setDateOfBizCreation(business.getDateOfBizCreation());
         businessDTO.setIndustry(business.getIndustry());
         businessDTO.setLocation(business.getLocation());
+        //businessDTO.setBusinessLogo(business.getBusinessLogo());
         businessDTO.setUser(user);
+
+        // Read the business logo from the file system and set it in the DTO
+        byte[] businessLogoBytes = FileUtils.readFileFromLocation(business.getBusinessLogo());
+        businessDTO.setBusinessLogo(businessLogoBytes);
 
         return businessDTO;
     }
@@ -28,6 +36,7 @@ public class BusinessMapper {
         business.setDateOfBizCreation(businessDTO.getDateOfBizCreation());
         business.setIndustry(businessDTO.getIndustry());
         business.setLocation(businessDTO.getLocation());
+
         return business;
     }
 

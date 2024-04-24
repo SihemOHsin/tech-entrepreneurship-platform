@@ -3,10 +3,12 @@ package com.vatunisia.soh.business.controller;
 import com.vatunisia.soh.business.dto.BusinessDTO;
 import com.vatunisia.soh.business.entity.Business;
 import com.vatunisia.soh.business.service.BusinessService;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -75,5 +77,14 @@ public class BusinessController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping(value = "/logo/{business-id}", consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadBusinessLogo(
+            @PathVariable("business-id") Integer businessId,
+            @RequestPart("file") MultipartFile file
+    ) {
+        businessService.uploadBusinessLogo(file, businessId);
+        return ResponseEntity.accepted().build();
     }
 }

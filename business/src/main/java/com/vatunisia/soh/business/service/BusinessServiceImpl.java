@@ -3,18 +3,18 @@ package com.vatunisia.soh.business.service;
 import com.vatunisia.soh.business.dto.BusinessDTO;
 import com.vatunisia.soh.business.dto.User;
 import com.vatunisia.soh.business.entity.Business;
+import com.vatunisia.soh.business.file.FileStorageService;
 import com.vatunisia.soh.business.mapper.BusinessMapper;
 import com.vatunisia.soh.business.repository.BusinessRepository;
-import com.vatunisia.soh.business.service.BusinessService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,11 +27,13 @@ public class BusinessServiceImpl implements BusinessService {
 
     private final BusinessRepository businessRepository;
     private final RestTemplate restTemplate;
+    private final FileStorageService fileStorageService;
 
     @Autowired
-    public BusinessServiceImpl(BusinessRepository businessRepository, RestTemplate restTemplate) {
+    public BusinessServiceImpl(BusinessRepository businessRepository, RestTemplate restTemplate, FileStorageService fileStorageService) {
         this.businessRepository = businessRepository;
         this.restTemplate = restTemplate;
+        this.fileStorageService = fileStorageService;
     }
 
     private BusinessDTO convertToDto(Business business) {
@@ -97,27 +99,6 @@ public class BusinessServiceImpl implements BusinessService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
-/*
-    @Override
-    public List<BusinessDTO> findBusinessByUserRole(String userRole) {
-        // Retrieve users with the specified role from the authentication service
-        List<User> users = restTemplate.getForObject(
-                "http://AUTHENTICATION:9096/auth/role/" + userRole,
-                List.class);
-
-        // Extract user IDs from the retrieved users
-        List<Integer> userIds = users.stream()
-                .map(User::getId)
-                .collect(Collectors.toList());
-
-        // Retrieve businesses associated with the extracted user IDs
-        List<Business> businesses = businessRepository.findByUserIdIn(userIds);
-
-        // Convert businesses to DTOs
-        return businesses.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }*/
 
     @Override
     public List<BusinessDTO> findBusinessByUserRole(String userRole) {
@@ -147,6 +128,15 @@ public class BusinessServiceImpl implements BusinessService {
         }
 
         return Collections.emptyList(); // Return empty list if no users found or error occurred
+    }
+
+    @Override
+    public void uploadBusinessLogo(MultipartFile file, Integer businessId) {
+        Business business = businessRepository.findById(businessId)
+                .orElseThrow(() -> new EntityNotFoundException("No book found with ID:: " + businessId));
+        var businessLogo = fileStorageService.saveFile(file, businessId);
+        business.setBusinessLogo(businessLogo);
+        businessRepository.save(business);
     }
 
 }

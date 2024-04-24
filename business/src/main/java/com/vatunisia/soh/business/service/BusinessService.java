@@ -2,6 +2,7 @@ package com.vatunisia.soh.business.service;
 
 import com.vatunisia.soh.business.dto.BusinessDTO;
 import com.vatunisia.soh.business.entity.Business;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface BusinessService {
     boolean updateBusiness(Integer id, Business updatedBusiness);
     List<BusinessDTO> findBusinessByUserID(Integer userID);
     List<BusinessDTO> findBusinessByUserRole(String userRole);
+
+    void uploadBusinessLogo(MultipartFile file, Integer businessId);
 }
