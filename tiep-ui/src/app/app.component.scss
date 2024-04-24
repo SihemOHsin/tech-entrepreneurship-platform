@@ -1,0 +1,40 @@
+// Define global variables
+$primary-color: #000;
+$secondary-color: #808080;
+$alert-bg: #fcba03;
+$alert-text: #614810;
+$font-family: 'Arial', sans-serif;
+
+// Apply global styles
+body {
+  background-color: #fff;
+  color: $primary-color;
+  font-family: $font-family;
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  border-color: $primary-color;
+  color: #fff;
+}
+
+.btn-link {
+  color: $secondary-color;
+}
+
+.alert {
+  background-color: $alert-bg;
+  color: $alert-text;
+}
+
+.form-label {
+  color: $primary-color;
+}
+
+.form-control {
+  color: $primary-color;
+}
+
+.text-center {
+  text-align: center;
+}
