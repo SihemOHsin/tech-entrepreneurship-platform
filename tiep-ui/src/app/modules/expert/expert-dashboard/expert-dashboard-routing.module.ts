@@ -6,7 +6,8 @@ import {authGuard} from "../../../services/guard/auth.guard";
 const routes: Routes = [
   {
     path:'',
-    component: ExpertDashboardComponent
+    component: ExpertDashboardComponent,
+    canActivate : [authGuard]
   }
 ];
 

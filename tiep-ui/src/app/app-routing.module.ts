@@ -4,6 +4,7 @@ import {FrontLayoutComponent} from "./layouts/front-layout/front-layout.componen
 import {AdminLayoutComponent} from "./layouts/admin-layout/admin-layout.component";
 import {ExpertLayoutComponent} from "./layouts/expert-layout/expert-layout.component";
 import {EntrepreneurLayoutComponent} from "./layouts/entrepreneur-layout/entrepreneur-layout.component";
+import {authGuard} from "./services/guard/auth.guard";
 
 
 const routes: Routes = [
@@ -44,46 +45,36 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    canActivate : [],
     children:[
       {
         path: 'dashboard',
-        loadChildren:() => import('./modules/admin/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule)
-      },
-      {
-        path: 'adminlogin',
-        loadChildren:() => import('./modules/admin/admin-login/admin-login.module').then(m => m.AdminLoginModule)
+        loadChildren:() => import('./modules/admin/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
+        canActivate : [authGuard]
       }
       ]
   },
   {
     path: 'expert',
     component: ExpertLayoutComponent,
-
     children:[
       {
         path: 'dashboard',
-        loadChildren:() => import('./modules/expert/expert-dashboard/expert-dashboard.module').then(m => m.ExpertDashboardModule)
-      },
-      {
-        path: 'expertlogin',
-        loadChildren:() => import('./modules/expert/expert-login/expert-login.module').then(m => m.ExpertLoginModule)
+        loadChildren:() => import('./modules/expert/expert-dashboard/expert-dashboard.module').then(m => m.ExpertDashboardModule),
+        canActivate : [authGuard]
       }
+
     ]
   },
   {
     path: 'entrepreneur',
     component: EntrepreneurLayoutComponent,
-
     children:[
       {
         path: 'dashboard',
-        loadChildren:() => import('./modules/entrepreneur/entrepreneur-dashboard/entrepreneur-dashboard.module').then(m => m.EntrepreneurDashboardModule)
-      },
-      {
-        path: 'entrepreneurlogin',
-        loadChildren:() => import('./modules/entrepreneur/entrepreneur-login/entrepreneur-login.module').then(m => m.EntrepreneurLoginModule)
+        loadChildren:() => import('./modules/entrepreneur/entrepreneur-dashboard/entrepreneur-dashboard.module').then(m => m.EntrepreneurDashboardModule),
+        canActivate : [authGuard]
       }
+
     ]
   }
 
