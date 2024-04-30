@@ -39,7 +39,7 @@ public class AuthenticationController {
         service.activateAccount(token);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
@@ -69,7 +69,7 @@ public class AuthenticationController {
     //GENERIC ONE USED IN BUSINESS
     @GetMapping("/role/{userRole}")
     public ResponseEntity<List<User>> getUsersByRole(@PathVariable String userRole) {
-        // Find users by role : ENTREPRENEUR / ITEXPERT
+        // Find users by role : ADMIN / ENTREPRENEUR / ITEXPERT
         List<User> usersWithRole = userRepository.findByRoles_Name(userRole);
         return ResponseEntity.ok(usersWithRole);
     }

@@ -61,7 +61,7 @@
         }
       }
     },
-    "/auth/login": {
+    "/auth/authenticate": {
       "post": {
         "tags": [
           "Authentication"

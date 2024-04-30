@@ -2,7 +2,6 @@ package com.vatunisia.soh.Authentication.auth;
 
 import com.vatunisia.soh.Authentication.email.EmailService;
 import com.vatunisia.soh.Authentication.email.EmailTemplateName;
-import com.vatunisia.soh.Authentication.role.Role;
 import com.vatunisia.soh.Authentication.role.RoleRepository;
 import com.vatunisia.soh.Authentication.security.JwtService;
 import com.vatunisia.soh.Authentication.user.Token;
@@ -36,7 +35,6 @@ public class AuthenticationService {
     private final EmailService emailService;
     private final TokenRepository tokenRepository;
 
-    //    @Value("${application.mailing.frontend.activation-url}")
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 

@@ -1,0 +1,40 @@
+<div class="container-fluid card login-container" style="background-color: #fff; color: #000; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+  <h3 class="text-center">Create an account</h3>
+  <hr>
+  <div class="alert alert-danger" role="alert" *ngIf="errorMsg.length">
+    <p *ngFor="let msg of errorMsg">{{msg}}</p>
+  </div>
+  <div class="mb-3">
+    <label for="firstname" class="form-label">Firstname</label>
+    <input [(ngModel)]="registerRequest.firstname" type="text" class="form-control" id="firstname" placeholder="Firstname">
+  </div>
+  <div class="mb-3">
+    <label for="lastname" class="form-label">Lastname</label>
+    <input [(ngModel)]="registerRequest.lastname" type="text" class="form-control" id="lastname" placeholder="Lastname">
+  </div>
+  <div class="mb-3">
+    <label for="login" class="form-label">Email address</label>
+    <input [(ngModel)]="registerRequest.email" type="email" class="form-control" id="login" placeholder="name@example.com">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input [(ngModel)]="registerRequest.password" type="password" class="form-control" id="password" placeholder="Password">
+  </div>
+  <div class="mb-3">
+    <label for="role" class="form-label">I'm a:</label>
+    <select [(ngModel)]="registerRequest.role" class="form-control" id="role">
+      <option value="ADMIN">VA Team</option>
+      <option value="ITEXPERT">IT Expert</option>
+      <option value="ENTREPRENEUR">Entrepreneur</option>
+    </select>
+  </div>
+  <div class="d-flex justify-content-between mb-3">
+    <button (click)="register()" type="button" class="btn btn-primary" style="background-color: #000; border-color: #000; border-radius: 30px;">
+      <em style="color: #fff; font-family: 'Arial', sans-serif;">&nbsp;Create an account</em>
+    </button>
+    <div>
+      Already have an account?&nbsp;
+      <a href="/login" class="btn btn-link" style="color: #808080; text-decoration: none;">Login</a>
+    </div>
+  </div>
+</div>

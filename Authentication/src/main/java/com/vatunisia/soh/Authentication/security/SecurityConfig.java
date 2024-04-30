@@ -17,7 +17,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity(securedEnabled = true) // bcz we are using role based authentication
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
     private final JwtFilter jwtAuthFilter;
