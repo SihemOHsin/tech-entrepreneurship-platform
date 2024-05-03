@@ -1,0 +1,78 @@
+<div class="w3-light-grey" style="min-height: 100vh;">
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+    <h5>Consultation Services</h5>
+
+    <!-- Flex container to hold the sections -->
+    <div class="w3-panel" style="padding: 16px; display: flex;">
+
+      <!-- First section -->
+      <div class="w3-half" style="padding-right: 10px;">
+        <div class="w3-white">
+          <div class="w3-responsive w3-card-4">
+            <table class="w3-table w3-striped w3-bordered">
+              <thead>
+              <tr class="w3-theme">
+                <th class="w3-light-grey"></th>
+                <th class="w3-light-grey">Name</th>
+                <th class="w3-light-grey">Business Name</th>
+                <th class="w3-light-grey">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Consultations for the first section -->
+              <ng-container *ngFor="let consultation of consultations.slice(0, Math.ceil(consultations.length / 2))">
+                <tr>
+                  <td>
+                    <input type="checkbox" (change)="viewConsultation(consultation.id)">
+                  </td>
+                  <td>{{ consultation.name }}</td>
+                  <td>{{ consultation.businessName }}</td>
+                  <td>
+                    <button class="w3-black"style="border:0px;border-radius: 5px;" (click)="performAction(consultation)">Action</button>
+                  </td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second section -->
+      <div class="w3-half" style="padding-left: 10px;">
+        <div class="w3-white">
+          <div class="w3-responsive w3-card-4">
+            <table class="w3-table w3-striped w3-bordered">
+              <thead>
+              <tr class="w3-theme">
+                <th class="w3-light-grey"></th>
+                <th class="w3-light-grey">Name</th>
+                <th class="w3-light-grey">Business Name</th>
+                <th class="w3-light-grey">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Consultations for the second section -->
+              <ng-container *ngFor="let consultation of consultations.slice(Math.ceil(consultations.length / 2))">
+                <tr>
+                  <td>
+                    <input type="checkbox" (change)="viewConsultation(consultation.id)">
+                  </td>
+                  <td>{{ consultation.name }}</td>
+                  <td>{{ consultation.businessName }}</td>
+                  <td>
+                    <button class="w3-black"style="border:0px;border-radius: 5px;" (click)="performAction(consultation)">Action</button>
+                  </td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
