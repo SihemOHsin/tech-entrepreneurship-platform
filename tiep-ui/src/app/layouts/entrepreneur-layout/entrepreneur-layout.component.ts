@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./entrepreneur-layout.component.scss']
 })
 export class EntrepreneurLayoutComponent {
-
+  logout(){
+//localStorage.clear();
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
 }

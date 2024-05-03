@@ -1,0 +1,46 @@
+<div class="w3-light-grey" style="min-height: 100vh;">
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+    <div class="w3-container">
+      <hr>
+      <div >
+        <h2>IT Experts</h2>
+        <p w3-class="w3-large">Manage IT experts in your system.</p>
+      </div>
+      <div class="w3-responsive w3-card-4">
+        <table class="w3-table w3-striped w3-bordered">
+          <thead>
+          <tr class="w3-theme">
+            <th class="w3-light-grey">Entrepreneur Name</th>
+            <th class="w3-light-grey">Entrepreneur LastName</th>
+            <th class="w3-light-grey">Business Name</th>
+            <th class="w3-light-grey">Business Creation</th>
+            <th class="w3-light-grey">Industry</th>
+            <th class="w3-light-grey">Location</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let entrepreneur  of paginatedItems">
+            <td class="w3-white">{{ entrepreneur.userfirstname }}</td>
+            <td class="w3-white">{{ entrepreneur.userlastname }}</td>
+            <td class="w3-white">{{ entrepreneur.bizname }}</td>
+            <td class="w3-white">{{ entrepreneur.dateOfBizCreation }}</td>
+            <td class="w3-white">{{ entrepreneur.industry }}</td>
+            <td class="w3-white">{{ entrepreneur.location }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="w3-center">
+      <!-- Pagination -->
+      <div class="w3-center w3-padding-32">
+        <div class="w3-bar">
+          <a href="javascript:void(0)" (click)="prevPage()" class="w3-bar-item w3-button w3-hover-black">« Previous </a>
+          <a href="javascript:void(0)" *ngFor="let page of pages" (click)="setPage(page)" class="w3-bar-item w3-button" [class.w3-theme]="currentPage === page">{{ page }}</a>
+          <a href="javascript:void(0)" (click)="nextPage()" class="w3-bar-item w3-button w3-hover-black"> Next »</a>
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
+</div>

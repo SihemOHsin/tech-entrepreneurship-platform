@@ -1,0 +1,21 @@
+.table-responsive-container {
+  width: 100% !important;
+}
+
+.w3-table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.dt-pagination-responsive {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .dt-pagination-responsive {
+    justify-content: center;
+  }
+}

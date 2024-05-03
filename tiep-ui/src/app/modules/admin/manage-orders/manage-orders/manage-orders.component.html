@@ -1,0 +1,86 @@
+<div class="w3-light-grey" style="min-height: 100vh;">
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+    <div class="w3-container">
+      <hr />
+
+      <!-- Manage Orders Card -->
+      <div class="w3-container" >
+        <h2>Manage Orders</h2>
+        <button class="w3-button w3-black w3-round-large w3-right" (click)="submitAction()">Submit & Get Bill</button>
+      </div>
+
+      <!-- Customer Details Card -->
+      <div class="w3-responsive w3-card-4" style="margin-top:25px;">
+        <form [formGroup]="manageOrderForm" class="w3-container">
+          <div style="margin:10px;">
+          <b><span>Customer Details:</span></b>
+          </div>
+          <div class="w3-row-padding" style="margin:10px;">
+            <div class="w3-quarter">
+              <label for="name">Name:</label>
+              <input type="text" id="name" formControlName="name" class="w3-input" required>
+            </div>
+            <div class="w3-quarter">
+              <label for="email">Email:</label>
+              <input type="email" id="email" formControlName="email" class="w3-input" required>
+            </div>
+            <div class="w3-quarter">
+              <label for="contact">Contact Number:</label>
+              <input type="number" id="contact" formControlName="contact" class="w3-input" required>
+            </div>
+            <div class="w3-quarter">
+              <label for="payment">Payment Method:</label>
+              <input type="text" id="payment" formControlName="payment" class="w3-input" required>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <hr />
+
+      <!-- Select Product Card -->
+      <div class="w3-responsive w3-card-4">
+        <form [formGroup]="manageOrderForm" class="w3-container">
+          <div style="margin:10px;">
+          <b><span>Select Service:</span></b>
+          </div>
+          <div class="w3-row-padding" style="margin:10px;">
+            <div class="w3-quarter">
+              <label for="category">Business:</label>
+              <select id="category" formControlName="category" class="w3-select" required>
+                <!-- Options populated from data source -->
+              </select>
+            </div>
+            <div class="w3-quarter">
+              <label for="product">Product:</label>
+              <select id="product" formControlName="product" class="w3-select" required>
+                <!-- Options populated from data source -->
+              </select>
+            </div>
+            <div class="w3-quarter">
+              <label for="price">Price:</label>
+              <input type="number" id="price" formControlName="price" class="w3-input" required>
+            </div>
+            <div class="w3-quarter">
+              <label for="amount">Total Amount: {{ totalAmount }}</label>
+              <input type="number" id="amount" formControlName="amount" class="w3-input" required>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="w3-container" style="margin-top:25px;">
+        <div class="w3-row-padding">
+          <div class="w3-twothird">
+            <button class="w3-button w3-light-grey w3-round-large w3-right w3-card-4" (click)="add()" [disabled]="validateProductAdd()">Add Service</button>
+          </div>
+          <div class="w3-third">
+            <button class="w3-button w3-light-grey w3-round-large  w3-card-4" (click)="handleDeleteAction()">Delete Order</button>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

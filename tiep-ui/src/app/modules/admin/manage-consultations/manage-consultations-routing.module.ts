@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AdminDashboardComponent} from "./admin-dashboard/admin-dashboard.component";
 import {authGuard} from "../../../services/guard/auth.guard";
+import {ManageConsultationsComponent} from "./manage-consultations/manage-consultations.component";
 
 const routes: Routes = [
   {
     path:'',
-    component: AdminDashboardComponent,
+    component: ManageConsultationsComponent,
     canActivate : [authGuard]
   }
 ];
@@ -15,4 +15,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdminDashboardRoutingModule { }
+export class ManageConsultationsRoutingModule { }

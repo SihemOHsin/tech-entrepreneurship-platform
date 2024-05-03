@@ -1,2 +1,52 @@
-<p>front-layout works!</p>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Company logo -->
+    <a class="navbar-brand" routerLink="">
+      <img src="assets/sohtiepLogo.png" alt="Company Logo" >
+    </a>
+
+    <!-- Toggler button for small screens -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/findexpert">Find Expert</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/entrepreneurcommunity">Entrepreneur Community</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/resourcehub">Resource Hub</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Login and Activate Account buttons -->
+    <div class="d-flex">
+      <a routerLink="/register" class="btn btn-dark"> Register</a>
+      <a routerLink="/login" class="btn btn-outline-dark ms-2"> Log In</a>
+    </div>
+  </div>
+</nav>
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a routerLink="/register" onclick="w3_close()" class="w3-bar-item w3-button">Register</a>
+  <a routerLink="/login" onclick="w3_close()" class="w3-bar-item w3-button">Log In</a>
+  <a routerLink="" onclick="w3_close()" class="w3-bar-item w3-button">Home</a>
+  <a routerLink="/findexpert" onclick="w3_close()" class="w3-bar-item w3-button"> Find Expert</a>
+  <a routerLink="/entrepreneurcommunity" onclick="w3_close()" class="w3-bar-item w3-button"> Entrepreneur Community</a>
+  <a routerLink="/resourcehub" onclick="w3_close()" class="w3-bar-item w3-button">Resource Hub</a>
+</nav>
+
+
 <router-outlet></router-outlet>

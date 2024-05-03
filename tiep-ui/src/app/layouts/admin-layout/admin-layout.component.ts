@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AdminLayoutComponent {
 
+  logout(){
+//localStorage.clear();
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
+
 }

@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./expert-layout.component.scss']
 })
 export class ExpertLayoutComponent {
-
+  logout(){
+//localStorage.clear();
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
 }

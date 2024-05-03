@@ -50,6 +50,31 @@ const routes: Routes = [
         path: 'dashboard',
         loadChildren:() => import('./modules/admin/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
         canActivate : [authGuard]
+      },
+      {
+        path: 'manage-users',
+        loadChildren:() => import('./modules/admin/manage-users/manage-users.module').then(m => m.ManageUsersModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'manage-entrepreneurs',
+        loadChildren:() => import('./modules/admin/manage-entrepreneurs/manage-entrepreneurs.module').then(m => m.ManageEntrepreneursModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'manage-itexperts',
+        loadChildren:() => import('./modules/admin/manage-itexperts/manage-itexperts.module').then(m => m.ManageItexpertsModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'manage-orders',
+        loadChildren:() => import('./modules/admin/manage-orders/manage-orders.module').then(m => m.ManageOrdersModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'manage-consultations',
+        loadChildren:() => import('./modules/admin/manage-consultations/manage-consultations.module').then(m => m.ManageConsultationsModule),
+        canActivate : [authGuard]
       }
       ]
   },
