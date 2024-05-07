@@ -1,0 +1,50 @@
+<div class="w3-light-grey" style="min-height: 100vh;">
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+    <div class="w3-container ">
+      <br >
+
+<div class="w3-card w3-padding ">
+  <h3><b>View Bill</b></h3>
+</div>
+
+<hr class="w3-border-grey" />
+
+<div class="w3-card w3-padding">
+  <div class="w3-container">
+    <label>Filter</label>
+    <input type="text" class="w3-input" [(ngModel)]="searchQuery" (input)="applyFilter()" #input />
+  </div>
+</div>
+
+<hr class="w3-border-grey" />
+
+<div class="responsive_table">
+  <table class="w3-table-all w3-hoverable">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Contact Number</th>
+      <th>Payment Method</th>
+      <th>Total</th>
+      <th>Action</th>
+    </tr>
+    <tr *ngFor="let element of dataSource">
+      <td>{{ element.name | titlecase }}</td>
+      <td>{{ element.email }}</td>
+      <td>{{ element.contactNumber }}</td>
+      <td>{{ element.paymentMethod }}</td>
+      <td>{{ element.total }}</td>
+      <td class="action-link">
+        <button class="w3-button w3-black" (click)="handleViewAction(element)">View</button>
+        <button class="w3-button w3-black" (click)="downloadReportAction(element)">Download Bill</button>
+        <button class="w3-button w3-black" (click)="handleDeleteAction(element)">Delete</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+    </div>
+
+  </div>
+</div>

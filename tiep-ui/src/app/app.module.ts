@@ -28,7 +28,8 @@ import {LayoutsModule} from "./layouts/layouts.module";
       useClass: HttpTokenInterceptor,
       multi: true
     }
-    ],
+  ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

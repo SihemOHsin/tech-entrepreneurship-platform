@@ -1,3 +1,5 @@
+<div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+
 <div class="container" *ngIf="submitted else codeForm" >
   <div class="activation-message" *ngIf="isOkay; else activationError">
     <h2>Activation Successful!</h2>
@@ -8,7 +10,7 @@
     <div class="activation-error">
       <h2>Activation Failed!</h2>
       <p>{{ message }}</p>
-      <button class="btn btn-primary" style="background-color: #000; border-color: #000; border-radius: 30px;" (click)="submitted = false">Try again</button>
+      <button class="w3-button w3-black w3-margin" style="background-color: #000; border-color: #000;" (click)="submitted = false">Try again</button>
     </div>
   </ng-template>
 </div>
@@ -21,7 +23,8 @@
                   [code]="'number'"
                   (codeCompleted)="onCodeCompleted($event)">
       </code-input>
-      <button class="btn btn-primary mt-3" style="background-color: #000; border-color: #000; border-radius: 30px;" (click)="redirectToLogin()">Go to Login</button>
+      <button class="w3-button w3-black w3-margin" style="background-color: #000; border-color: #000; " (click)="redirectToLogin()">Go to Login</button>
     </div>
   </div>
 </ng-template>
+</div>

@@ -1,0 +1,5 @@
+.slideshow-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
+  grid-gap: 10px; /* Adjust this value to your preference */
+}

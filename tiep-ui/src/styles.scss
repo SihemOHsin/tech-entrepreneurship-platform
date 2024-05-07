@@ -3,7 +3,11 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
-
+body,h1,h2,h3,h4,h5 {font-family: "Arial", sans-serif}
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
 
 .login-container {
   width: 800px !important;
@@ -12,4 +16,16 @@
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("/assets/back.jpg");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
 }

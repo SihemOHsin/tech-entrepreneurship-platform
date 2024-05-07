@@ -12,5 +12,13 @@
 </head>
 <body>
   <app-root></app-root>
+
+  <!-- Place this script tag just before the closing body tag -->
+  <script>
+    function showFullContent(id) {
+      document.getElementById("partialContent" + id).style.display = "none";
+      document.getElementById("fullContent" + id).style.display = "block";
+    }
+  </script>
 </body>
 </html>

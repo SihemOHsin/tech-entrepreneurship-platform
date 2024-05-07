@@ -86,7 +86,22 @@ const routes: Routes = [
         path: 'dashboard',
         loadChildren:() => import('./modules/expert/expert-dashboard/expert-dashboard.module').then(m => m.ExpertDashboardModule),
         canActivate : [authGuard]
-      }
+      },
+      {
+        path: 'community',
+        loadChildren:() => import('./modules/expert/entrepreneurs-comminuty/entrepreneurs-comminuty.module').then(m => m.EntrepreneursComminutyModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'business',
+        loadChildren:() => import('./modules/expert/business-profile/business-profile.module').then(m => m.BusinessProfileModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'reviews',
+        loadChildren:() => import('./modules/expert/manage-reviews/manage-reviews.module').then(m => m.ManageReviewsModule),
+        canActivate : [authGuard]
+      },
 
     ]
   },
@@ -97,6 +112,36 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren:() => import('./modules/entrepreneur/entrepreneur-dashboard/entrepreneur-dashboard.module').then(m => m.EntrepreneurDashboardModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'profile',
+        loadChildren:() => import('./modules/entrepreneur/entrepreneur-profile/entrepreneur-profile.module').then(m => m.EntrepreneurProfileModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'consultation',
+        loadChildren:() => import('./modules/entrepreneur/consultation-services/consultation-services.module').then(m => m.ConsultationServicesModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'findexpert',
+        loadChildren:() => import('./modules/entrepreneur/findexpert/findexpert.module').then(m => m.FindexpertModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'manage-orders',
+        loadChildren:() => import('./modules/entrepreneur/manage-orders/manage-orders.module').then(m => m.ManageOrdersModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'consultations',
+        loadChildren:() => import('./modules/entrepreneur/view-consultation/view-consultation.module').then(m => m.ViewConsultationModule),
+        canActivate : [authGuard]
+      },
+      {
+        path: 'entrepreneurs',
+        loadChildren:() => import('./modules/entrepreneur/entrepreneurs-community/entrepreneurs-community.module').then(m => m.EntrepreneursCommunityModule),
         canActivate : [authGuard]
       }
 

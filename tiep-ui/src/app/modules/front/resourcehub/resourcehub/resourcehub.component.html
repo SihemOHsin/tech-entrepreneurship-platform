@@ -1,1 +1,97 @@
-<p>resourcehub works!</p>
+<div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+
+  <div class="w3-row-padding" id="plans">
+  <div class="w3-center w3-padding-64">
+    <h3>Resource Hub</h3>
+    <p>Integrate Technology into Your Business</p>
+  </div>
+
+  <div class="w3-third w3-margin-bottom">
+    <ul class="w3-ul w3-border w3-center w3-hover-shadow">
+      <li class="w3-black w3-xlarge w3-padding-32">Free Plan</li>
+      <li class="w3-padding-16"><b>Basic Access</b></li>
+      <li class="w3-padding-16"><b>Access to Free Resources</b></li>
+      <li class="w3-padding-16"><b>Access to Bargain with Companies</b></li>
+      <li class="w3-padding-16"><b>Endless Support</b></li>
+      <li class="w3-padding-16">
+        <h2 class="w3-wide">Free</h2>
+        <span class="w3-opacity">One-time Signup</span>
+      </li>
+      <li class="w3-light-grey w3-padding-24">
+        <button class="w3-button w3-black w3-padding-large">Sign Up</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="w3-third w3-margin-bottom">
+    <ul class="w3-ul w3-border w3-center w3-hover-shadow">
+      <li class="w3-dark-grey w3-xlarge w3-padding-32">Premium Plan</li>
+      <li class="w3-padding-16"><b>Full Access</b></li>
+      <li class="w3-padding-16"><b>Priority Access to Resources</b></li>
+      <li class="w3-padding-16"><b>Access to Consultation Services</b></li>
+      <li class="w3-padding-16"><b>Endless Support</b></li>
+      <li class="w3-padding-16">
+        <h2 class="w3-wide">DT 99</h2>
+        <span class="w3-opacity">per month</span>
+      </li>
+      <li class="w3-light-grey w3-padding-24">
+        <button class="w3-button w3-black w3-padding-large">Sign Up</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="w3-third w3-margin-bottom">
+    <ul class="w3-ul w3-border w3-center w3-hover-shadow">
+      <li class="w3-black w3-xlarge w3-padding-32">Enterprise Plan</li>
+      <li class="w3-padding-16"><b>Fully Customized Solution</b></li>
+      <li class="w3-padding-16"><b>Unlimited Access to Resources</b></li>
+      <li class="w3-padding-16"><b>Premium Support</b></li>
+      <li class="w3-padding-16"><b>Access to Expert Consultation</b></li>
+      <li class="w3-padding-16">
+        <h2 class="w3-wide">Custom</h2>
+        <span class="w3-opacity">Contact Us for Pricing</span>
+      </li>
+      <li class="w3-light-grey w3-padding-24">
+        <button class="w3-button w3-black w3-padding-large">Contact Us</button>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+  <!-- testomonials Section -->
+  <div class="w3-container w3-light-grey" style="padding:128px 16px">
+    <div class="w3-row-padding w3-center">
+      <p>Find Out More</p>
+      <h3>Best Free Resources For Tech entrepreneurship</h3>
+    </div>
+
+    <div class="w3-row-padding" style="padding-top: 80px; padding-left: 200px; padding-right: 200px;">
+      <button (click)="toggleAccordion('Demo1')" class="w3-padding-16 w3-white w3-button w3-block w3-left-align">Startup Grind - Global Community for Entrepreneurs <i class="fas fa-plus w3-right"></i>
+      </button>
+      <div [hidden]="!isAccordionOpen['Demo1']" class="w3-container">
+        <p>Startup Grind is a global startup community designed to educate, inspire, and connect entrepreneurs and in partnership with Google for Startups.
+
+          Startup Grind hosts monthly events in more than 500 cities across 125+ countries featuring successful local founders, innovators, educators and investors who share personal stories and lessons learned on the road to building great companies.</p>
+      </div><br>
+      <button (click)="toggleAccordion('Demo2')" class="w3-padding-16 w3-white w3-button w3-block w3-left-align">TechCrunch - Startup and Technology News <i class="fas fa-plus w3-right"></i>
+      </button>
+      <div [hidden]="!isAccordionOpen['Demo2']" class="w3-container">
+        <p>Reporting on the business of technology, startups, venture capital funding, and Silicon Valley.This American global online newspaper focusing on topics regarding high-tech and startup companies.</p>
+      </div><br>
+      <button (click)="toggleAccordion('Demo3')" class="w3-padding-16 w3-white w3-button w3-block w3-left-align">Mashable - technology, business, and entrepreneurship <i class="fas fa-plus w3-right"></i>
+      </button>
+      <div [hidden]="!isAccordionOpen['Demo3']" class="w3-container">
+        <p>Mashable covers a wide range of topics related to technology, business, and entrepreneurship, including the latest innovations, startups, industry trends, and emerging technologies.</p>
+      </div><br>
+      <button (click)="toggleAccordion('Demo4')" class="w3-padding-16 w3-white w3-button w3-block w3-left-align">Entrepreneur - Start, run and grow your business <i class="fas fa-plus w3-right"></i>
+      </button>
+      <div [hidden]="!isAccordionOpen['Demo4']" class="w3-container">
+        <p>Entrepreneur is dedicated to empowering aspiring and established entrepreneurs with the knowledge, tools, and resources they need to succeed in today's competitive business environment.</p>
+      </div><br>
+      <button (click)="toggleAccordion('Demo5')" class="w3-padding-16 w3-white w3-button w3-block w3-left-align">Harvard Business Review - Ideas and Advice for Leaders <i class="fas fa-plus w3-right"></i>
+      </button>
+      <div [hidden]="!isAccordionOpen['Demo5']" class="w3-container">
+        <p>Fortune 500 company, an entrepreneur leading a startup, or a mid-level manager seeking to enhance your leadership skills, HBR serves as a trusted resource for ideas and advice to inspire and guide you in your leadership journey.</p>
+      </div>
+    </div>
+  </div>

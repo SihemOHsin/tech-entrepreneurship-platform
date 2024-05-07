@@ -1,23 +1,23 @@
 <div class="w3-light-grey" style="min-height: 100vh;">
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
     <div class="w3-container">
-      <hr>
+      <br>
 
       <div class="w3-center">
         <h2>Users</h2>
         <p w3-class="w3-large">Manage users in your system.</p>
       </div>
       <div class="w3-responsive w3-card-4">
-        <table class="w3-table w3-striped w3-bordered">
+        <table class="w3-table w3-bordered">
           <thead>
-          <tr class="w3-theme">
+          <tr class="w3-theme ">
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
             <th>Authority</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody class="w3-white">
           <tr *ngFor="let user of paginatedUsers">
             <td>{{ user.firstName }}</td>
             <td>{{ user.lastName }}</td>
