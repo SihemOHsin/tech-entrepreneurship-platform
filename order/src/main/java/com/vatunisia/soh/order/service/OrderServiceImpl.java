@@ -11,6 +11,7 @@ import com.vatunisia.soh.order.mapper.OrderMapper;
 import com.vatunisia.soh.order.repo.OrderRepository;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,8 @@ import org.springframework.http.HttpHeaders;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    @Value("${order.directory}")
+    private String reportDirectory;
 
     @Autowired
     private OrderRepository orderRepo;
@@ -50,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Extract the selected businessId
-        Long businessId = order.getBusinessId();
+        Integer businessId = order.getBusinessId();
 
         // Ensure that all consultations in the order belong to the same business
         for (Consultation consultation : order.getConsultationServices()) {
@@ -157,11 +160,14 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // String fileName = "Order_Report_" + System.currentTimeMillis() + ".pdf";
+            //String fileName = reportDirectory + "Order_Report_" + System.currentTimeMillis() + ".pdf";
+
 //OR
             // Set the directory where you want to save the PDF file
-            String directoryPath = "C:\\Users\\USER\\Desktop\\PFE\\ProjectCode\\order\\generated_files\\";
+            //String directoryPath = "C:\\Users\\USER\\Desktop\\PFE\\ProjectCode\\order\\generated_files\\";
+            String directoryPath = reportDirectory ;
             // Generate a unique file name for the report
-            String fileName = directoryPath + "Order_Report_" + System.currentTimeMillis() + ".pdf";
+            String fileName =directoryPath+ "\\"+ "Order_Report_" + System.currentTimeMillis() + ".pdf";
 
             // Create a new PDF document
             Document document = new Document();
@@ -192,14 +198,14 @@ public class OrderServiceImpl implements OrderService {
     private void addOrderDetails(Document document, Map<String, Object> requestMap) throws DocumentException {
         // Add order information
         document.add(new Paragraph("Order Information:"));
-        document.add(new Paragraph("Name: " + requestMap.get("name")));
+        document.add(new Paragraph("\nName: " + requestMap.get("name")));
         document.add(new Paragraph("Contact Number: " + requestMap.get("contactNumber")));
         document.add(new Paragraph("Email: " + requestMap.get("email")));
         document.add(new Paragraph("Payment Method: " + requestMap.get("paymentMethod")));
         document.add(new Paragraph("Total: " + requestMap.get("total")));
 
         // Add consultation services information
-        document.add(new Paragraph("\nConsultation Services:"));
+        document.add(new Paragraph("\nConsultation Services:\n\n"));
         List<Map<String, Object>> consultationServices = (List<Map<String, Object>>) requestMap.get("consultationServices");
         PdfPTable table = new PdfPTable(3);
         Stream.of("Service Name", "Service Description", "Price")
@@ -290,7 +296,7 @@ public class OrderServiceImpl implements OrderService {
                     header.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     header.setBorderWidth(1);
                     header.setPhrase(new Phrase(columnTitle));
-                    header.setBackgroundColor(BaseColor.MAGENTA);
+                    header.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     header.setHorizontalAlignment(Element.ALIGN_CENTER);
                     header.setVerticalAlignment(Element.ALIGN_CENTER);
                     table.addCell(header);
@@ -301,11 +307,11 @@ public class OrderServiceImpl implements OrderService {
     private Font getFont(String type) {
         switch (type) {
             case "header":
-                Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLDOBLIQUE, 18, BaseColor.MAGENTA);
+                Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLDOBLIQUE, 18, BaseColor.LIGHT_GRAY);
                 headerFont.setStyle(Font.BOLD);
                 return headerFont;
             case "data":
-                Font dataFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, BaseColor.BLACK);
+                Font dataFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, BaseColor.GRAY);
                 dataFont.setStyle(Font.BOLD);
                 return dataFont;
             default:
@@ -319,7 +325,7 @@ public class OrderServiceImpl implements OrderService {
         rec.enableBorderSide(2);
         rec.enableBorderSide(4);
         rec.enableBorderSide(8);
-        rec.setBorderColor(BaseColor.MAGENTA);
+        rec.setBorderColor(BaseColor.LIGHT_GRAY);
         rec.setBorderWidth(1);
         document.add(rec);
     }

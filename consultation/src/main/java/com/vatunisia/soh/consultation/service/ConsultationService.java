@@ -14,5 +14,5 @@ public interface ConsultationService {
     boolean updateConsultation(Long id, Consultation updatedConsultation);
 
     // Additional method to find consultation services by business ID
-    List<ConsultationDTO> findConsultationByBusinessId(Long businessId);
+    List<ConsultationDTO> findConsultationByBusinessId(Integer businessId);
 }

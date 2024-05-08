@@ -81,7 +81,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
-    public List<ConsultationDTO> findConsultationByBusinessId(Long businessId) {
+    public List<ConsultationDTO> findConsultationByBusinessId(Integer businessId) {
         List<Consultation> consultations = consultationRepository.findByBusinessId(businessId);
         List<ConsultationDTO> ConsultationDTOs = new ArrayList<>();
         return consultations.stream()

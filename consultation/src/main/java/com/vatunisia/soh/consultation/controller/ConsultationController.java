@@ -62,7 +62,7 @@ public class ConsultationController {
     }
 
     @GetMapping("/business/{businessId}")
-    public ResponseEntity<List<ConsultationDTO>> findConsultationByBusinessId(@PathVariable Long businessId) {
+    public ResponseEntity<List<ConsultationDTO>> findConsultationByBusinessId(@PathVariable Integer businessId) {
         List<ConsultationDTO> consultationDTOs = consultationService.findConsultationByBusinessId(businessId);
         if (!consultationDTOs.isEmpty()) {
             return ResponseEntity.ok(consultationDTOs);

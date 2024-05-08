@@ -5,21 +5,19 @@ import com.vatunisia.soh.business.dto.User;
 import com.vatunisia.soh.business.entity.Business;
 import com.vatunisia.soh.business.file.FileUtils;
 
-import java.util.Arrays;
 
 public class BusinessMapper {
-    public static BusinessDTO mapToBusinessWithUserDto(Business business , User user
-                                                    ) {
+
+    public static BusinessDTO mapToBusinessWithUserDto(Business business, User user) {
         BusinessDTO businessDTO = new BusinessDTO();
         businessDTO.setId(business.getId());
         businessDTO.setBizname(business.getBizname());
         businessDTO.setDateOfBizCreation(business.getDateOfBizCreation());
         businessDTO.setIndustry(business.getIndustry());
         businessDTO.setLocation(business.getLocation());
-        //businessDTO.setBusinessLogo(business.getBusinessLogo());
         businessDTO.setUser(user);
 
-        // Read the business logo from the file system and set it in the DTO
+        // Set business logo directly from file location
         byte[] businessLogoBytes = FileUtils.readFileFromLocation(business.getBusinessLogo());
         businessDTO.setBusinessLogo(businessLogoBytes);
 
@@ -36,9 +34,8 @@ public class BusinessMapper {
         business.setDateOfBizCreation(businessDTO.getDateOfBizCreation());
         business.setIndustry(businessDTO.getIndustry());
         business.setLocation(businessDTO.getLocation());
+        // No need to convert byte array to string here
 
         return business;
     }
-
 }
-

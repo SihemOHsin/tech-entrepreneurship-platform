@@ -7,6 +7,8 @@ import com.vatunisia.soh.business.file.FileStorageService;
 import com.vatunisia.soh.business.mapper.BusinessMapper;
 import com.vatunisia.soh.business.repository.BusinessRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,18 +26,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional
 public class BusinessServiceImpl implements BusinessService {
 
     private final BusinessRepository businessRepository;
     private final RestTemplate restTemplate;
     private final FileStorageService fileStorageService;
 
-    @Autowired
-    public BusinessServiceImpl(BusinessRepository businessRepository, RestTemplate restTemplate, FileStorageService fileStorageService) {
-        this.businessRepository = businessRepository;
-        this.restTemplate = restTemplate;
-        this.fileStorageService = fileStorageService;
-    }
+
 
     private BusinessDTO convertToDto(Business business) {
         User user = restTemplate.getForObject(

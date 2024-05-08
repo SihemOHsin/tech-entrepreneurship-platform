@@ -17,7 +17,7 @@ import java.util.List;
 public class Order {
     private String id;
     private List<Consultation> consultationServices;
-    private Long businessId;
+    private Integer businessId;
     private String paymentMethod;
     private  String contactNumber;
     private String email;

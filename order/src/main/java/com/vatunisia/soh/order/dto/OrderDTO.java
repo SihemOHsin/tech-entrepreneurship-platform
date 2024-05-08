@@ -7,7 +7,7 @@ public class OrderDTO {
 
     private String id;
     private List<Consultation> consultationServices;
-    private Long businessId;
+    private Integer businessId;
     private String paymentMethod;
     private  String contactNumber;
     private String email;
@@ -30,11 +30,11 @@ public class OrderDTO {
         this.consultationServices = consultationServices;
     }
 
-    public Long getBusinessId() {
+    public Integer getBusinessId() {
         return businessId;
     }
 
-    public void setBusinessId(Long businessId) {
+    public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
     }
 

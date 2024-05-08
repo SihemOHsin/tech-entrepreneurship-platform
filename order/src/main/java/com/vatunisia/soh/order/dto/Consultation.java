@@ -17,6 +17,6 @@ public class Consultation {
 
     private Long price;
 
-    private Long businessId;
+    private Integer businessId;
 
 }
