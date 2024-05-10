@@ -1,4 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {BusinessDTO} from "../../../../services/business/business-dto.model";
+import {ExpertiseDTO} from "../../../../services/expertise/expertise-dto.model";
+import {BusinessService} from "../../../../services/business/business.service";
+import {ExpertiseService} from "../../../../services/expertise/expertise.service";
 
 @Component({
   selector: 'app-entrepreneur-community',
@@ -7,67 +11,86 @@ import {Component, OnInit} from '@angular/core';
 })
 export class EntrepreneurCommunityComponent implements OnInit{
 
-  blogEntries: { id: number, title: string, content: string, fullContent: string, comments: number }[] = [
-    {
-      id: 1,
-      title: "Entrepreneur 1",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      fullContent: "Full content of the first blog entry Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla quis lorem ut libero Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla quis lorem ut libero",
-      comments: 5
-    },
-    {
-      id: 2,
-      title: "Entrepreneur 2",
-      content: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Lorem ipsum dolor sit amet, consectetur ...",
-      fullContent: "Full content of the second blog entry Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla quis lorem ut libero Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla quis lorem ut libero",
-      comments: 0
-    },
-    {
-      id: 3,
-      title: "Entrepreneur 3",
-      content: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas...",
-      fullContent: "Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla quis lorem ut libero malesuada feugiat.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      comments: 3
-    },
-    {
-      id: 4,
-      title: "Entrepreneur 4",
-      content: "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      fullContent: "Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Curabitur aliquet quam id dui posuere blandit Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      comments: 0
-    },
-    {
-      id: 5,
-      title: "Entrepreneur 5",
-      content: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas...",
-      fullContent: "Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla quis lorem ut libero malesuada feugiat.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      comments: 3
-    },
-    {
-      id: 6,
-      title: "Entrepreneur 6",
-      content: "Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      fullContent: "Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Curabitur aliquet quam id dui posuere blandit Lorem ipsum dolor sit amet, consectetur adipiscing elit Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      comments: 0
-    }
-  ];
+  searchQuery: string = ''; // Initialize search query property
+  filteredEntries: { id: number, title: string, content: string, fullContent: string,date:string, comments: number }[] = [];
+
+  businesses: BusinessDTO[];
+  businessExpertises: { [key: number]: ExpertiseDTO[] } = {};
+  blogEntries: { id: number, title: string, content: string, fullContent: string,date:string, comments: number }[] = [];
 
   currentPage = 1;
   entriesPerPage = 4;
-  currentEntries: { id: number, title: string, content: string, fullContent: string, comments: number }[] = []; // Explicitly declare type
+  currentEntries: { id: number, title: string, content: string, fullContent: string,date:string , comments: number }[] = [];
   totalPages = 0;
 
-  constructor() { }
+  constructor(
+    private businessService: BusinessService,
+    private expertiseService: ExpertiseService
+  ) { }
 
   ngOnInit(): void {
-    this.totalPages = Math.ceil(this.blogEntries.length / this.entriesPerPage);
-    this.updateBlogEntries();
+    this.loadBusinesses();
   }
 
+  loadBusinesses() {
+    this.businessService.getBusinessesByUserRole('entrepreneur').subscribe(
+      (data: BusinessDTO[]) => {
+        this.businesses = data;
+        this.fetchExpertisesForBusinesses();
+      },
+      (error) => {
+        console.log('Error fetching businesses:', error);
+      }
+    );
+  }
+
+  fetchExpertisesForBusinesses() {
+    this.businesses.forEach(business => {
+      this.expertiseService.getExpertisesByBusinessId(business.id).subscribe(
+        (data: ExpertiseDTO[]) => {
+          this.businessExpertises[business.id] = data; // Store the expertise associated with the business
+          this.populateBlogEntries(); // Populate blogEntries after fetching expertises
+        },
+        (error) => {
+          console.error(`Error fetching expertises for business ${business.id}:`, error);
+        }
+      );
+    });
+  }
+
+  populateBlogEntries() {
+    this.blogEntries = [];
+    this.businesses.forEach(business => {
+      const expertises = this.businessExpertises[business.id];
+      if (expertises && expertises.length > 0) {
+        expertises.forEach(expertise => {
+          this.blogEntries.push({
+            id: expertise.business.id,
+            title: expertise.business.bizname,
+            content: expertise.description.slice(0, 100) + '...',
+            fullContent: expertise.description,
+            date: expertise.business.dateOfBizCreation,
+            comments: (expertise.reviews.length)
+          });
+        });
+      }
+    });
+
+    // Filter blogEntries based on search query
+    if (this.searchQuery) {
+      this.blogEntries = this.blogEntries.filter(entry =>
+        entry.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+
+    this.updateBlogEntries(); // Update currentEntries and totalPages
+  }
+//
   updateBlogEntries() {
     const startIndex = (this.currentPage - 1) * this.entriesPerPage;
     const endIndex = startIndex + this.entriesPerPage;
     this.currentEntries = this.blogEntries.slice(startIndex, endIndex);
+    this.totalPages = Math.ceil(this.blogEntries.length / this.entriesPerPage);
   }
 
   changePage(delta: number) {
@@ -77,6 +100,9 @@ export class EntrepreneurCommunityComponent implements OnInit{
     } else if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages;
     }
+
+   //
+
     this.updateBlogEntries();
   }
 
@@ -91,5 +117,18 @@ export class EntrepreneurCommunityComponent implements OnInit{
       fullContent.style.display = 'block';
     }
   }
+
+  onSearch() {
+    const searchTerm = this.searchQuery.trim().toLowerCase();
+    if (searchTerm) {
+      this.filteredEntries = this.blogEntries.filter(entry =>
+        entry.title.toLowerCase().includes(searchTerm)
+      );
+    } else {
+      // If the search query is empty, show all blog entries
+      this.filteredEntries = this.blogEntries;
+    }
+  }
+
 
 }

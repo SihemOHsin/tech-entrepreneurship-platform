@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/expertises")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 public class ExpertiseController {
     private ExpertiseService expertiseService;
 

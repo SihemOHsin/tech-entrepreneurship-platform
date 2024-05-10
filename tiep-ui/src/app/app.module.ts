@@ -8,10 +8,12 @@ import {FormsModule} from "@angular/forms";
 import {CodeInputModule} from "angular-code-input";
 import {HttpTokenInterceptor} from "./services/interceptor/http-token.interceptor";
 import {LayoutsModule} from "./layouts/layouts.module";
+import { TestServicesComponent } from './components/test-services/test-services.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TestServicesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,4 @@
 <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
-
   <div class="w3-row-padding" id="plans">
     <div class=" w3-padding" style="position: relative;">
       <h3>Drive Business Growth</h3>
@@ -10,94 +9,34 @@
         <a routerLink="/login" class="w3-button w3-border w3-border-dark-grey w3-padding-large w3-large w3-margin-top "> Entrepreneur</a>
       </p>
     </div>
-<br>
+    <br>
     <!-- Second Container -->
-    <div class="w3-row-padding w3-grayscale " style="position: relative; ">
-      <!-- First Quarter -->
-      <div class="w3-quarter">
+    <div class="w3-row-padding w3-grayscale">
+      <div class="w3-quarter" *ngFor="let business of businesses">
         <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
+          <img [src]="business.businessLogo ? 'data:image/png;base64,' + business.businessLogo : '/assets/logo.png'" alt="Business Logo" style="width:100%">
           <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
+            <h3>{{ business.bizname }}</h3>
+            <p class="w3-opacity">{{ business.industry }}</p>
+            <p *ngFor="let expertise of businessExpertises[business.id]">
+              {{ expertise.description }}
+            </p>
             <div>
               <div class="w3-half">
                 <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-              </div >
+              </div>
               <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p> 10/10</p>
+                <h6 *ngFor="let expertise of businessExpertises[business.id]">
+                  {{ expertise.reviews[0].title }}
+                </h6>
+                <p *ngFor="let expertise of businessExpertises[business.id]">
+                 {{ expertise.reviews[0].rating }}/5
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="w3-quarter">
-        <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
-          <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
-            <div>
-              <div class="w3-half">
-                <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-              </div >
-              <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p> 10/10</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="w3-quarter">
-        <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
-          <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
-            <div>
-              <div class="w3-half">
-                <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-              </div >
-              <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p> 10/10</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="w3-quarter">
-        <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
-          <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
-            <div>
-              <div class="w3-half">
-                <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-              </div >
-              <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p> 10/10</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>

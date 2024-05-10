@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("businesses")
+@CrossOrigin
 public class BusinessController {
 
     private final BusinessService businessService;
