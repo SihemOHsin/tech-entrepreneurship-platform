@@ -1,38 +1,134 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { OrderService } from "../../../../services/order/order.service";
+import { BusinessService } from "../../../../services/business/business.service";
+import { ConsultationService } from "../../../../services/consultation/consultation.service";
+import { BusinessDTO } from "../../../../services/business/business-dto.model";
+import {ConsultationDTOs} from "../../../../services/consultation/consulaltion.model";
 
 @Component({
   selector: 'app-manage-orders',
   templateUrl: './manage-orders.component.html',
   styleUrls: ['./manage-orders.component.scss']
 })
-export class ManageOrdersComponent {
-  manageOrderForm: FormGroup; // Define FormGroup for form control bindings
-  totalAmount: number = 1000; // Static total amount
-  dataSource: any[] = [ // Static data for the table
-    { name: 'Product 1', price: 100, quantity: 2, total: 200 },
-    { name: 'Product 2', price: 150, quantity: 1, total: 150 },
-    { name: 'Product 3', price: 75, quantity: 3, total: 225 }
-  ];
+export class ManageOrdersComponent implements OnInit {
+  myForm: FormGroup;
+  consultationServices: ConsultationDTOs[] = [];
+  businesses: BusinessDTO[] = [];
+  totalAmount: number = 0;
+  selectedConsultation: ConsultationDTOs | undefined; // Updated to store the selected consultation object
 
-  constructor(private fb: FormBuilder) {
-    // Initialize the form group and its controls
-    this.manageOrderForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      contactNumber: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      paymentMethod: ['', Validators.required],
-      category: ['', Validators.required],
-      product: ['', Validators.required],
+  constructor(
+    private fb: FormBuilder,
+    private orderService: OrderService,
+    private businessService: BusinessService,
+    private consultationService: ConsultationService
+  ) {
+    this.myForm = this.fb.group({
+      consultationServices: ['', Validators.required],
       price: ['', Validators.required],
-      quantity: ['', Validators.required],
+      selectedBusiness: ['', Validators.required],
+      businessId: ['', Validators.required],
+      paymentMethod: ['', Validators.required],
+      contactNumber: ['', [Validators.required, Validators.pattern('[0-9]*')]],
+      email: ['', [Validators.required, Validators.email]],
+      name: ['', Validators.required],
       total: ['', Validators.required]
     });
   }
 
+  ngOnInit(): void {
+    this.loadBusinesses();
+  }
+
+  loadBusinesses() {
+    this.businessService.getAllBusinesses().subscribe(
+      (data: BusinessDTO[]) => {
+        this.businesses = data;
+      },
+      (error) => {
+        console.error('Error fetching businesses:', error);
+      }
+    );
+  }
+
+  onBusinessSelection(event: any) {
+    const selectedBusinessId = +event.target.value;
+    this.myForm.get('businessId')?.setValue(selectedBusinessId); // Safely set the selected business ID to the form control
+    if (selectedBusinessId) {
+      this.consultationService.findConsultationByBusinessId(selectedBusinessId).subscribe(
+        (data: ConsultationDTOs[]) => {
+          this.consultationServices = data;
+        },
+        (error) => {
+          console.error('Error fetching consultations:', error);
+        }
+      );
+    } else {
+      this.consultationServices = []; // Clear consultations if no business is selected
+    }
+  }
+
+  updateConsultationPrice(event: any) {
+    const selectedConsultationId = +event.target.value; // Convert to number
+    this.selectedConsultation = this.consultationServices.find(consultation => consultation.id === selectedConsultationId); // Store the selected consultation object
+
+    const consultationPrice = this.selectedConsultation?.price;
+
+    console.log('Selected consultation price:', consultationPrice);
+
+    if (consultationPrice !== undefined) {
+      this.myForm.get('price')?.setValue(consultationPrice);
+
+      const vat = 0.19; // 19% VAT
+      this.totalAmount = consultationPrice + (consultationPrice * vat);
+
+      console.log("totalAmounttotalAmount ", this.totalAmount)
+      this.myForm.get('total')?.setValue(this.totalAmount);
+    }
+  }
+
   submitAction() {
-    // Functionality for submitting action
-    console.log('Submit action triggered');
+    if (this.myForm.valid && this.selectedConsultation) { // Check if the form is valid and a consultation is selected
+      // Extract form values
+      const formData = this.myForm.value;
+
+      // Include the selected consultation object in the form data
+      formData.consultationServices = this.selectedConsultation;
+      console.log('new form data ', formData)
+
+      // Send HTTP request to save order
+      this.orderService.saveOrder(formData).subscribe(
+        (savedOrder) => {
+          // Handle successful order saving
+          console.log('Order saved successfully:', savedOrder);
+
+          // Generate PDF report
+          const reportRequest = {
+            orderId: savedOrder.id // Assuming savedOrder contains the id of the newly saved order
+          };
+          this.orderService.generateReport(reportRequest).subscribe(
+            (reportUrl) => {
+              // Handle successful report generation
+              console.log('PDF report generated successfully:', reportUrl);
+
+              // Now you have the URL of the generated report, you can redirect the user or display the link to download the report
+            },
+            (reportError) => {
+              // Handle report generation error
+              console.error('Error generating PDF report:', reportError);
+            }
+          );
+        },
+        (saveError) => {
+          // Handle save order error
+          console.error('Error saving order:', saveError);
+        }
+      );
+    } else {
+      // Form is invalid or no consultation is selected, display error message or handle it accordingly
+      console.error('Form is invalid or no consultation is selected. Cannot submit.');
+    }
   }
 
   add() {
@@ -48,10 +144,5 @@ export class ManageOrdersComponent {
   validateProductAdd(): boolean {
     // Functionality for validating product add
     return false; // For demonstration, always return false
-  }
-
-  setQuantity(event: any) {
-    // Functionality for setting quantity
-    console.log('Quantity set:', event.target.value);
   }
 }

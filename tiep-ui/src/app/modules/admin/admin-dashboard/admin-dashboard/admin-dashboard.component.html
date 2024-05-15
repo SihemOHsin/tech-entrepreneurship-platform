@@ -3,13 +3,13 @@
 <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
   <!-- Header -->
-  <header class="w3-container" style="padding-top:22px">
+  <header class="w3-container" style="padding-top:50px;padding-bottom:20px;">
     <h5><b><i class="fa fa-dashboard"></i> Dashboard</b></h5>
   </header>
 
   <div class="w3-row-padding w3-margin-bottom ">
     <div class="w3-quarter">
-      <div class="w3-container w3-white w3-padding-16">
+      <div class="w3-container w3-light-grey w3-padding-16 w3-card">
         <div class="w3-left"><i class="fa fa-users w3-xlarge"></i></div>
         <div class="w3-right">
           <h3>52</h3>
@@ -19,30 +19,30 @@
       </div>
     </div>
     <div class="w3-quarter">
-      <div class="w3-container w3-white w3-padding-16">
+      <div class="w3-container w3-light-grey w3-padding-16 w3-card">
         <div class="w3-left"><i class="fa fa-users-cog w3-xlarge"></i></div>
         <div class="w3-right">
-          <h3>99</h3>
+          <h3>{{numberOfAllUsers}}</h3>
         </div>
         <div class="w3-clear"></div>
         <h4 class="w3-text-grey">IT Experts</h4>
       </div>
     </div>
     <div class="w3-quarter">
-      <div class="w3-container w3-white w3-padding-16">
+      <div class="w3-container w3-light-grey w3-padding-16 w3-card">
         <div class="w3-left"><i class="fa fa-users-rays w3-xlarge"></i></div>
         <div class="w3-right">
-          <h3>23</h3>
+          <h3>{{numberOfITExperts}}</h3>
         </div>
         <div class="w3-clear"></div>
         <h4 class="w3-text-grey">Entrepreneurs</h4>
       </div>
     </div>
     <div class="w3-quarter">
-      <div class="w3-container w3-white w3-padding-16">
+      <div class="w3-container w3-light-grey w3-padding-16 w3-card">
         <div class="w3-left"><i class="fa fa-list w3-xlarge"></i></div>
         <div class="w3-right">
-          <h3>50</h3>
+          <h3>{{numberOfEntrepreneurs}}</h3>
         </div>
         <div class="w3-clear"></div>
         <h4 class="w3-text-grey">Orders</h4>
@@ -52,49 +52,22 @@
 
   <div class="w3-panel">
     <div class="w3-row-padding" style="margin:0 -16px">
+      <br>
       <div class="w3-third">
-        <h5>Regions</h5>
-        <img src="/w3images/region.jpg" style="width:100%" alt="Google Regional Map">
+        <h5>Distribution of users</h5>
+
+        <div>
+          <canvas id="donutChart" width="300" height="300"></canvas>
+        </div>
+
       </div>
       <div class="w3-twothird">
-        <h5>Feeds</h5>
-        <table class="w3-table w3-striped w3-white">
-          <tr>
-            <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
-            <td>New record, over 90 views.</td>
-            <td><i>10 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-bell w3-text-red w3-large"></i></td>
-            <td>Database error.</td>
-            <td><i>15 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-users w3-text-yellow w3-large"></i></td>
-            <td>New record, over 40 users.</td>
-            <td><i>17 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-comment w3-text-red w3-large"></i></td>
-            <td>New comments.</td>
-            <td><i>25 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-bookmark w3-text-blue w3-large"></i></td>
-            <td>Check transactions.</td>
-            <td><i>28 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-laptop w3-text-red w3-large"></i></td>
-            <td>CPU overload.</td>
-            <td><i>35 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-share-alt w3-text-green w3-large"></i></td>
-            <td>New shares.</td>
-            <td><i>39 mins</i></td>
-          </tr>
-        </table>
+        <h5>New Users</h5>
+
+        <div>
+          <canvas id="lineChart" width="300" height="300"></canvas>
+        </div>
+
       </div>
     </div>
   </div>
@@ -104,3 +77,4 @@
   <!-- End page content -->
 </div>
 </div>
+

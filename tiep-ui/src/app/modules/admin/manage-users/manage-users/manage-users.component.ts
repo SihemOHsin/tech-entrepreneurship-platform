@@ -1,34 +1,69 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthenticationService} from "../../../../services/services/authentication.service";
+import {User} from "../../../../services/models/user";
 
 @Component({
   selector: 'app-manage-users',
   templateUrl: './manage-users.component.html',
   styleUrls: ['./manage-users.component.scss']
 })
-export class ManageUsersComponent {
+export class ManageUsersComponent implements OnInit{
+
+  user: User;
   users: any[] = [
-    { firstName: 'sTE VirtuA', lastName: 'Startup', email: 'virtua@gmail.com', authority: 'Admin' },
-    { firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', authority: 'User' },
-    { firstName: 'Jane', lastName: 'Smith', email: 'jane.smith@example.com', authority: 'User' },
-    { firstName: 'Michael', lastName: 'Johnson', email: 'michael.johnson@example.com', authority: 'Admin' },
-    { firstName: 'Emily', lastName: 'Brown', email: 'emily.brown@example.com', authority: 'User' },
-    { firstName: 'David', lastName: 'Martinez', email: 'david.martinez@example.com', authority: 'Admin' },
-    { firstName: 'Sophia', lastName: 'Lee', email: 'sophia.lee@example.com', authority: 'User' },
-    { firstName: 'Matthew', lastName: 'Garcia', email: 'matthew.garcia@example.com', authority: 'User' },
-    { firstName: 'Olivia', lastName: 'Wilson', email: 'olivia.wilson@example.com', authority: 'Admin' },
-    { firstName: 'William', lastName: 'Anderson', email: 'william.anderson@example.com', authority: 'User' },
-    { firstName: 'Isabella', lastName: 'Taylor', email: 'isabella.taylor@example.com', authority: 'User' },
+    { firstName: '', lastName: '', email: '', authority: '' },
   ];
 
-  // Pagination variables
-  pageSize: number = 4; // Number of users per page
-  currentPage: number = 1; // Current page
-  totalPages: number = Math.ceil(this.users.length / this.pageSize); // Total number of pages
-  pages: number[] = Array.from({ length: this.totalPages }, (_, i) => i + 1); // Array of page numbers
-  paginatedUsers: any[] = []; // Array to hold users for current page
+  pageSize: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 0;
+  pages: number[] = [];
+  paginatedUsers: any[] = [];
 
-  constructor() {
-    this.setPage(1); // Set initial page
+  constructor(private authService: AuthenticationService) { }
+
+  ngOnInit(): void {
+    this.tableOfUsers();
+  }
+
+  tableOfUsers(): void {
+    this.authService.getAllUsers({ body: this.user }).subscribe({
+      next: (res) => {
+        if (res instanceof Blob) {
+          // Read the Blob as JSON
+          const reader = new FileReader();
+          reader.onload = () => {
+            const jsonRes = JSON.parse(reader.result as string);
+            console.log('JSON Response:', jsonRes);
+
+            // Map the JSON response to the users array
+            this.users = jsonRes.map((item: any) => {
+              return {
+                firstName: item.firstname,
+                lastName: item.lastname,
+                email: item.email,
+                authority: item.authorities && item.authorities.length > 0 ? item.authorities[0].authority : ''
+              };
+            });
+
+            // Calculate total number of pages
+            this.totalPages = Math.ceil(this.users.length / this.pageSize);
+            // Update pages array
+            this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+
+            // Set initial page
+            this.setPage(1);
+          };
+          reader.readAsText(res);
+        } else {
+          // Handle non-Blob response
+          console.error('Response is not a Blob.');
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching users:', error);
+      }
+    });
   }
 
   setPage(page: number) {

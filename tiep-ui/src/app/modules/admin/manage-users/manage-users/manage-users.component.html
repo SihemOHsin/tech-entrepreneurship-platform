@@ -1,9 +1,9 @@
 <div class="w3-light-grey" style="min-height: 100vh;">
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
-    <div class="w3-container">
+    <div class="w3-container" >
       <br>
 
-      <div class="w3-center">
+      <div >
         <h2>Users</h2>
         <p w3-class="w3-large">Manage users in your system.</p>
       </div>
@@ -18,7 +18,7 @@
           </tr>
           </thead>
           <tbody class="w3-white">
-          <tr *ngFor="let user of paginatedUsers">
+          <tr *ngFor="let user of users">
             <td>{{ user.firstName }}</td>
             <td>{{ user.lastName }}</td>
             <td>{{ user.email }}</td>

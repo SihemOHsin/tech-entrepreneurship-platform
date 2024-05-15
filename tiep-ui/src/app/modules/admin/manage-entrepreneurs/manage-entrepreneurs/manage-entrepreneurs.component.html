@@ -20,8 +20,8 @@
           </thead>
           <tbody>
           <tr *ngFor="let entrepreneur  of paginatedItems">
-            <td class="w3-white">{{ entrepreneur.userfirstname }}</td>
-            <td class="w3-white">{{ entrepreneur.userlastname }}</td>
+            <td class="w3-white">{{ entrepreneur.user.firstname }}</td>
+            <td class="w3-white">{{ entrepreneur.user.lastname }}</td>
             <td class="w3-white">{{ entrepreneur.bizname }}</td>
             <td class="w3-white">{{ entrepreneur.dateOfBizCreation }}</td>
             <td class="w3-white">{{ entrepreneur.industry }}</td>
