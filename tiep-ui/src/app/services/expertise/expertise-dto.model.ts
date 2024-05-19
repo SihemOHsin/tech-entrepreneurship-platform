@@ -19,7 +19,7 @@ export class Business {
 }
 
 export class Review {
-  id: number;
+  id?: number; // Making id property optional
   title: string;
   description: string;
   rating: number;

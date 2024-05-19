@@ -19,13 +19,13 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Review>> getAllReviews(@RequestParam Long businessId){
+    public ResponseEntity<List<Review>> getAllReviews(@RequestParam Integer businessId){
         return new ResponseEntity<>(reviewService.getAllReviews(businessId),
                 HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<String> addReview(@RequestParam Long businessId,
+    public ResponseEntity<String> addReview(@RequestParam Integer businessId,
                                             @RequestBody Review review){
         boolean isReviewSaved = reviewService.addReview(businessId, review);
         if (isReviewSaved)

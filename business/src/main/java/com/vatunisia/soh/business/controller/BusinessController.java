@@ -3,6 +3,7 @@ package com.vatunisia.soh.business.controller;
 import com.vatunisia.soh.business.dto.BusinessDTO;
 import com.vatunisia.soh.business.entity.Business;
 import com.vatunisia.soh.business.service.BusinessService;
+import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,5 +88,11 @@ public class BusinessController {
     ) {
         businessService.uploadBusinessLogo(file, businessId);
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/user-email/{email}")
+    public ResponseEntity<List<BusinessDTO>> getBusinessesByUserEmail(@PathVariable String email) {
+        List<BusinessDTO> businesses = businessService.findBusinessByUserEmail(email);
+        return ResponseEntity.ok(businesses);
     }
 }

@@ -9,7 +9,6 @@ import com.vatunisia.soh.business.repository.BusinessRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -139,5 +138,57 @@ public class BusinessServiceImpl implements BusinessService {
         business.setBusinessLogo(businessLogo);
         businessRepository.save(business);
     }
+
+
+    /*
+    @Override
+    public List<BusinessDTO> findBusinessByUserEmail(String userEmail) {
+        List<Business> businesses = businessRepository.findByUserEmail(userEmail);
+        return businesses.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+*/
+
+    @Override
+    public List<BusinessDTO> findBusinessByUserEmail(String userEmail) {
+        // Step 1: Retrieve all users
+        ResponseEntity<List<User>> response = restTemplate.exchange(
+                "http://AUTHENTICATION:9096/auth/users",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<User>>() {});
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new EntityNotFoundException("Failed to retrieve users from authentication service");
+        }
+
+        List<User> users = response.getBody();
+
+        if (users == null || users.isEmpty()) {
+            throw new EntityNotFoundException("No users found in the system");
+        }
+
+        // Step 2: Filter the user by email
+        Optional<User> optionalUser = users.stream()
+                .filter(user -> userEmail.equals(user.getEmail()))
+                .findFirst();
+
+        if (!optionalUser.isPresent()) {
+            throw new EntityNotFoundException("User not found with email: " + userEmail);
+        }
+
+        User user = optionalUser.get();
+
+        // Step 3: Fetch businesses by user ID
+        List<Business> businesses = businessRepository.findByUserId(user.getId());
+
+        // Step 4: Convert the businesses to BusinessDTO
+        return businesses.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+
 
 }

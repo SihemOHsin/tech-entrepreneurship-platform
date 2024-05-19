@@ -48,6 +48,28 @@ export class TokenService {
     return [];
   }
 
+  get userId(): number | null {
+    const token = this.token;
+    if (token) {
+      const jwtHelper = new JwtHelperService();
+      const decodedToken = jwtHelper.decodeToken(token);
+      console.log(decodedToken.userId);
+      return decodedToken.userId;
+    }
+    return null;
+  }
+
+  getUserEmailFromToken(): string | null {
+    const token = this.token;
+    if (token) {
+      const jwtHelper = new JwtHelperService();
+      const decodedToken = jwtHelper.decodeToken(token);
+      return decodedToken ? decodedToken.sub : null; // Assuming `sub` contains the email
+    }
+    return null;
+  }
+
+
   // Convert blob to JSON
    blobToJson(blob: Blob): Observable<any> {
     return new Observable<any>((observer) => {

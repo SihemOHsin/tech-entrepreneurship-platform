@@ -187,7 +187,7 @@ public class OrderServiceImpl implements OrderService {
             document.close();
 
             // Return the file name in the response entity
-            return ResponseEntity.ok().body("Report generated successfully. File name: " + fileName);
+            return ResponseEntity.ok().body( fileName);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to generate report.");

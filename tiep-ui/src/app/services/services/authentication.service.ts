@@ -20,6 +20,8 @@ import { getEntrepreneurs } from '../fn/authentication/get-entrepreneurs';
 import { GetEntrepreneurs$Params } from '../fn/authentication/get-entrepreneurs';
 import { getItExperts } from '../fn/authentication/get-it-experts';
 import { GetItExperts$Params } from '../fn/authentication/get-it-experts';
+import { getUserByEmail } from '../fn/authentication/get-user-by-email';
+import { GetUserByEmail$Params } from '../fn/authentication/get-user-by-email';
 import { getUserById } from '../fn/authentication/get-user-by-id';
 import { GetUserById$Params } from '../fn/authentication/get-user-by-id';
 import { getUsersByRole } from '../fn/authentication/get-users-by-role';
@@ -134,6 +136,31 @@ export class AuthenticationService extends BaseService {
    */
   getUserById(params: GetUserById$Params, context?: HttpContext): Observable<User> {
     return this.getUserById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<User>): User => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserByEmail()` */
+  static readonly GetUserByEmailPath = '/auth/users/email/{email}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserByEmail()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserByEmail$Response(params: GetUserByEmail$Params, context?: HttpContext): Observable<StrictHttpResponse<User>> {
+    return getUserByEmail(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserByEmail$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserByEmail(params: GetUserByEmail$Params, context?: HttpContext): Observable<User> {
+    return this.getUserByEmail$Response(params, context).pipe(
       map((r: StrictHttpResponse<User>): User => r.body)
     );
   }

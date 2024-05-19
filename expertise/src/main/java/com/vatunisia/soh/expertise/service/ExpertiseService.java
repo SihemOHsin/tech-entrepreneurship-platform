@@ -7,10 +7,13 @@ import java.util.List;
 
 public interface ExpertiseService {
     List<ExpertiseDTO> findAll();
-    void createExpertise(Expertise expertise);
+
+    Expertise createExpertise(Expertise expertise);
+
     ExpertiseDTO getExpertiseById(Long id);
     boolean deleteExpertiseById(Long id);
-    boolean updateExpertise(Long id, Expertise updatedExpertise);
+
+    Expertise updateExpertise(Long id, Expertise updatedExpertise);
 
     // Additional method to find expertise by business ID
     List<ExpertiseDTO> findExpertiseByBusinessId(Long businessId);

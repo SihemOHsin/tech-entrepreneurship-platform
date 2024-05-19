@@ -1,35 +1,165 @@
+
 <div class="w3-light-grey" style="min-height: 100vh;">
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
-    <div class="w3-container w3-clear">
+    <div class="w3-container w3-clear ">
       <!-- The Grid -->
-      <div class="w3-row w3-row-padding w3-margin">
+      <div class="w3-row w3-row-padding" style="margin-top:60px;">
         <!-- Left Column -->
         <div class="w3-col m3">
+
           <!-- Profile -->
-          <div class="w3-card w3-round w3-white">
+          <!-- Profile -->
+          <div *ngIf="showCreateForm" class="w3-card w3-round w3-white">
+            <div class="w3-container">
+              <h4 class="w3-center w3-margin">Create Your Business Profile</h4>
+              <form [formGroup]="createBusinessForm" (ngSubmit)="onSubmit()">
+                <p>
+                  <label>Business Name</label>
+                  <input formControlName="bizname" class="w3-input w3-border" type="text" required>
+                </p>
+                <p>
+                  <label>Location</label>
+                  <input formControlName="location" class="w3-input w3-border" type="text" required>
+                </p>
+                <p>
+                  <label>Industry</label>
+                  <input formControlName="industry" class="w3-input w3-border" type="text" required>
+                </p>
+                <p>
+                  <label>Date of Creation</label>
+                  <input formControlName="dateOfBizCreation" class="w3-input w3-border" type="date" required>
+                </p>
+                <p>
+                  <button class="w3-button w3-block w3-black" type="submit">Create Business</button>
+                </p>
+              </form>
+            </div>
+          </div>
+
+          <!-- Upload Logo -->
+          <div *ngIf="!showCreateForm && showUploadLogoForm" class="w3-card w3-round w3-white">
+            <div class="w3-container">
+              <h4 class="w3-center w3-margin">Upload Your Business Logo</h4>
+              <p>
+                <label>Business Logo</label>
+                <input (change)="onFileChange($event)" class="w3-input w3-border" type="file">
+              </p>
+              <p>
+                <button class="w3-button w3-block w3-black" (click)="onUploadLogo()">Upload Logo</button>
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="!showCreateForm && !showUploadLogoForm" class="w3-card w3-round w3-white">
             <div class="w3-container">
               <h4 class="w3-center w3-margin">My Profile</h4>
-              <p class="w3-center"><img src="/assets/logo.png" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+              <p class="w3-center">
+                <img [src]="businessLogo ? 'data:image/png;base64,' + businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
+              </p>
               <hr>
-              <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> VirtuA Agency, STE</p>
-              <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> Sfax, TN</p>
-              <p><i class="fa fa-business-time fa-fw w3-margin-right w3-text-theme"></i> Digital Marketing</p>
-              <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> Juanuary 6, 2020</p>
-              <p><i class="fa fa-phone fa-fw w3-margin-right w3-text-theme"></i> +216 20 817 717</p>
-              <p><i class="fa fa-mail-bulk fa-fw w3-margin-right w3-text-theme"></i> contact@virtuaagency.tn</p>
+              <p><i class="fa fa-user fa-fw w3-margin-right w3-text-theme"></i> {{ firstName }}</p>
+              <p><i class="fa fa-home-user fa-fw w3-margin-right w3-text-theme"></i> {{ businessName }}</p>
+              <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> {{ businessLocation }}</p>
+              <p><i class="fa fa-business-time fa-fw w3-margin-right w3-text-theme"></i> {{ businessIndustry }}</p>
+              <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> {{ businessCreationDate }}</p>
+              <p><i class="fa fa-mail-bulk fa-fw w3-margin-right w3-text-theme"></i> {{ contactEmail }}</p>
+            </div>
+            <button class="w3-button w3-block w3-theme-l1 w3-margin-bottom w3-text-grey" (click)="showUpdateForm = true"><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>Update Profile</button>
+
+          </div>
+
+          <!-- Update Form -->
+          <div *ngIf="showUpdateForm" class="w3-card w3-round w3-white">
+            <div class="w3-container">
+              <h4 class="w3-center w3-margin">Update Your Business Profile</h4>
+              <form [formGroup]="updateBusinessForm" (ngSubmit)="onUpdateSubmit()">
+                <label>Business Name</label>
+                <input type="text" formControlName="bizname" class="w3-input w3-border w3-round" placeholder="Enter Business Name">
+                <label>Location</label>
+                <input type="text" formControlName="location" class="w3-input w3-border w3-round" placeholder="Enter Location">
+                <label>Industry</label>
+                <input type="text" formControlName="industry" class="w3-input w3-border w3-round" placeholder="Enter Industry">
+                <label>Date of Creation</label>
+                <input type="date" formControlName="dateOfBizCreation" class="w3-input w3-border w3-round">
+                <button type="submit" class="w3-button w3-block w3-black w3-section w3-padding">Update</button>
+              </form>
+              <button class="w3-button w3-block w3-black w3-margin-bottom" (click)="onUpdateLogoClick()">Update Logo</button>
             </div>
           </div>
+
+
+
+
           <br>
-          <div class="w3-card w3-round w3-white">
+          <!-- Skills Section -->
+          <!-- Show the form for creating a new skill if there are no skills -->
+          <div *ngIf="showCreateSkillForm && !showUpdateSkillForm && !showUploadSkillForm">
+            <div class="w3-card w3-round w3-white">
+              <div class="w3-container">
+                <h4 class="w3-center w3-margin">Add Your Skills</h4>
+                <form [formGroup]="createSkillForm" (ngSubmit)="onCreateSkill()">
+                  <p>
+                    <label>Skill Title</label>
+                    <input formControlName="title" class="w3-input w3-border" type="text" required>
+                  </p>
+                  <p>
+                    <label>Description</label>
+                    <textarea formControlName="description" class="w3-input w3-border" rows="3" required></textarea>
+                  </p>
+                  <p>
+                    <label>Minimum proposed Price</label>
+                    <input formControlName="minProposedPrice" class="w3-input w3-border" type="text" required>
+                  </p>
+                  <p>
+                    <label>Maximum proposed Price</label>
+                    <textarea formControlName="maxProposedPrice" class="w3-input w3-border" rows="3" required></textarea>
+                  </p>
+
+                  <p>
+                    <button class="w3-button w3-block w3-black" type="submit">Add Skill</button>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Show the list of skills -->
+          <div class="w3-card w3-round w3-white" *ngIf="!showCreateSkillForm && !showUpdateSkillForm && !showUploadSkillForm">
             <div class="w3-container">
               <h4 class="w3-center w3-margin">Skills</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
+              <div *ngFor="let skill of skills">
+                <h5>{{ skill.title }}</h5>
+                <p>{{ skill.description }}</p>
+                <button class="w3-button w3-small w3-margin-bottom w3-black" (click)="onEditSkill(skill)">Edit</button>
+              </div>
             </div>
           </div>
-          <br>
 
+          <!-- Show the form for updating a skill if there's a selected skill -->
+          <div *ngIf="!showCreateSkillForm && showUpdateSkillForm && !showUploadSkillForm">
+            <div class="w3-card w3-round w3-white">
+              <div class="w3-container">
+                <h4 class="w3-center w3-margin">Update Skill</h4>
+                <form [formGroup]="updateSkillForm" (ngSubmit)="onUpdateSkill()">
+                  <p>
+                    <label>Skill Title</label>
+                    <input formControlName="title" class="w3-input w3-border" type="text" required>
+                  </p>
+                  <p>
+                    <label>Description</label>
+                    <textarea formControlName="description" class="w3-input w3-border" rows="3" required></textarea>
+                  </p>
+                  <p>
+                    <button class="w3-button w3-block w3-black" type="submit">Update Skill</button>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+          <br>
 
           <!-- Alert Box -->
           <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
@@ -106,14 +236,15 @@
             </div>
           </div>
 
-        <!-- End Grid -->
+          <!-- End Grid -->
+        </div>
+
+        <!-- End Page Container -->
       </div>
+      <br>
 
-      <!-- End Page Container -->
+
+
     </div>
-    <br>
-
-
-
   </div>
 </div>

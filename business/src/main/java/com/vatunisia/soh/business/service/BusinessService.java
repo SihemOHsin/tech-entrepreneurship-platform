@@ -16,4 +16,6 @@ public interface BusinessService {
     List<BusinessDTO> findBusinessByUserRole(String userRole);
 
     void uploadBusinessLogo(MultipartFile file, Integer businessId);
+
+    List<BusinessDTO> findBusinessByUserEmail(String userEmail);
 }

@@ -15,13 +15,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getAllReviews(Long businessId) {
+    public List<Review> getAllReviews(Integer businessId) {
         List<Review> reviews = reviewRepository.findByBusinessId(businessId);
         return reviews;
     }
 
     @Override
-    public boolean addReview(Long businessId, Review review) {
+    public boolean addReview(Integer businessId, Review review) {
         if (businessId != null && review != null){
             review.setBusinessId(businessId);
             reviewRepository.save(review);

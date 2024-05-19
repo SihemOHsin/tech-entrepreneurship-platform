@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OrderService } from "../../../../services/order/order.service";
 import { BusinessService } from "../../../../services/business/business.service";
 import { ConsultationService } from "../../../../services/consultation/consultation.service";
 import { BusinessDTO } from "../../../../services/business/business-dto.model";
+import {Consultation, OrderDTO} from "../../../../services/order/order.model";
 import {ConsultationDTOs} from "../../../../services/consultation/consulaltion.model";
+//import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-manage-orders',
@@ -12,37 +13,33 @@ import {ConsultationDTOs} from "../../../../services/consultation/consulaltion.m
   styleUrls: ['./manage-orders.component.scss']
 })
 export class ManageOrdersComponent implements OnInit {
-  myForm: FormGroup;
-  consultationServices: ConsultationDTOs[] = [];
+  orderDTO: OrderDTO = {
+    id: '',
+    consultationServices: [],
+    businessId: 0,
+    paymentMethod: '',
+    contactNumber: '',
+    email: '',
+    name: '',
+    total: 0
+  };
+  consultationServices: Consultation[] = [];
   businesses: BusinessDTO[] = [];
   totalAmount: number = 0;
-  selectedConsultation: ConsultationDTOs | undefined; // Updated to store the selected consultation object
+  selectedConsultation: Consultation | undefined;
 
   constructor(
-    private fb: FormBuilder,
     private orderService: OrderService,
     private businessService: BusinessService,
     private consultationService: ConsultationService
-  ) {
-    this.myForm = this.fb.group({
-      consultationServices: ['', Validators.required],
-      price: ['', Validators.required],
-      selectedBusiness: ['', Validators.required],
-      businessId: ['', Validators.required],
-      paymentMethod: ['', Validators.required],
-      contactNumber: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      email: ['', [Validators.required, Validators.email]],
-      name: ['', Validators.required],
-      total: ['', Validators.required]
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadBusinesses();
   }
 
   loadBusinesses() {
-    this.businessService.getAllBusinesses().subscribe(
+    this.businessService.getBusinessesByUserRole('itexpert').subscribe(
       (data: BusinessDTO[]) => {
         this.businesses = data;
       },
@@ -54,95 +51,148 @@ export class ManageOrdersComponent implements OnInit {
 
   onBusinessSelection(event: any) {
     const selectedBusinessId = +event.target.value;
-    this.myForm.get('businessId')?.setValue(selectedBusinessId); // Safely set the selected business ID to the form control
+    this.orderDTO.businessId = selectedBusinessId;
     if (selectedBusinessId) {
       this.consultationService.findConsultationByBusinessId(selectedBusinessId).subscribe(
         (data: ConsultationDTOs[]) => {
-          this.consultationServices = data;
+          this.consultationServices = data.map((dto) => ({
+            id: dto.id,
+            consultationName: dto.consultationName,
+            consultationDescription: dto.consultationDescription,
+            price: dto.price,
+            businessId: dto.business.id
+          }));
         },
         (error) => {
           console.error('Error fetching consultations:', error);
         }
       );
     } else {
-      this.consultationServices = []; // Clear consultations if no business is selected
+      this.consultationServices = [];
     }
   }
 
   updateConsultationPrice(event: any) {
-    const selectedConsultationId = +event.target.value; // Convert to number
-    this.selectedConsultation = this.consultationServices.find(consultation => consultation.id === selectedConsultationId); // Store the selected consultation object
+    const selectedConsultationId = +event.target.value;
+    this.selectedConsultation = this.consultationServices.find(consultation => consultation.id === selectedConsultationId);
 
-    const consultationPrice = this.selectedConsultation?.price;
+    if (!this.selectedConsultation) {
+      console.error('No consultation selected. Cannot proceed.');
+      return;
+    }
 
-    console.log('Selected consultation price:', consultationPrice);
-
+    const consultationPrice = this.selectedConsultation.price;
     if (consultationPrice !== undefined) {
-      this.myForm.get('price')?.setValue(consultationPrice);
-
-      const vat = 0.19; // 19% VAT
+      const vat = 0.19;
       this.totalAmount = consultationPrice + (consultationPrice * vat);
-
-      console.log("totalAmounttotalAmount ", this.totalAmount)
-      this.myForm.get('total')?.setValue(this.totalAmount);
+      const amountInput = document.getElementById('amount') as HTMLInputElement;
+      if (amountInput) {
+        amountInput.value = this.totalAmount.toString();
+      }
     }
   }
 
   submitAction() {
-    if (this.myForm.valid && this.selectedConsultation) { // Check if the form is valid and a consultation is selected
-      // Extract form values
-      const formData = this.myForm.value;
+    if (this.selectedConsultation) {
+      this.orderDTO.consultationServices = [this.selectedConsultation];
+      this.orderDTO.total = this.totalAmount;
 
-      // Include the selected consultation object in the form data
-      formData.consultationServices = this.selectedConsultation;
-      console.log('new form data ', formData)
+      if (this.validateOrderDTO(this.orderDTO)) {
+        console.log('All required attributes exist in orderDTO. Proceeding to save order...', this.orderDTO);
 
-      // Send HTTP request to save order
-      this.orderService.saveOrder(formData).subscribe(
-        (savedOrder) => {
-          // Handle successful order saving
-          console.log('Order saved successfully:', savedOrder);
+        this.orderService.saveOrder(this.orderDTO).subscribe(
+          (savedOrder) => {
+            console.log('Order saved successfully:', savedOrder);
 
-          // Generate PDF report
-          const reportRequest = {
-            orderId: savedOrder.id // Assuming savedOrder contains the id of the newly saved order
-          };
-          this.orderService.generateReport(reportRequest).subscribe(
-            (reportUrl) => {
-              // Handle successful report generation
-              console.log('PDF report generated successfully:', reportUrl);
+            const reportRequest = {
+              orderId: savedOrder.id
+            };
 
-              // Now you have the URL of the generated report, you can redirect the user or display the link to download the report
-            },
-            (reportError) => {
-              // Handle report generation error
-              console.error('Error generating PDF report:', reportError);
-            }
-          );
-        },
-        (saveError) => {
-          // Handle save order error
-          console.error('Error saving order:', saveError);
-        }
-      );
+            this.orderService.generateReport(this.orderDTO).subscribe(
+              (reportResponse) => {
+                // Assuming reportResponse is a string URL
+                const reportUrl = reportResponse.replace(/\\/g, '/');
+                console.log('Report generated successfully:', reportResponse);
+
+                const pdfRequest = {
+                  orderId: savedOrder.id
+                };
+
+                this.orderService.generatePdf(this.orderDTO).subscribe(
+                  (blob) => {
+                    console.log('PDF generated successfully');
+                    const url = window.URL.createObjectURL(blob);
+                    window.open(url);
+
+                    // Refresh order list or other actions after successful operations
+                    this.resetForm();
+                  },
+                  (pdfError) => {
+                    console.error('Error generating PDF:', pdfError);
+                  }
+                );
+              },
+              (reportError) => {
+                console.error('Error generating report:', reportError);
+              }
+            );
+          },
+          (saveError) => {
+            console.error('Error saving order:', saveError);
+          }
+        );
+      } else {
+        console.error('Incomplete order data. Cannot submit.');
+      }
     } else {
-      // Form is invalid or no consultation is selected, display error message or handle it accordingly
-      console.error('Form is invalid or no consultation is selected. Cannot submit.');
+      console.error('No consultation selected. Cannot submit.');
     }
   }
 
+  validateOrderDTO(orderDTO: OrderDTO): boolean {
+    return !!(
+      orderDTO.name &&
+      orderDTO.email &&
+      orderDTO.contactNumber &&
+      orderDTO.paymentMethod &&
+      orderDTO.businessId &&
+      orderDTO.total !== undefined &&
+      orderDTO.consultationServices &&
+      orderDTO.consultationServices.length > 0 &&
+      orderDTO.consultationServices.every(service =>
+        service.id &&
+        service.consultationName &&
+        service.consultationDescription &&
+        service.price !== undefined &&
+        service.businessId
+      )
+    );
+  }
+
+  resetForm() {
+    this.orderDTO = {
+      id: '',
+      consultationServices: [],
+      businessId: 0,
+      paymentMethod: '',
+      contactNumber: '',
+      email: '',
+      name: '',
+      total: 0
+    };
+    this.totalAmount = 0;
+    this.selectedConsultation = undefined;
+  }
+
   add() {
-    // Functionality for adding action
     console.log('Add action triggered');
   }
 
   handleDeleteAction() {
-    // Functionality for handling delete action
     console.log('Delete action triggered for index:');
   }
 
   validateProductAdd(): boolean {
-    // Functionality for validating product add
-    return false; // For demonstration, always return false
+    return false;
   }
 }

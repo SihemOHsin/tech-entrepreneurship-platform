@@ -11,72 +11,63 @@
       </div>
 
       <div>
-      <form [formGroup]="myForm" class="w3-container">
-
-      <!-- Customer Details Card -->
-      <div class="w3-responsive w3-card-4" style="margin-top:25px;">
+        <!-- Customer Details Card -->
+        <div class="w3-responsive w3-card-4" style="margin-top:25px;">
           <div style="margin:10px;">
             <b><span>Customer Details:</span></b>
           </div>
           <div class="w3-row-padding" style="margin:10px;">
             <div class="w3-quarter">
               <label for="name">Name:</label>
-              <input type="text" id="name" formControlName="name" class="w3-input" required>
+              <input type="text" id="name" [(ngModel)]="orderDTO.name" class="w3-input" required>
             </div>
             <div class="w3-quarter">
               <label for="email">Email:</label>
-              <input type="email" id="email" formControlName="email" class="w3-input" required>
+              <input type="email" id="email" [(ngModel)]="orderDTO.email" class="w3-input" required>
             </div>
             <div class="w3-quarter">
               <label for="contact">Contact Number:</label>
-              <input type="number" id="contact" formControlName="contactNumber" class="w3-input" required>
+              <input type="number" id="contact" [(ngModel)]="orderDTO.contactNumber" class="w3-input" required>
             </div>
             <div class="w3-quarter">
               <label for="payment">Payment Method:</label>
-              <input type="text" id="payment" formControlName="paymentMethod" class="w3-input" required>
+              <input type="text" id="payment" [(ngModel)]="orderDTO.paymentMethod" class="w3-input" required>
             </div>
           </div>
-      </div>
-
-      <hr />
-
-
-
-      <!-- Select Business and Consultation Card -->
-      <div class="w3-responsive w3-card-4" style="margin-top:25px;">
-        <div style="margin:10px;">
-          <b><span>Select Business and Consultation:</span></b>
         </div>
-        <div class="w3-row-padding" style="margin:10px;">
-          <div class="w3-quarter">
-            <label for="selectedBusiness">Business:</label>
-            <select id="selectedBusiness" formControlName="selectedBusiness" class="w3-select" required (change)="onBusinessSelection($event)">
-              <option *ngFor="let business of businesses" [value]="business.id">{{ business.bizname }}</option>
-            </select>
-            <input type="hidden" id="businessId" formControlName="businessId">
 
-          </div>
-          <div class="w3-quarter">
-            <label for="consultationServices">Consultation:</label>
-            <select id="consultationServices" formControlName="consultationServices" class="w3-select" required (change)="updateConsultationPrice($event)">
-              <option *ngFor="let consultation of consultationServices" [value]="consultation.id">{{ consultation.consultationName }}</option>
-            </select>
-          </div>
-          <div class="w3-quarter">
-            <label for="price">Price:</label>
-            <input type="number" id="price" formControlName="price" class="w3-input" required>
-          </div>
+        <hr />
 
-          <div class="w3-quarter">
-            <label for="amount">Total Amount: </label>
-            <input type="number" id="amount" formControlName="total" class="w3-input" required>
+        <!-- Select Business and Consultation Card -->
+        <div class="w3-responsive w3-card-4" style="margin-top:25px;">
+          <div style="margin:10px;">
+            <b><span>Select Business and Consultation:</span></b>
           </div>
+          <div class="w3-row-padding" style="margin:10px;">
+            <div class="w3-quarter">
+              <label for="selectedBusiness">Business:</label>
+              <select id="selectedBusiness" [(ngModel)]="orderDTO.businessId" class="w3-select" required (change)="onBusinessSelection($event)">
+                <option *ngFor="let business of businesses" [value]="business.id">{{ business.bizname }}</option>
+              </select>
+            </div>
+            <div class="w3-quarter">
+              <label for="consultationServices">Consultation:</label>
+              <select id="consultationServices" [(ngModel)]="selectedConsultation" class="w3-select" required (change)="updateConsultationPrice($event)">
+                <option *ngFor="let consultation of consultationServices" [value]="consultation.id">{{ consultation.consultationName }}</option>
+              </select>
+            </div>
+            <div class="w3-quarter">
+              <label for="price">Price:</label>
+              <input *ngIf="selectedConsultation" type="number" id="price" [(ngModel)]="selectedConsultation.price" class="w3-input" required readonly>
+            </div>
 
-
+            <div class="w3-quarter">
+              <label for="amount">Total Amount: </label>
+              <input type="number" id="amount" [(ngModel)]="orderDTO.total" class="w3-input" required readonly>
+            </div>
+          </div>
         </div>
       </div>
-      </form>
-    </div>
 
       <!-- Buttons -->
       <div class="w3-container" style="margin-top:25px;">

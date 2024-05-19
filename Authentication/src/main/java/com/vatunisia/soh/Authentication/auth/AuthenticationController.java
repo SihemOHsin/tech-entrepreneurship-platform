@@ -89,4 +89,19 @@ public class AuthenticationController {
         }
     }
 
+    @GetMapping("/users/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        // Find user by email
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        // Check if user exists
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return ResponseEntity.ok(user);
+        } else {
+            // Return 404 Not Found if user is not found
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

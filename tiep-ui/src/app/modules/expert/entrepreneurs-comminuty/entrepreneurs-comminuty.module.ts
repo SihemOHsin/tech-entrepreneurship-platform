@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { EntrepreneursComminutyRoutingModule } from './entrepreneurs-comminuty-routing.module';
 import { EntrepreneursCommunityComponent } from './entrepreneurs-community/entrepreneurs-community.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -11,7 +12,9 @@ import { EntrepreneursCommunityComponent } from './entrepreneurs-community/entre
   ],
   imports: [
     CommonModule,
-    EntrepreneursComminutyRoutingModule
+    EntrepreneursComminutyRoutingModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class EntrepreneursComminutyModule { }

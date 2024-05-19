@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -25,10 +26,11 @@ public class ExpertiseController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createExpertise(@RequestBody Expertise expertise){
-        expertiseService.createExpertise(expertise);
-        return new ResponseEntity<>("Expertise added successfully", HttpStatus.CREATED);
+    public ResponseEntity<Expertise> createExpertise(@RequestBody Expertise expertise) {
+        Expertise createdExpertise = expertiseService.createExpertise(expertise);
+        return new ResponseEntity<>(createdExpertise, HttpStatus.CREATED);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ExpertiseDTO> getExpertiseById(@PathVariable Long id){
@@ -47,24 +49,27 @@ public class ExpertiseController {
     }
 
     @PutMapping("/{id}")
-    //@RequestMapping(value = "/expertises/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateExpertise(@PathVariable Long id,
-                                                  @RequestBody Expertise updatedExpertise){
-        boolean updated = expertiseService.updateExpertise(id, updatedExpertise);
-        if (updated)
-            return new ResponseEntity<>("Expertise updated successfully",HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Expertise> updateExpertise(@PathVariable Long id,
+                                                     @RequestBody Expertise updatedExpertise) {
+        Expertise updated = expertiseService.updateExpertise(id, updatedExpertise);
+        if (updated != null) {
+            return ResponseEntity.ok(updated); // Return updated expertise with HTTP status 200 (OK)
+        } else {
+            return ResponseEntity.notFound().build(); // Return HTTP status 404 (NOT FOUND)
+        }
     }
+
 
     @GetMapping("/business/{businessId}")
     public ResponseEntity<List<ExpertiseDTO>> findExpertiseByBusinessId(@PathVariable Long businessId) {
         List<ExpertiseDTO> expertiseDTOs = expertiseService.findExpertiseByBusinessId(businessId);
-        if (!expertiseDTOs.isEmpty()) {
-            return ResponseEntity.ok(expertiseDTOs);
+        if (expertiseDTOs.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList()); // Return an empty list if no expertise is found
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(expertiseDTOs);
         }
     }
+
 
 }
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,9 +63,10 @@ public class ExpertiseServiceImpl implements ExpertiseService {
     }
 
     @Override
-    public void createExpertise(Expertise expertise) {
-        expertiseRepository.save(expertise);
+    public Expertise createExpertise(Expertise expertise) {
+        return expertiseRepository.save(expertise);
     }
+
 
     @Override
     public ExpertiseDTO getExpertiseById(Long id) {
@@ -83,7 +85,7 @@ public class ExpertiseServiceImpl implements ExpertiseService {
     }
 
     @Override
-    public boolean updateExpertise(Long id, Expertise updatedExpertise) {
+    public Expertise updateExpertise(Long id, Expertise updatedExpertise) {
         Optional<Expertise> expertiseOptional = expertiseRepository.findById(id);
         if (expertiseOptional.isPresent()) {
             Expertise expertise = expertiseOptional.get();
@@ -91,20 +93,23 @@ public class ExpertiseServiceImpl implements ExpertiseService {
             expertise.setDescription(updatedExpertise.getDescription());
             expertise.setMinProposedPrice(updatedExpertise.getMinProposedPrice());
             expertise.setMaxProposedPrice(updatedExpertise.getMaxProposedPrice());
-            expertiseRepository.save(expertise);
-            return true;
+            Expertise savedExpertise = expertiseRepository.save(expertise);
+            return savedExpertise; // Return the updated expertise
         }
-        return false;
+        return null; // Return null if expertise not found
     }
+
 
     @Override
     public List<ExpertiseDTO> findExpertiseByBusinessId(Long businessId) {
         List<Expertise> expertises = expertiseRepository.findByBusinessId(businessId);
-        List<ExpertiseDTO> expertiseDTOs = new ArrayList<>();
-
-        return expertises.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        if (expertises.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if no expertise is found
+        } else {
+            return expertises.stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        }
     }
 
 }

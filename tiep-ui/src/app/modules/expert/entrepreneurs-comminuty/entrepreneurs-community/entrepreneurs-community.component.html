@@ -4,39 +4,67 @@
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
     <!-- Header -->
-    <header class="w3-container  w3-padding-32 ">
+    <header class="w3-container w3-padding-32">
       <h2><b>Browse entrepreneurs needs</b></h2>
-      <p>Search by tag <button class="w3-tag w3-white" style="border:0px;border-radius: 5px;">Search</button></p>
+      <p>
+        <input type="text" [(ngModel)]="searchQuery" (keyup)="onSearch()" class="w3-input w3-border" placeholder="Search by name...">
+      </p>
     </header>
 
     <!-- Grid -->
     <div class="w3-row">
 
       <!-- Blog entries -->
-      <div class="w3-col l6 s12" *ngFor="let entry of currentEntries">
-        <!-- Blog entry -->
-        <div class="w3-card-4 w3-margin">
-          <div class="w3-container w3-light-grey " style="padding-bottom:3px;padding-top:8px;">
-            <h5><b>{{entry.title}}</b></h5>
-            <h6>Needs description, <span class="w3-opacity">April 7, 2014</span></h6>
-          </div>
+      <ng-container *ngIf="!filteredEntries || filteredEntries.length === 0">
+        <div class="w3-col l6 s12" *ngFor="let entry of currentEntries">
+          <!-- Blog entry -->
+          <div class="w3-card-4 w3-margin">
+            <div class="w3-container w3-light-grey" style="padding-bottom:3px;padding-top:8px;">
+              <h5><b>{{entry.title}}</b></h5>
+              <h6>Needs description, <span class="w3-opacity">{{entry.date}}</span></h6>
+            </div>
 
-          <div class="w3-container w3-white">
-            <p id="partialContent{{entry.id}}">{{entry.content}}</p>
-            <p id="fullContent{{entry.id}}" style="display: none;">{{entry.fullContent}}</p>
-            <div class="w3-row">
-              <div class="w3-col m8 s12">
-                <p><button class="w3-button w3-light-grey " style="border:0px;border-radius: 5px;" (click)="showFullContent(entry.id)"><b>Read More »</b></button></p>
-              </div>
-              <div class="w3-col m4 w3-hide-small">
-                <p><span class="w3-padding-large w3-right"><b>Comments </b> <span class="w3-tag" style="border:0px;border-radius: 5px;">{{entry.comments}}</span></span></p>
+            <div class="w3-container w3-white">
+              <p id="partialContent{{entry.id}}">{{entry.content}}</p>
+              <p id="fullContent{{entry.id}}" style="display: none;">{{entry.fullContent}}</p>
+              <div class="w3-row">
+                <div class="w3-col m8 s12">
+                  <p><button class="w3-button w3-light-grey" style="border:0px;border-radius: 5px;" (click)="showFullContent(entry.id)"><b>Read More »</b></button></p>
+                </div>
+                <div class="w3-col m4 w3-hide-small">
+                  <p><span class="w3-padding-large w3-right"><b>IT Reviews </b> <span class="w3-tag" style="border:0px;border-radius: 5px;">{{entry.comments}}</span></span></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </ng-container>
 
-        <hr>
-      </div>
+      <!-- Filtered entries -->
+      <ng-container *ngIf="filteredEntries && filteredEntries.length > 0">
+        <div class="w3-col l6 s12" *ngFor="let entry of filteredEntries">
+          <!-- Blog entry -->
+          <div class="w3-card-4 w3-margin">
+            <div class="w3-container w3-light-grey" style="padding-bottom:3px;padding-top:8px;">
+              <h5><b>{{entry.title}}</b></h5>
+              <h6>Needs description, <span class="w3-opacity">{{entry.date}}</span></h6>
+            </div>
+
+            <div class="w3-container w3-white">
+              <p id="partialContent{{entry.id}}">{{entry.content}}</p>
+              <p id="fullContent{{entry.id}}" style="display: none;">{{entry.fullContent}}</p>
+              <div class="w3-row">
+                <div class="w3-col m8 s12">
+                  <p><button class="w3-button w3-light-grey" style="border:0px;border-radius: 5px;" (click)="showFullContent(entry.id)"><b>Read More »</b></button></p>
+                </div>
+                <div class="w3-col m4 w3-hide-small">
+                  <p><span class="w3-padding-large w3-right"><b>IT Reviews </b> <span class="w3-tag" style="border:0px;border-radius: 5px;">{{entry.comments}}</span></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
 
       <!-- END GRID -->
     </div><br>
@@ -46,5 +74,6 @@
       <button class="w3-button" (click)="changePage(-1)" [disabled]="currentPage === 1">&laquo; Previous</button>
       <button class="w3-button" (click)="changePage(1)" [disabled]="currentPage === totalPages">Next &raquo;</button>
     </div>
+
   </div>
 </div>
