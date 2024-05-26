@@ -8,6 +8,7 @@ import { AuthenticationService } from "../../../../services/services/authenticat
 import { GetUserByEmail$Params } from "../../../../services/fn/authentication/get-user-by-email";
 import {ExpertiseService} from "../../../../services/expertise/expertise.service";
 import {ExpertiseDTO} from "../../../../services/expertise/expertise-dto.model";
+import {ReviewService} from "../../../../services/review/review.service";
 
 @Component({
   selector: 'app-business-profile',
@@ -36,12 +37,14 @@ export class BusinessProfileComponent implements OnInit {
   showUpdateSkillForm = false;
   showUploadSkillForm = false; // Added property
   selectedSkill: ExpertiseDTO | null = null;
-
+  reviews: any[] = [];
+  reviewees: { [key: string]: any } = {};
 
   constructor(
     private businessService: BusinessService,
     private tokenService: TokenService,
     private authenticationService: AuthenticationService,
+    private reviewService: ReviewService,
     private fb: FormBuilder,
     private http: HttpClient,
     private expertiseService: ExpertiseService
@@ -99,11 +102,11 @@ export class BusinessProfileComponent implements OnInit {
               // Load skills for the business if the business ID exists
               if (this.createdBusinessId) {
                 this.loadSkills(this.createdBusinessId);
+                this.getBusinessReviews();
               }
             } else {
               this.showCreateForm = true;
               this.showUploadLogoForm = false;
-              //this.showCreateSkillForm = true;
             }
           },
           (error) => {
@@ -201,7 +204,7 @@ export class BusinessProfileComponent implements OnInit {
             this.firstName = business.user.firstname;
             this.showUploadLogoForm = true;
             this.showCreateForm = false;
-            this.showUpdateForm = true; // Show update form
+            this.showUpdateForm = false; // Show update form
             this.createdBusinessId = business.id;
             this.updateBusinessForm.patchValue({
               bizname: business.bizname,
@@ -209,6 +212,7 @@ export class BusinessProfileComponent implements OnInit {
               industry: business.industry,
               dateOfBizCreation: business.dateOfBizCreation
             });
+
           } else {
             console.error('No businesses found for the user.');
           }
@@ -263,6 +267,7 @@ export class BusinessProfileComponent implements OnInit {
         industry: this.updateBusinessForm.value.industry,
         dateOfBizCreation: this.updateBusinessForm.value.dateOfBizCreation
       };
+
       this.businessService.updateBusiness(this.createdBusinessId, updatedBusiness).subscribe(
         () => {
           console.log('Business updated successfully');
@@ -349,6 +354,45 @@ export class BusinessProfileComponent implements OnInit {
         }
       );
     }
+  }
+
+
+  // reviewee
+
+  getBusinessReviews(): void {
+    if (this.createdBusinessId) {
+      this.expertiseService.getAllExpertises().subscribe(
+        data => {
+          this.reviews = data.flatMap(expertise => expertise.reviews);
+          console.log("reviews from expertise in get business reviews",this.reviews );
+
+          this.reviews.forEach(review => {
+            console.log("review.businessId from expertise in get business reviews ",review.businessId );
+
+            if (review.reviewerBusinessId == this.createdBusinessId) {
+
+              this.getReviewee(review.businessId);
+
+            }
+          });
+        },
+        error => console.error(error)
+      );
+    } else {
+      console.error('Business ID is not set.');
+    }
+  }
+
+
+  getReviewee(businessId: number): void {
+    this.expertiseService.getReviewee(businessId).subscribe(
+      (data) => {
+        this.reviewees[businessId] = data;
+        console.log("data from reviewee ",data );
+
+      },
+      (error) => console.error('Error fetching reviewee:', error)
+    );
   }
 
 }

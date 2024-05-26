@@ -5,22 +5,22 @@ import {BusinessService} from "../../../../services/business/business.service";
 import {ExpertiseService} from "../../../../services/expertise/expertise.service";
 
 @Component({
-  selector: 'app-entrepreneur-community',
-  templateUrl: './entrepreneur-community.component.html',
-  styleUrls: ['./entrepreneur-community.component.scss']
+  selector: 'app-entrepreneurs-community',
+  templateUrl: './entrepreneurs-community.component.html',
+  styleUrls: ['./entrepreneurs-community.component.scss']
 })
-export class EntrepreneurCommunityComponent implements OnInit{
+export class EntrepreneursCommunityComponent implements OnInit{
 
-  searchQuery: string = ''; // Initialize search query property
-  filteredEntries: { id: number, title: string, content: string, fullContent: string, date: string, comments: number }[] = [];
+  searchQuery: string = '';
+  filteredEntries: { id: number, title: string, content: string, fullContent: string,date:string, comments: number }[] = [];
 
-  businesses: BusinessDTO[] = [];
+  businesses: BusinessDTO[];
   businessExpertises: { [key: number]: ExpertiseDTO[] } = {};
-  blogEntries: { id: number, title: string, content: string, fullContent: string, date: string, comments: number }[] = [];
+  blogEntries: { id: number, title: string, content: string, fullContent: string,date:string, comments: number }[] = [];
 
   currentPage = 1;
   entriesPerPage = 4;
-  currentEntries: { id: number, title: string, content: string, fullContent: string, date: string, comments: number }[] = [];
+  currentEntries: { id: number, title: string, content: string, fullContent: string,date:string , comments: number }[] = [];
   totalPages = 0;
 
   constructor(
@@ -64,37 +64,33 @@ export class EntrepreneurCommunityComponent implements OnInit{
       const expertises = this.businessExpertises[business.id];
       if (expertises && expertises.length > 0) {
         expertises.forEach(expertise => {
-          if (expertise.business && expertise.reviews) {
-            this.blogEntries.push({
-              id: expertise.business.id,
-              title: expertise.business.bizname,
-              content: expertise.description ? expertise.description.slice(0, 100) + '...' : '',
-              fullContent: expertise.description || '',
-              date: expertise.business.dateOfBizCreation,
-              comments: expertise.reviews.length
-            });
-          }
+          this.blogEntries.push({
+            id: expertise.business.id,
+            title: expertise.business.bizname,
+            content: expertise.description.slice(0, 100) + '...',
+            fullContent: expertise.description,
+            date: expertise.business.dateOfBizCreation,
+            comments: (expertise.reviews.length)
+          });
         });
       }
     });
 
     // Filter blogEntries based on search query
     if (this.searchQuery) {
-      this.filteredEntries = this.blogEntries.filter(entry =>
+      this.blogEntries = this.blogEntries.filter(entry =>
         entry.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    } else {
-      this.filteredEntries = this.blogEntries;
     }
 
     this.updateBlogEntries(); // Update currentEntries and totalPages
   }
-
+//
   updateBlogEntries() {
     const startIndex = (this.currentPage - 1) * this.entriesPerPage;
     const endIndex = startIndex + this.entriesPerPage;
-    this.currentEntries = this.filteredEntries.slice(startIndex, endIndex);
-    this.totalPages = Math.ceil(this.filteredEntries.length / this.entriesPerPage);
+    this.currentEntries = this.blogEntries.slice(startIndex, endIndex);
+    this.totalPages = Math.ceil(this.blogEntries.length / this.entriesPerPage);
   }
 
   changePage(delta: number) {
@@ -104,6 +100,8 @@ export class EntrepreneurCommunityComponent implements OnInit{
     } else if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages;
     }
+
+    //
 
     this.updateBlogEntries();
   }
@@ -127,11 +125,10 @@ export class EntrepreneurCommunityComponent implements OnInit{
         entry.title.toLowerCase().includes(searchTerm)
       );
     } else {
+      // If the search query is empty, show all blog entries
       this.filteredEntries = this.blogEntries;
     }
-
-    this.updateBlogEntries(); // Update currentEntries and totalPages
   }
+
+
 }
-
-

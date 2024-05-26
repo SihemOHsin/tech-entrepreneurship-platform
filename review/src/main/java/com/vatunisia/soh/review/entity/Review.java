@@ -20,4 +20,6 @@ public class Review {
     private String description;
     private double rating;
     private Integer businessId;
+    private Integer reviewerBusinessId; // New field
+    //private Integer revieweeBusinessId; = businessId
 }

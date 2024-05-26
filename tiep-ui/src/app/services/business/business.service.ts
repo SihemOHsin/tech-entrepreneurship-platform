@@ -57,7 +57,7 @@ export class BusinessService {
   updateBusiness(id: number, updatedBusiness: BusinessDTO): Observable<any> {
     return this.http.put(`${this.baseUrl}/businesses/${id}`, updatedBusiness, this.httpOptions)
       .pipe(
-        tap(response => console.log('Update business response:', response)), // Log the response
+        tap(response => console.log('Update business response:', response)),
         catchError(this.handleError<any>('updateBusiness'))
       );
   }

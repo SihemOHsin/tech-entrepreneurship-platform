@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ExpertiseDTO } from './expertise-dto.model';
+import {Business, ExpertiseDTO} from './expertise-dto.model';
 import { environment } from "../../environments/environment";
 
 @Injectable({
@@ -40,5 +40,14 @@ export class ExpertiseService {
 
   getExpertisesByBusinessId(businessId: number): Observable<ExpertiseDTO[]> {
     return this.http.get<ExpertiseDTO[]>(`${this.baseUrl}/business/${businessId}`, this.httpOptions);
+  }
+
+
+  getReviewer(reviewId: number): Observable<Business> {
+    return this.http.get<Business>(`${this.baseUrl}/reviews/${reviewId}/reviewer-business`);
+  }
+
+  getReviewee(businessId: number): Observable<Business> {
+    return this.http.get<Business>(`${this.baseUrl}/business/${businessId}/reviewee`);
   }
 }

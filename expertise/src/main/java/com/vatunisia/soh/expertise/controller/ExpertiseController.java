@@ -1,5 +1,6 @@
 package com.vatunisia.soh.expertise.controller;
 
+import com.vatunisia.soh.expertise.dto.Business;
 import com.vatunisia.soh.expertise.entity.Expertise;
 import com.vatunisia.soh.expertise.service.ExpertiseService;
 import com.vatunisia.soh.expertise.dto.ExpertiseDTO;
@@ -61,7 +62,7 @@ public class ExpertiseController {
 
 
     @GetMapping("/business/{businessId}")
-    public ResponseEntity<List<ExpertiseDTO>> findExpertiseByBusinessId(@PathVariable Long businessId) {
+    public ResponseEntity<List<ExpertiseDTO>> findExpertiseByBusinessId(@PathVariable Integer businessId) {
         List<ExpertiseDTO> expertiseDTOs = expertiseService.findExpertiseByBusinessId(businessId);
         if (expertiseDTOs.isEmpty()) {
             return ResponseEntity.ok(Collections.emptyList()); // Return an empty list if no expertise is found
@@ -70,6 +71,25 @@ public class ExpertiseController {
         }
     }
 
+    @GetMapping("/reviews/{reviewId}/reviewer-business")
+    public ResponseEntity<Business> getReviewerBusiness(@PathVariable Long reviewId) {
+        Business reviewerBusiness = expertiseService.getReviewerBusiness(reviewId);
+        if (reviewerBusiness != null) {
+            return new ResponseEntity<>(reviewerBusiness, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/business/{businessId}/reviewee")
+    public ResponseEntity<Business> getRevieweeBusiness(@PathVariable Integer businessId) {
+        Business revieweeBusiness = expertiseService.getRevieweeBusiness(businessId);
+        if (revieweeBusiness != null) {
+            return new ResponseEntity<>(revieweeBusiness, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
 

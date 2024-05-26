@@ -17,5 +17,8 @@ public class Review {
     private String title;
     private String description;
     private double rating;
-    private Long businessId;
+    private Integer businessId;
+    private Integer reviewerBusinessId; // New field
+    //private Integer revieweeBusinessId; = businessId
+
 }

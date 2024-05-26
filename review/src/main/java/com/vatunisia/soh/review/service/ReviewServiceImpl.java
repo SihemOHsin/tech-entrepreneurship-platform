@@ -21,13 +21,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public boolean addReview(Integer businessId, Review review) {
-        if (businessId != null && review != null){
+    public Review addReview(Integer businessId, Review review) {
+        if (businessId != null && review != null) {
             review.setBusinessId(businessId);
-            reviewRepository.save(review);
-            return true;
+            return reviewRepository.save(review);
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -37,17 +36,18 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public boolean updateReview(Long reviewId, Review updatedReview) {
+    public Review updateReview(Long reviewId, Review updatedReview) {
         Review review = reviewRepository.findById(reviewId).orElse(null);
         if (review != null){
             review.setTitle(updatedReview.getTitle());
             review.setDescription(updatedReview.getDescription());
             review.setRating(updatedReview.getRating());
             review.setBusinessId(updatedReview.getBusinessId());
-            reviewRepository.save(review);
-            return true;
+            review.setReviewerBusinessId(updatedReview.getReviewerBusinessId()); // New field
+
+            return reviewRepository.save(review);
         } else {
-            return false;
+            return null;
         }
     }
 

@@ -25,16 +25,15 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addReview(@RequestParam Integer businessId,
-                                            @RequestBody Review review){
-        boolean isReviewSaved = reviewService.addReview(businessId, review);
-        if (isReviewSaved)
-            return new ResponseEntity<>("Review Added Successfully",
-                    HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Review Not Saved",
-                    HttpStatus.NOT_FOUND);
+    public ResponseEntity<Review> addReview(@RequestParam Integer businessId, @RequestBody Review review) {
+        Review savedReview = reviewService.addReview(businessId, review);
+        if (savedReview != null) {
+            return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
+
 
     @GetMapping("/{reviewId}")
     public ResponseEntity<Review> getReview(@PathVariable Long reviewId){
@@ -44,15 +43,13 @@ public class ReviewController {
     }
 
     @PutMapping("/{reviewId}")
-    public ResponseEntity<String> updateReview(@PathVariable Long reviewId,
-                                               @RequestBody Review review){
-        boolean isReviewUpdated = reviewService.updateReview(reviewId, review);
-        if (isReviewUpdated)
-            return new ResponseEntity<>("Review updated successfully",
-                    HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Review not updated",
-                    HttpStatus.NOT_FOUND);
+    public ResponseEntity<Review> updateReview(@PathVariable Long reviewId, @RequestBody Review review) {
+        Review updatedReview = reviewService.updateReview(reviewId, review);
+        if (updatedReview != null) {
+            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{reviewId}")

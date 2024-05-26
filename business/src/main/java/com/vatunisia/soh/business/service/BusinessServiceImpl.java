@@ -76,16 +76,16 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public boolean updateBusiness(Integer id, Business updatedBusiness) {
+    public boolean updateBusiness(Integer id, BusinessDTO updatedBusinessDTO) {
         Optional<Business> businessOptional = businessRepository.findById(id);
         if (businessOptional.isPresent()) {
             Business business = businessOptional.get();
-            business.setBizname(updatedBusiness.getBizname());
-            business.setDateOfBizCreation(updatedBusiness.getDateOfBizCreation());
-            business.setIndustry(updatedBusiness.getIndustry());
-            business.setLocation(updatedBusiness.getLocation());
+            business.setBizname(updatedBusinessDTO.getBizname());
+            business.setDateOfBizCreation(updatedBusinessDTO.getDateOfBizCreation());
+            business.setIndustry(updatedBusinessDTO.getIndustry());
+            business.setLocation(updatedBusinessDTO.getLocation());
 
-            businessRepository.save(updatedBusiness);
+            businessRepository.save(business);
             return true;
         }
         return false;

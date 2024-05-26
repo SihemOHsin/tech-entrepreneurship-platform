@@ -1,9 +1,8 @@
 <div class="w3-light-grey" style="min-height: 100vh;">
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
-
     <div class="w3-container w3-clear">
       <!-- The Grid -->
-      <div class="w3-row w3-row-padding "style="margin-top:60px;">
+      <div class="w3-row w3-row-padding" style="margin-top:60px;">
         <!-- Left Column -->
         <div class="w3-col m3">
           <!-- Profile -->
@@ -14,92 +13,138 @@
                 <img [src]="businessLogo ? 'data:image/png;base64,' + businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
               </p>
               <hr>
-              <!--<p><i class="fa fa-user fa-fw w3-margin-right w3-text-theme"></i> {{ firstName }}</p> -->
-             <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> {{ businessName }}</p>
-             <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> {{ businessLocation }}</p>
-             <p><i class="fa fa-business-time fa-fw w3-margin-right w3-text-theme"></i> {{ businessIndustry }}</p>
-             <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> {{ businessCreationDate }}</p>
-             <p><i class="fa fa-mail-bulk fa-fw w3-margin-right w3-text-theme"></i> {{ contactEmail }}</p>
-           </div>
-         </div>
-
-         <br>
-
-
-
-         <!-- Alert Box -->
+              <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> {{ businessName }}</p>
+              <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> {{ businessLocation }}</p>
+              <p><i class="fa fa-business-time fa-fw w3-margin-right w3-text-theme"></i> {{ businessIndustry }}</p>
+              <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> {{ businessCreationDate }}</p>
+              <p><i class="fa fa-mail-bulk fa-fw w3-margin-right w3-text-theme"></i> {{ contactEmail }}</p>
+            </div>
+          </div>
+          <br>
+          <!-- Alert Box -->
           <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
+            <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
+              <i class="fa fa-remove"></i>
+            </span>
             <p><strong>Hey!</strong></p>
             <p>Entrepreneurs are looking at your profile. Great work is coming.</p>
           </div>
-
-          <!-- End Left Column -->
         </div>
-
         <!-- Middle Column -->
         <div class="w3-col m8">
-
           <div class="w3-row-padding">
             <div class="w3-col m12">
               <div class="w3-card w3-round w3-white">
                 <div class="w3-container w3-padding">
-                  <h6 class=" w3-opacity w3-padding">SOH> Profile</h6>
-                  <h4 class="w3-clear w3-margin"> Reviews</h4>
-                  <p contenteditable="true" class="w3-border w3-padding">Search for your reviews by the name of entrepreneur.</p>
-                  <button type="button" class="w3-button w3-theme"><i class="fa fa-comment"></i> Search</button>
+                  <h6 class="w3-opacity w3-padding">{{ businessName }} >Profile</h6>
+                  <h4 class="w3-clear w3-margin">Reviews</h4>
+                  <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="filterReviews()" class="w3-border w3-padding" placeholder="Search for reviews by business">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Display reviews -->
+
+          <div *ngFor="let review of displayedReviews" class="w3-container w3-card w3-white w3-round w3-margin">
+            <br>
+            <div class="w3-col col-md-12">
+              <div class="w3-col m-2 ">
+                <div *ngIf="reviewees[review.businessId]" class="w3-container">
+                  <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
+                  <h4 class="w3-opacity">{{ reviewees[review.businessId].bizname }}</h4>
+                  <hr class="w3-clear">
+                  <p>{{ review.description }}</p>
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
+                    <i class="fa fa-pencil"></i> Update
+                  </button>
+
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
+                    <i class="fa fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+              <div class="w3-col m-2">
+                <div *ngIf="review.reviewerBusinessId !== undefined && reviewees[review.reviewerBusinessId]" class="w3-container">
+                  <img [src]="reviewees[review.reviewerBusinessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.reviewerBusinessId].businessLogo : '/assets/logo.png'" alt="Avatar" class="w3-circle w3-margin-right" style="width:60px">
+                  <h4 class="w3-opacity">{{ reviewees[review.reviewerBusinessId].bizname }}</h4>
+                  <hr class="w3-clear">
+                  <p>{{ review.description }}</p>
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
+                    <i class="fa fa-pencil"></i> Update
+                  </button>
+
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
+                    <i class="fa fa-trash"></i> Delete
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <div class="w3-half">
-            <img src="/assets/sihemhsin.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-            <h4 class=" w3-opacity">Entrepreneur </h4><br>
-            <hr class="w3-clear">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-pencil"></i> Update</button>
-          </div>
-            <div class="w3-half">
-              <img src="/assets/sihemhsin.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-              <h4 class="w3-opacity">Entrepreneur </h4><br>
-              <hr class="w3-clear">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-              <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-pencil"></i> Update</button>
+          <!-- Default reviews list-->
+          <div *ngFor="let review of reviews" class="w3-container w3-card w3-white w3-round w3-margin">
+            <br>
+            <div class="w3-col col-md-12">
+              <div class="w3-col m-2 ">
+                <div *ngIf="reviewees[review.businessId]" class="w3-container">
+                  <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
+                  <h4 class="w3-opacity">{{ reviewees[review.businessId].bizname }}</h4>
+                  <hr class="w3-clear">
+                  <p>{{ review.description }}</p>
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
+                    <i class="fa fa-pencil"></i> Update
+                  </button>
+
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
+                    <i class="fa fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+              <div class="w3-half">
+                <div *ngIf="review.reviewerBusinessId !== undefined && reviewees[review.reviewerBusinessId]" class="w3-container">
+                  <img [src]="reviewees[review.reviewerBusinessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.reviewerBusinessId].businessLogo : '/assets/logo.png'" alt="Avatar" class="w3-circle w3-margin-right" style="width:60px">
+                  <h4 class="w3-opacity">{{ reviewees[review.reviewerBusinessId].bizname }}</h4>
+                  <hr class="w3-clear">
+                  <p>{{ review.description }}</p>
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
+                    <i class="fa fa-pencil"></i> Update
+                  </button>
+
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
+                    <i class="fa fa-trash"></i> Delete
+                  </button>
+                </div>
+
+                <!-- Modal or form to edit review -->
+                <div *ngIf="selectedReview && selectedReview.id === review.id" class="w3-modal" style="display: block;">
+                  <div class="w3-modal-content w3-animate-top w3-card-4">
+                    <header class="w3-container w3-black">
+                      <span (click)="selectedReview = null" class="w3-button w3-display-topright">&times;</span>
+                      <h2>Edit Review</h2>
+                    </header>
+                    <div class="w3-container">
+                      <form [formGroup]="updatedReviewForm">
+                        <p>
+                          <label for="description">New Review Description</label>
+                          <textarea id="description" formControlName="description" class="w3-input w3-border" required></textarea>
+                        </p>
+                      </form>
+                    </div>
+                    <footer class="w3-container w3-light-grey">
+                      <button class="w3-button w3-white w3-border" (click)="updateReview(review.id)">Save</button>
+                      <button class="w3-button w3-white w3-border" (click)="selectedReview = null">Cancel</button>
+                    </footer>
+                  </div>
+                </div>
+
+
+              </div>
             </div>
           </div>
 
-          <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <div class="w3-half">
-              <img src="/assets/sihemhsin.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-              <h4 class=" w3-opacity">Entrepreneur </h4><br>
-              <hr class="w3-clear">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-              <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-pencil"></i> Update</button>
-            </div>
-            <div class="w3-half">
-              <img src="/assets/sihemhsin.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-              <h4 class="w3-opacity">Entrepreneur </h4><br>
-              <hr class="w3-clear">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-              <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-pencil"></i> Update</button>
-            </div>
-          </div>
-
-          <!-- End Middle Column -->
         </div>
-
-        <!-- End Grid -->
+        <!-- End Middle Column -->
       </div>
-
-      <!-- End Page Container -->
     </div>
-    <br>
-
-
-
   </div>
 </div>

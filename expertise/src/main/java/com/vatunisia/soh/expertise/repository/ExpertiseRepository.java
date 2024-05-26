@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ExpertiseRepository extends JpaRepository<Expertise, Long> {
-    List<Expertise> findByBusinessId(Long businessId);
+    List<Expertise> findByBusinessId(Integer businessId);
 }

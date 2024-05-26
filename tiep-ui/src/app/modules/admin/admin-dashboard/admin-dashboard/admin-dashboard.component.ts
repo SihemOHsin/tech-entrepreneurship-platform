@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../../../../services/models/user";
 import {AuthenticationService} from "../../../../services/services/authentication.service";
 import Chart from 'chart.js/auto';
+import {OrderService} from "../../../../services/order/order.service";
+import {OrderDTO} from "../../../../services/order/order.model";
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -18,13 +20,28 @@ export class AdminDashboardComponent implements OnInit {
   numberOfAllUsers: number = 0;
   numberOfEntrepreneurs: number = 0;
   numberOfITExperts: number = 0;
+  numberOfOrders: number = 0;
+
   date: string[];
 
-  constructor(private authService: AuthenticationService) {
+  constructor(private authService: AuthenticationService,
+              private orderService: OrderService) {
   }
 
   ngOnInit(): void {
     this.fetchNumberOfUsers();
+    this.loadOrderCount();
+
+  }
+  loadOrderCount(): void {
+    this.orderService.findAllOrders().subscribe(
+      (orders: OrderDTO[]) => {
+        this.numberOfOrders = orders.length;
+      },
+      error => {
+        console.error('Error fetching orders:', error);
+      }
+    );
 
   }
 
@@ -205,5 +222,9 @@ export class AdminDashboardComponent implements OnInit {
       }
       }
     });
+  }
+
+  private fetchOrders() {
+
   }
 }

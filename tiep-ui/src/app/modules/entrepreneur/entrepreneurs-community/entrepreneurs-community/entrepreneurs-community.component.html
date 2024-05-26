@@ -1,5 +1,9 @@
 <div class="w3-light-grey" style="min-height: 100vh;">
+
+  <!-- !PAGE CONTENT! -->
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+    <!-- Header -->
     <header class="w3-container w3-padding-32">
       <h2><b>Browse entrepreneurs needs</b></h2>
       <p>
@@ -7,86 +11,69 @@
       </p>
     </header>
 
+    <!-- Grid -->
     <div class="w3-row">
+
+      <!-- Blog entries -->
       <ng-container *ngIf="!filteredEntries || filteredEntries.length === 0">
         <div class="w3-col l6 s12" *ngFor="let entry of currentEntries">
+          <!-- Blog entry -->
           <div class="w3-card-4 w3-margin">
             <div class="w3-container w3-light-grey" style="padding-bottom:3px;padding-top:8px;">
               <h5><b>{{entry.title}}</b></h5>
               <h6>Needs description, <span class="w3-opacity">{{entry.date}}</span></h6>
             </div>
+
             <div class="w3-container w3-white">
               <p id="partialContent{{entry.id}}">{{entry.content}}</p>
               <p id="fullContent{{entry.id}}" style="display: none;">{{entry.fullContent}}</p>
               <div class="w3-row">
                 <div class="w3-col m8 s12">
-                  <p><button class="w3-button" style="border:0px;border-radius: 5px;" (click)="showFullContent(entry.id)"><b>Read More »</b></button></p>
+                  <p><button class="w3-button w3-light-grey" style="border:0px;border-radius: 5px;" (click)="showFullContent(entry.id)"><b>Read More »</b></button></p>
                 </div>
                 <div class="w3-col m4 w3-hide-small">
-                  <p><button class="w3-padding w3-right w3-border-light-grey" (click)="openReviewModal(entry.id)"><b>Post a Review </b> <span class="w3-tag" style="border:0px;border-radius: 5px;">{{entry.comments}}</span></button></p>
+                  <p><span class="w3-padding-large w3-right"><b>IT Reviews </b> <span class="w3-tag" style="border:0px;border-radius: 5px;">{{entry.comments}}</span></span></p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </ng-container>
+
+      <!-- Filtered entries -->
       <ng-container *ngIf="filteredEntries && filteredEntries.length > 0">
         <div class="w3-col l6 s12" *ngFor="let entry of filteredEntries">
+          <!-- Blog entry -->
           <div class="w3-card-4 w3-margin">
             <div class="w3-container w3-light-grey" style="padding-bottom:3px;padding-top:8px;">
               <h5><b>{{entry.title}}</b></h5>
               <h6>Needs description, <span class="w3-opacity">{{entry.date}}</span></h6>
             </div>
+
             <div class="w3-container w3-white">
               <p id="partialContent{{entry.id}}">{{entry.content}}</p>
               <p id="fullContent{{entry.id}}" style="display: none;">{{entry.fullContent}}</p>
               <div class="w3-row">
                 <div class="w3-col m8 s12">
-                  <p><button class="w3-button" style="border:0px;border-radius: 5px;" (click)="showFullContent(entry.id)"><b>Read More »</b></button></p>
+                  <p><button class="w3-button w3-light-grey" style="border:0px;border-radius: 5px;" (click)="showFullContent(entry.id)"><b>Read More »</b></button></p>
                 </div>
                 <div class="w3-col m4 w3-hide-small">
-                  <p><button class="w3-padding w3-right w3-border-light-grey" (click)="openReviewModal(entry.id)"><b>Post a Review </b> <span class="w3-tag" style="border:0px;border-radius: 5px;">{{entry.comments}}</span></button></p>
+                  <p><span class="w3-padding-large w3-right"><b>IT Reviews </b> <span class="w3-tag" style="border:0px;border-radius: 5px;">{{entry.comments}}</span></span></p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </ng-container>
+
+      <!-- END GRID -->
     </div><br>
 
+    <!-- Pagination -->
     <div class="w3-center">
       <button class="w3-button" (click)="changePage(-1)" [disabled]="currentPage === 1">&laquo; Previous</button>
       <button class="w3-button" (click)="changePage(1)" [disabled]="currentPage === totalPages">Next &raquo;</button>
     </div>
-  </div>
-</div>
 
-<div id="reviewModal" class="w3-modal" style="display: none;">
-  <div class="w3-modal-content w3-animate-top w3-card-4">
-    <header class="w3-container w3-black">
-      <span (click)="closeReviewModal()" class="w3-button w3-display-topright">&times;</span>
-      <h2 class="w3-margin-top">Add Review</h2>
-    </header>
-    <div class="w3-container">
-      <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
-        <p>
-          <label for="title">Title</label>
-          <input id="title" formControlName="title" class="w3-input w3-border" required/>
-        </p>
-        <p>
-          <label for="description">Comment</label>
-          <textarea id="description" formControlName="description" class="w3-input w3-border" required></textarea>
-        </p>
-        <p>
-          <label for="rating">Rating (1-5)</label>
-          <input id="rating" type="number" formControlName="rating" class="w3-input w3-border" min="1" max="5" required>
-          <small class="text-muted">Please rate between 1 to 5.</small>
-        </p>
-
-        <p>
-          <button type="submit" class="w3-button w3-black" [disabled]="reviewForm.invalid">Submit</button>
-        </p>
-      </form>
-    </div>
   </div>
 </div>

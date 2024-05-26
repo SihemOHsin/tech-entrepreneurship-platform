@@ -12,31 +12,38 @@
     <br>
     <!-- Second Container -->
     <div class="w3-row-padding w3-grayscale">
-      <div class="w3-quarter" *ngFor="let business of businesses">
+
+      <div class="w3-quarter" *ngFor="let business of businesses" style="margin-bottom: 50px;">
         <div class="w3-card-4">
           <img [src]="business.businessLogo ? 'data:image/png;base64,' + business.businessLogo : '/assets/logo.png'" alt="Business Logo" style="width:100%">
           <div class="w3-container">
             <h3>{{ business.bizname }}</h3>
             <p class="w3-opacity">{{ business.industry }}</p>
-            <p *ngFor="let expertise of businessExpertises[business.id]">
-              {{ expertise.description }}
-            </p>
-            <div>
-              <div class="w3-half">
-                <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+            <ng-container *ngIf="businessExpertises[business.id] && businessExpertises[business.id].length > 0">
+              <p *ngFor="let expertise of businessExpertises[business.id]">
+                {{ expertise.description }}
+              </p>
+              <div>
+                <div class="w3-half">
+                  <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
+                </div>
+                <div class="w3-half">
+                  <h6 *ngFor="let expertise of businessExpertises[business.id]">
+                    {{ expertise.reviews && expertise.reviews.length > 0 ? expertise.reviews[0].title : '' }}
+                  </h6>
+                  <p *ngFor="let expertise of businessExpertises[business.id]">
+                    {{ expertise.reviews && expertise.reviews.length > 0 ? expertise.reviews[0].rating + '/5' : '' }}
+                  </p>
+                </div>
               </div>
-              <div class="w3-half">
-                <h6 *ngFor="let expertise of businessExpertises[business.id]">
-                  {{ expertise.reviews[0].title }}
-                </h6>
-                <p *ngFor="let expertise of businessExpertises[business.id]">
-                 {{ expertise.reviews[0].rating }}/5
-                </p>
-              </div>
-            </div>
+            </ng-container>
+            <ng-container *ngIf="!businessExpertises[business.id] || businessExpertises[business.id].length === 0">
+              <p>No expertise available</p>
+            </ng-container>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>

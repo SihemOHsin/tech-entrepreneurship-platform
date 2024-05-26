@@ -39,7 +39,7 @@ export class FindExpertComponent implements OnInit {
     this.businesses.forEach(business => {
       this.expertiseService.getExpertisesByBusinessId(business.id).subscribe(
         (data: ExpertiseDTO[]) => {
-          this.businessExpertises[business.id] = data; // Store the expertise associated with the business
+          this.businessExpertises[business.id] = data || []; // Initialize array to prevent null errors
 
         },
         (error) => {

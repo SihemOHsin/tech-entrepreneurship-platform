@@ -1,8 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {BusinessDTO} from "../../../../services/business/business-dto.model";
-import {ExpertiseDTO} from "../../../../services/expertise/expertise-dto.model";
+import {ExpertiseDTO, Review} from "../../../../services/expertise/expertise-dto.model";
 import {BusinessService} from "../../../../services/business/business.service";
 import {ExpertiseService} from "../../../../services/expertise/expertise.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ReviewService} from "../../../../services/review/review.service";
+import {GetUserByEmail$Params} from "../../../../services/fn/authentication/get-user-by-email";
+import {User} from "../../../../services/models/user";
+import {HttpErrorResponse} from "@angular/common/http";
+import {TokenService} from "../../../../services/token/token.service";
+import {AuthenticationService} from "../../../../services/services/authentication.service";
 
 @Component({
   selector: 'app-entrepreneurs-community',
@@ -10,26 +17,113 @@ import {ExpertiseService} from "../../../../services/expertise/expertise.service
   styleUrls: ['./entrepreneurs-community.component.scss']
 })
 export class EntrepreneursCommunityComponent implements OnInit{
+  businessInfo: BusinessDTO[];
 
   searchQuery: string = '';
-  filteredEntries: { id: number, title: string, content: string, fullContent: string,date:string, comments: number }[] = [];
+  filteredEntries: { id: number, title: string, content: string, fullContent: string, date: string, comments: number }[] = [];
 
-  businesses: BusinessDTO[];
+  businesses: BusinessDTO[] = [];
   businessExpertises: { [key: number]: ExpertiseDTO[] } = {};
-  blogEntries: { id: number, title: string, content: string, fullContent: string,date:string, comments: number }[] = [];
+  blogEntries: { id: number, title: string, content: string, fullContent: string, date: string, comments: number }[] = [];
 
   currentPage = 1;
   entriesPerPage = 4;
-  currentEntries: { id: number, title: string, content: string, fullContent: string,date:string , comments: number }[] = [];
+  currentEntries: { id: number, title: string, content: string, fullContent: string, date: string, comments: number }[] = [];
   totalPages = 0;
+
+  reviewForm: FormGroup;
+  selectedBusinessId: number | null = null;
+  reviewerBusinessId: number | null = null;
 
   constructor(
     private businessService: BusinessService,
-    private expertiseService: ExpertiseService
+    private tokenService: TokenService,
+    private expertiseService: ExpertiseService,
+    private authenticationService: AuthenticationService,
+    private reviewService: ReviewService,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
+    this.getProfile();
     this.loadBusinesses();
+    this.initReviewForm();
+  }
+
+  getProfile(): void {
+    const tokenExists = !!this.tokenService.token;
+    if (tokenExists) {
+      const userEmail = this.tokenService.getUserEmailFromToken();
+      if (userEmail) {
+        const params: GetUserByEmail$Params = { email: userEmail };
+        this.authenticationService.getUserByEmail(params).subscribe(
+          (response: any) => {
+            this.parseBlobToJson(response).then((user: User) => {
+              if (user && user.id) {
+                this.businessService.getBusinessesByUserEmail(userEmail).subscribe(
+                  (businesses: BusinessDTO[]) => {
+                    this.businessInfo = businesses;
+                    if (businesses.length > 0) {
+                      const business = businesses[0];
+
+                      this.reviewerBusinessId = business.id;
+                      console.log("reviewerBusinessId:", this.reviewerBusinessId);
+
+
+                    } else {
+                      console.error('No businesses found for the user.');
+                    }
+                    console.log('business info:', businesses);
+                  },
+                  (error) => {
+                    console.error('Error fetching business information:', error);
+                  }
+                );
+              } else {
+                console.error('User ID not found for email:', userEmail);
+              }
+            }).catch((error: any) => {
+              console.error('Error parsing response:', error);
+            });
+          },
+          (error: HttpErrorResponse) => {
+            console.error('Error retrieving user:', error);
+          }
+        );
+      } else {
+        console.error('User email not found.');
+      }
+    } else {
+      console.error('Token not found. User not authenticated.');
+    }
+  }
+
+  parseBlobToJson(blob: Blob): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const json = JSON.parse(reader.result as string);
+          resolve(json);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+      reader.readAsText(blob);
+    });
+  }
+
+
+
+  initReviewForm() {
+    this.reviewForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]]
+    });
   }
 
   loadBusinesses() {
@@ -48,8 +142,8 @@ export class EntrepreneursCommunityComponent implements OnInit{
     this.businesses.forEach(business => {
       this.expertiseService.getExpertisesByBusinessId(business.id).subscribe(
         (data: ExpertiseDTO[]) => {
-          this.businessExpertises[business.id] = data; // Store the expertise associated with the business
-          this.populateBlogEntries(); // Populate blogEntries after fetching expertises
+          this.businessExpertises[business.id] = data;
+          this.populateBlogEntries();
         },
         (error) => {
           console.error(`Error fetching expertises for business ${business.id}:`, error);
@@ -76,16 +170,15 @@ export class EntrepreneursCommunityComponent implements OnInit{
       }
     });
 
-    // Filter blogEntries based on search query
     if (this.searchQuery) {
       this.blogEntries = this.blogEntries.filter(entry =>
         entry.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     }
 
-    this.updateBlogEntries(); // Update currentEntries and totalPages
+    this.updateBlogEntries();
   }
-//
+
   updateBlogEntries() {
     const startIndex = (this.currentPage - 1) * this.entriesPerPage;
     const endIndex = startIndex + this.entriesPerPage;
@@ -100,9 +193,6 @@ export class EntrepreneursCommunityComponent implements OnInit{
     } else if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages;
     }
-
-    //
-
     this.updateBlogEntries();
   }
 
@@ -125,10 +215,58 @@ export class EntrepreneursCommunityComponent implements OnInit{
         entry.title.toLowerCase().includes(searchTerm)
       );
     } else {
-      // If the search query is empty, show all blog entries
       this.filteredEntries = this.blogEntries;
     }
   }
 
+  openReviewModal(businessId: number) {
+    this.selectedBusinessId = businessId;
+    console.log("this.selectedBusinessId:", this.selectedBusinessId);
 
+    this.reviewForm.reset();
+    const reviewModal = document.getElementById('reviewModal');
+    if (reviewModal) {
+      reviewModal.style.display = 'block';
+    }
+    console.log("Review Modal opened for Business ID:", businessId);
+  }
+
+  closeReviewModal() {
+    const reviewModal = document.getElementById('reviewModal');
+    if (reviewModal) {
+      reviewModal.style.display = 'none';
+    }
+  }
+
+  submitReview() {
+    //  id?: number; // Making id property optional
+    //   title: string;
+    //   description: string;
+    //   rating: number;
+    //   businessId: number;//reviewer
+    //   reviewerBusinessId?: number;
+
+
+    if (this.selectedBusinessId !== null ) {
+      const review: Review = {
+        ...this.reviewForm.value,
+        reviewerBusinessId: this.reviewerBusinessId,
+      };
+      console.log("Review to be submitted FORM:", this.reviewForm.value);
+
+      console.log("Review object to be submitted:", review);
+
+      this.reviewService.addReview(this.selectedBusinessId, review).subscribe(
+        (response) => {
+          console.log('Review submitted successfully:', response);
+          this.closeReviewModal();
+        },
+        (error) => {
+          console.error('Error submitting review:', error);
+        }
+      );
+    } else {
+      console.log("Review form is invalid or IDs are not set");
+    }
+  }
 }

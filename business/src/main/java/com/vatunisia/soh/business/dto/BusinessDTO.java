@@ -67,6 +67,5 @@ public class BusinessDTO {
         this.location = location;
     }
 
-
 }
 

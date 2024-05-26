@@ -21,4 +21,4 @@ public class Expertise {
     private String description;
     private String minProposedPrice;
     private String maxProposedPrice;
-    private Long businessId; }
+    private Integer businessId; }

@@ -53,11 +53,11 @@ public class BusinessController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateBusiness(@PathVariable Integer id,
-                                                 @RequestBody Business updatedBusiness) {
+    public ResponseEntity<String> updateBusiness(@PathVariable Integer id, @RequestBody BusinessDTO updatedBusiness) {
         boolean updated = businessService.updateBusiness(id, updatedBusiness);
-        if (updated)
-            return new ResponseEntity<>("Expertise updated successfully",HttpStatus.OK);
+        if (updated) {
+            return new ResponseEntity<>("Business updated successfully", HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

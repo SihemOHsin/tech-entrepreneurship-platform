@@ -11,7 +11,9 @@ public interface BusinessService {
     void createBusiness(Business business);
     BusinessDTO getBusinessById(Integer id);
     boolean deleteBusinessById(Integer id);
-    boolean updateBusiness(Integer id, Business updatedBusiness);
+
+    boolean updateBusiness(Integer id, BusinessDTO updatedBusinessDTO);
+
     List<BusinessDTO> findBusinessByUserID(Integer userID);
     List<BusinessDTO> findBusinessByUserRole(String userRole);
 

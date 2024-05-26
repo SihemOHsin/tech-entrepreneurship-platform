@@ -21,4 +21,6 @@ public class Business {
     private LocalDate dateOfBizCreation;//LocalDate in Spring Boot is typically ISO-8601 (yyyy-MM-dd)
     private String industry;
     private String location;
+    private String businessLogo;
+
 }

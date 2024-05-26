@@ -180,7 +180,7 @@
             <div class="w3-col m12">
               <div class="w3-card w3-round w3-white">
                 <div class="w3-container w3-padding">
-                  <h6 class=" w3-opacity w3-padding">SOH> Profile</h6>
+                  <h6 class=" w3-opacity w3-padding">{{ businessName }}> Profile</h6>
                   <h4 class="w3-clear w3-margin"> Ste IT</h4>
                   <p contenteditable="true" class="w3-border w3-padding w3-light-grey">You can see bellow list of entrepreneurs who have rated this profile.</p>
                   <h6 class="w3-clear w3-margin"><i class="fa fa-thumbs-up"></i> Rates</h6>
@@ -190,49 +190,11 @@
             </div>
           </div>
 
-          <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
+          <div  class="w3-container w3-card w3-white w3-round w3-margin"><br>
+            <div *ngFor="let review of reviews" class="w3-quarter">
+              <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
               <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
-            </div>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
-              <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
-            </div>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
-              <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
-            </div>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
-              <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
-            </div>
-          </div>
-
-          <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
-              <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
-            </div>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
-              <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
-            </div>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
-              <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
-            </div>
-            <div class="w3-quarter">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right w3-margin-top" style="width:100px">
-              <br class="w3-clear">
-              <p class="w3-opacity">Entrepreneur</p><br>
+              <p class="w3-opacity">{{ reviewees[review.businessId].bizname }}</p><br>
             </div>
           </div>
 

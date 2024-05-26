@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ManageReviewsRoutingModule } from './manage-reviews-routing.module';
 import { ManageReviewsComponent } from './manage-reviews/manage-reviews.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -11,7 +12,9 @@ import { ManageReviewsComponent } from './manage-reviews/manage-reviews.componen
   ],
   imports: [
     CommonModule,
-    ManageReviewsRoutingModule
+    ManageReviewsRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ManageReviewsModule { }

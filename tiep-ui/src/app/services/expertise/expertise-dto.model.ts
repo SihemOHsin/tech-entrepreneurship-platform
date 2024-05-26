@@ -16,6 +16,8 @@ export class Business {
   dateOfBizCreation: string; // Assuming ISO-8601 format
   industry: string;
   location: string;
+  businessLogo?: string;
+
 }
 
 export class Review {
@@ -23,5 +25,6 @@ export class Review {
   title: string;
   description: string;
   rating: number;
-  businessId: number;
+  businessId: number;//reviewer
+  reviewerBusinessId?: number;
 }

@@ -6,8 +6,13 @@ import java.util.List;
 
 public interface ReviewService {
     List<Review> getAllReviews(Integer businessId);
-    boolean addReview(Integer businessId, Review review);
+
+    Review addReview(Integer businessId, Review review);
+
     Review getReview(Long reviewId);
-    boolean updateReview(Long reviewId, Review review);
+
+    Review updateReview(Long reviewId, Review updatedReview);
+
     boolean deleteReview(Long reviewId);
+
 }

@@ -103,7 +103,6 @@ export class EntrepreneurProfileComponent implements OnInit {
             } else {
               this.showCreateForm = true;
               this.showUploadLogoForm = false;
-              //this.showCreateSkillForm = true;
             }
           },
           (error) => {
@@ -201,7 +200,7 @@ export class EntrepreneurProfileComponent implements OnInit {
             this.firstName = business.user.firstname;
             this.showUploadLogoForm = true;
             this.showCreateForm = false;
-            this.showUpdateForm = true; // Show update form
+            this.showUpdateForm = false; // Show update form
             this.createdBusinessId = business.id;
             this.updateBusinessForm.patchValue({
               bizname: business.bizname,
@@ -263,6 +262,7 @@ export class EntrepreneurProfileComponent implements OnInit {
         industry: this.updateBusinessForm.value.industry,
         dateOfBizCreation: this.updateBusinessForm.value.dateOfBizCreation
       };
+
       this.businessService.updateBusiness(this.createdBusinessId, updatedBusiness).subscribe(
         () => {
           console.log('Business updated successfully');
