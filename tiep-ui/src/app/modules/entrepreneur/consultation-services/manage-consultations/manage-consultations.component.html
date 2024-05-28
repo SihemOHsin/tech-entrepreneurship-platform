@@ -22,14 +22,12 @@
                 <ng-container *ngFor="let consultation of getFirstHalfConsultations()">
                   <tr>
                     <td>
-                      <input type="checkbox" (change)="viewConsultation(consultation)">
+                      <input type="checkbox" (change)="performAction(consultation)">
                     </td>
                     <td>{{ consultation.consultationName }}</td>
                     <td>{{ consultation.business.bizname }}</td>
                     <td>
-                      <button class="w3-black" style="border:0px;padding-right:16px; margin-bottom: 2px;" (click)="viewConsultation(consultation)">View</button>
-                      <br><button class="w3-black" style="border:0px; margin-bottom: 2px;" (click)="deleteConsultation(consultation.id)">Delete</button>
-                      <br><button class="w3-black" style="border:0px; padding-right:22px;" (click)="viewConsultation(consultation)">Edit</button>
+                      <button class="w3-black" style="border:0px; border-radius: 5px;" (click)="performAction(consultation)">View</button>
                     </td>
                   </tr>
                 </ng-container>
@@ -55,14 +53,12 @@
                 <ng-container *ngFor="let consultation of getSecondHalfConsultations()">
                   <tr>
                     <td>
-                      <input type="checkbox" (change)="viewConsultation(consultation)">
+                      <input type="checkbox" (change)="performAction(consultation)">
                     </td>
                     <td>{{ consultation.consultationName }}</td>
                     <td>{{ consultation.business.bizname }}</td>
                     <td>
-                      <button class="w3-black" style="border:0px;padding-right:16px; margin-bottom: 2px;" (click)="viewConsultation(consultation)">View</button>
-                      <br><button class="w3-black" style="border:0px; margin-bottom: 2px;" (click)="deleteConsultation(consultation.id)">Delete</button>
-                     <br> <button class="w3-black" style="border:0px; padding-right:22px;" (click)="viewConsultation(consultation)">Edit</button>
+                      <button class="w3-black" style="border:0px; border-radius: 5px;" (click)="performAction(consultation)">View</button>
                     </td>
                   </tr>
                 </ng-container>
@@ -73,27 +69,25 @@
         </div>
       </div>
 
-      <div style="padding: 16px;">
-        <div *ngIf="consultation" class="w3-panel w3-white w3-card-4" style="padding: 16px;">
-          <h3>Consultation Details</h3>
-          <form>
-            <p>
-              <label class="w3-text-grey" for="consultationName">Name:</label>
-              <input id="consultationName" class="w3-input" [(ngModel)]="consultation.consultationName" name="consultationName" required>
-            </p>
-            <p>
-              <label class="w3-text-grey" for="consultationDescription">Description:</label>
-              <input id="consultationDescription" class="w3-input" [(ngModel)]="consultation.consultationDescription" name="consultationDescription" required>
-            </p>
-            <p>
-              <label class="w3-text-grey" for="price">Price:</label>
-              <input id="price" class="w3-input" [(ngModel)]="consultation.price" name="price" required>
-            </p>
-            <button type="button" class="w3-button w3-black" style="margin-right: 10px;" (click)="updateConsultation()">Save</button>
-            <button type="button" class="w3-button w3-black" (click)="cancelEdit()">Cancel</button>
-          </form>
-        </div>
+      <div  style="padding: 16px; ">
+      <div *ngIf="consultation" class=" w3-panel w3-white w3-card-4" style="padding: 16px;">
+        <h3>Consultation Details</h3>
+        <form>
+          <p>
+            <label class="w3-text-grey" for="consultationName">Name:</label>
+            <input id="consultationName" class="w3-input" [(ngModel)]="consultation.consultationName" name="consultationName" readonly>
+          </p>
+          <p>
+            <label class="w3-text-grey" for="consultationDescription">Description:</label>
+            <input id="consultationDescription" class="w3-input" [(ngModel)]="consultation.consultationDescription" name="consultationDescription" readonly>
+          </p>
+          <p>
+            <label class="w3-text-grey" for="price">Price:</label>
+            <input id="price" class="w3-input" [(ngModel)]="consultation.price" name="price" readonly>
+          </p>
+        </form>
       </div>
+    </div>
     </div>
   </div>
 </div>

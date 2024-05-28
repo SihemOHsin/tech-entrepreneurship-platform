@@ -6,6 +6,8 @@ import com.vatunisia.soh.consultation.entity.Consultation;
 import com.vatunisia.soh.consultation.mapper.ConsultationMapper;
 import com.vatunisia.soh.consultation.repository.ConsultationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,18 +57,19 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
-    public boolean deleteConsultationById(Long id) {
+    public ResponseEntity<?> deleteConsultationById(Long id) {
         try {
             consultationRepository.deleteById(id);
-            return true;
+            return ResponseEntity.ok().body("Consultation deleted successfully");
         } catch (Exception e) {
-            return false;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete consultation");
         }
     }
 
 
+
     @Override
-    public boolean updateConsultation(Long id, Consultation updatedConsultation) {
+    public Consultation updateConsultation(Long id, Consultation updatedConsultation) {
         Optional<Consultation> consultationOptional = consultationRepository.findById(id);
         if (consultationOptional.isPresent()) {
             Consultation consultation = consultationOptional.get();
@@ -75,9 +78,9 @@ public class ConsultationServiceImpl implements ConsultationService {
             consultation.setPrice(updatedConsultation.getPrice());
             consultation.setBusinessId(updatedConsultation.getBusinessId());
             consultationRepository.save(consultation);
-            return true;
+            return consultation;
         }
-        return false;
+        return null;
     }
 
     @Override

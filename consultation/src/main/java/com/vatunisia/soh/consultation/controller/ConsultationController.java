@@ -41,25 +41,22 @@ public class ConsultationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteConsultation(@PathVariable Long id) {
-        boolean deleted = consultationService.deleteConsultationById(id);
-        if (deleted) {
-            return new ResponseEntity<>("Consultation deleted successfully", HttpStatus.OK);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> deleteConsultationById(@PathVariable Long id) {
+        return consultationService.deleteConsultationById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateConsultation(@PathVariable Long id,
-                                                     @RequestBody Consultation updatedConsultation) {
-        boolean updated = consultationService.updateConsultation(id, updatedConsultation);
-        if (updated) {
-            return new ResponseEntity<>("Consultation updated successfully", HttpStatus.OK);
+    public ResponseEntity<?> updateConsultation(@PathVariable Long id,
+                                                @RequestBody Consultation updatedConsultation) {
+        Consultation updated = consultationService.updateConsultation(id, updatedConsultation);
+        if (updated != null) {
+            return new ResponseEntity<>(updated, HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consultation not found with id " + id);
         }
     }
+
+
 
     @GetMapping("/business/{businessId}")
     public ResponseEntity<List<ConsultationDTO>> findConsultationByBusinessId(@PathVariable Integer businessId) {

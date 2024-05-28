@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  ManageConsultationsComponent
-} from "../../admin/manage-consultations/manage-consultations/manage-consultations.component";
+
 import {authGuard} from "../../../services/guard/auth.guard";
+import {ManageConsultationsComponent} from "./manage-consultations/manage-consultations.component";
 
 const routes: Routes = [
   {

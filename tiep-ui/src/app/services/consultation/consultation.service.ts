@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConsultationDTOs } from "./consulaltion.model";
 import { environment } from "../../environments/environment";
+import {Consultation} from "../order/order.model";
 
 @Injectable({
   providedIn: 'root'
@@ -32,13 +33,15 @@ export class ConsultationService {
     return this.http.get<ConsultationDTOs>(`${this.baseUrl}/${id}`, this.httpOptions);
   }
 
-  deleteConsultation(id: number): Observable<string> {
-    return this.http.delete<string>(`${this.baseUrl}/${id}`, this.httpOptions);
+  deleteConsultation(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`, { responseType: 'text' });
   }
 
-  updateConsultation(id: number, updatedConsultation: ConsultationDTOs): Observable<string> {
-    return this.http.put<string>(`${this.baseUrl}/${id}`, updatedConsultation, this.httpOptions);
+
+  updateConsultation(id: number, updatedConsultation: Consultation): Observable<ConsultationDTOs> {
+    return this.http.put<ConsultationDTOs>(`${this.baseUrl}/${id}`, updatedConsultation, this.httpOptions);
   }
+
 
   findConsultationByBusinessId(businessId: number): Observable<ConsultationDTOs[]> {
     return this.http.get<ConsultationDTOs[]>(`${this.baseUrl}/business/${businessId}`, this.httpOptions);
