@@ -176,8 +176,8 @@
             <div class="w3-col m12">
               <div class="w3-card w3-round w3-white">
                 <div class="w3-container w3-padding">
-                  <h6 class=" w3-opacity w3-padding">SOH> Profile</h6>
-                  <h4 class="w3-clear w3-margin"> Ste IT</h4>
+                  <h6 class=" w3-opacity w3-padding">{{ businessName }}> Profile</h6>
+                  <h4 class="w3-clear w3-margin"> Technology is best when it brings people together.</h4>
                   <p contenteditable="true" class="w3-border w3-padding w3-light-grey">Below is a list of experts who have given feedback on this profile.</p>
                   <h6 class="w3-clear w3-margin"><i class="fa fa-comment"></i> Comment</h6>
 
@@ -186,36 +186,23 @@
             </div>
           </div>
 
-          <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <div class="w3-half">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-              <h4 class=" w3-opacity">Entrepreneur </h4><br>
-              <hr class="w3-clear">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-            </div>
-            <div class="w3-half">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-              <h4 class="w3-opacity">Entrepreneur </h4><br>
-              <hr class="w3-clear">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            </div>
-          </div>
-
-          <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <div class="w3-half">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-              <h4 class=" w3-opacity">Entrepreneur </h4><br>
-              <hr class="w3-clear">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            </div>
-            <div class="w3-half">
-              <img src="/assets/faviconsihem.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-              <h4 class="w3-opacity">Entrepreneur </h4><br>
-              <hr class="w3-clear">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <div *ngFor="let reviewPair of reviews | slice:0:reviews.length; let i = index">
+            <div class="w3-container w3-card w3-white w3-round w3-margin" *ngIf="i % 2 === 0"><br>
+              <div class="w3-half" *ngIf="reviews[i]">
+                <img [src]="getBusinessLogo(reviews[i].reviewerBusinessId)" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                <h4 class="w3-opacity">{{ getBusinessName(reviews[i].reviewerBusinessId) }}</h4><br>
+                <hr class="w3-clear">
+                <p>{{ reviews[i].description }}</p>
+              </div>
+              <div class="w3-half" *ngIf="reviews[i + 1]">
+                <img [src]="getBusinessLogo(reviews[i + 1].reviewerBusinessId)" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                <h4 class="w3-opacity">{{ getBusinessName(reviews[i + 1].reviewerBusinessId) }}</h4><br>
+                <hr class="w3-clear">
+                <p>{{ reviews[i + 1].description }}</p>
+              </div>
             </div>
           </div>
+
 
           <!-- End Middle Column -->
         </div>

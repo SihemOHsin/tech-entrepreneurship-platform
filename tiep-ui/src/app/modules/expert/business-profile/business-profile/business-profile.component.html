@@ -192,9 +192,11 @@
 
           <div  class="w3-container w3-card w3-white w3-round w3-margin"><br>
             <div *ngFor="let review of reviews" class="w3-quarter">
+              <div *ngIf="reviewees[review.businessId]">
               <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
               <br class="w3-clear">
               <p class="w3-opacity">{{ reviewees[review.businessId].bizname }}</p><br>
+              </div>
             </div>
           </div>
 

@@ -21,10 +21,10 @@ export class Business {
 }
 
 export class Review {
-  id?: number; // Making id property optional
+  id: number; // Making id property optional
   title: string;
   description: string;
   rating: number;
   businessId: number;//reviewer
-  reviewerBusinessId?: number;
+  reviewerBusinessId: number;
 }

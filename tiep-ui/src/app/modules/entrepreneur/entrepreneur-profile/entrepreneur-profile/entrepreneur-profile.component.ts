@@ -6,8 +6,9 @@ import {TokenService} from "../../../../services/token/token.service";
 import {AuthenticationService} from "../../../../services/services/authentication.service";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {GetUserByEmail$Params} from "../../../../services/fn/authentication/get-user-by-email";
-import {ExpertiseDTO} from "../../../../services/expertise/expertise-dto.model";
+import {ExpertiseDTO, Review} from "../../../../services/expertise/expertise-dto.model";
 import {ExpertiseService} from "../../../../services/expertise/expertise.service";
+import {ReviewService} from "../../../../services/review/review.service";
 
 @Component({
   selector: 'app-entrepreneur-profile',
@@ -37,6 +38,8 @@ export class EntrepreneurProfileComponent implements OnInit {
   showUploadSkillForm = false; // Added property
   selectedSkill: ExpertiseDTO | null = null;
 
+  reviews: Review[] = [];
+  reviewerBusinesses: { [key: number]: BusinessDTO } = {};
 
   constructor(
     private businessService: BusinessService,
@@ -44,7 +47,8 @@ export class EntrepreneurProfileComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private fb: FormBuilder,
     private http: HttpClient,
-    private expertiseService: ExpertiseService
+    private expertiseService: ExpertiseService,
+    private reviewService: ReviewService
   ) {
     this.createBusinessForm = this.fb.group({
       bizname: ['', Validators.required],
@@ -99,6 +103,7 @@ export class EntrepreneurProfileComponent implements OnInit {
               // Load skills for the business if the business ID exists
               if (this.createdBusinessId) {
                 this.loadSkills(this.createdBusinessId);
+                this.showReviews(this.createdBusinessId);
               }
             } else {
               this.showCreateForm = true;
@@ -349,6 +354,41 @@ export class EntrepreneurProfileComponent implements OnInit {
         }
       );
     }
+  }
+
+  private showReviews(createdBusinessId: number) {
+    const businessId = this.createdBusinessId;
+    this.reviewService.getAllReviews(businessId).subscribe(
+      (data: Review[]) => {
+        this.reviews = data;
+        console.log("Reviews of business 3", data)
+        this.reviews.forEach(review => {
+          this.fetchReviewerBusiness(review.reviewerBusinessId);
+        });
+      },
+      (error) => {
+        console.error('Error fetching reviews:', error);
+      }
+    );
+  }
+  private fetchReviewerBusiness(reviewerBusinessId: number): void {
+    this.businessService.getBusinessById(reviewerBusinessId).subscribe(
+      (data: BusinessDTO) => {
+        this.reviewerBusinesses[reviewerBusinessId] = data;
+      },
+      (error) => {
+        console.error(`Error fetching business details for ID ${reviewerBusinessId}:`, error);
+      }
+    );
+  }
+  //2 helper methods just for the reviewers business to facilitate it
+  getBusinessName(reviewerBusinessId: number): string {
+    return this.reviewerBusinesses[reviewerBusinessId]?.bizname || 'Unknown Business';
+  }
+
+  getBusinessLogo(reviewerBusinessId: number): string {
+    const logo = this.reviewerBusinesses[reviewerBusinessId]?.businessLogo;
+    return logo ? `data:image/png;base64,${logo}` : '/assets/default-avatar.png';
   }
 
 }

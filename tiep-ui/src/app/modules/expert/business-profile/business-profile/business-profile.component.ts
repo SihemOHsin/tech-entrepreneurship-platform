@@ -108,6 +108,8 @@ export class BusinessProfileComponent implements OnInit {
               this.showCreateForm = true;
               this.showUploadLogoForm = false;
             }
+
+
           },
           (error) => {
             console.error('Error fetching business information:', error);
@@ -121,6 +123,7 @@ export class BusinessProfileComponent implements OnInit {
     }
 
   }
+
 
   onSubmit() {
     if (this.createBusinessForm.valid) {

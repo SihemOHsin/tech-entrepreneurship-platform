@@ -38,53 +38,37 @@
                 <div class="w3-container w3-padding">
                   <h6 class="w3-opacity w3-padding">{{ businessName }} >Profile</h6>
                   <h4 class="w3-clear w3-margin">Reviews</h4>
-                  <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="filterReviews()" class="w3-border w3-padding" placeholder="Search for reviews by business">
+                  <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="filterReviews()" class="w3-border w3-padding" placeholder="Search for reviews by biz">
                 </div>
               </div>
             </div>
           </div>
-          <!-- Display reviews -->
+
+          <!-- Display reviews only in search results -->
+          <div *ngIf="searchQuery">
 
           <div *ngFor="let review of displayedReviews" class="w3-container w3-card w3-white w3-round w3-margin">
-            <br>
-            <div class="w3-col col-md-12">
-              <div class="w3-col m-2 ">
-                <div *ngIf="reviewees[review.businessId]" class="w3-container">
-                  <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
-                  <h4 class="w3-opacity">{{ reviewees[review.businessId].bizname }}</h4>
-                  <hr class="w3-clear">
-                  <p>{{ review.description }}</p>
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
-                    <i class="fa fa-pencil"></i> Update
-                  </button>
-
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
-                    <i class="fa fa-trash"></i> Delete
-                  </button>
-                </div>
-              </div>
-              <div class="w3-col m-2">
-                <div *ngIf="review.reviewerBusinessId !== undefined && reviewees[review.reviewerBusinessId]" class="w3-container">
-                  <img [src]="reviewees[review.reviewerBusinessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.reviewerBusinessId].businessLogo : '/assets/logo.png'" alt="Avatar" class="w3-circle w3-margin-right" style="width:60px">
-                  <h4 class="w3-opacity">{{ reviewees[review.reviewerBusinessId].bizname }}</h4>
-                  <hr class="w3-clear">
-                  <p>{{ review.description }}</p>
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
-                    <i class="fa fa-pencil"></i> Update
-                  </button>
-
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
-                    <i class="fa fa-trash"></i> Delete
-                  </button>
+              <br>
+                <div class="w3-col m-2 ">
+                  <div *ngIf="reviewees[review.businessId]" class="w3-container">
+                    <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
+                    <h4 class="w3-opacity">{{ reviewees[review.businessId].bizname }}</h4>
+                    <hr class="w3-clear">
+                    <p>{{ review.description }}</p>
+                    <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
+                      <i class="fa fa-pencil"></i> Update
+                    </button>
+                    <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
+                      <i class="fa fa-trash"></i> Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Default reviews list-->
+          <!-- Default reviews list -->
           <div *ngFor="let review of reviews" class="w3-container w3-card w3-white w3-round w3-margin">
             <br>
-            <div class="w3-col col-md-12">
               <div class="w3-col m-2 ">
                 <div *ngIf="reviewees[review.businessId]" class="w3-container">
                   <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
@@ -94,26 +78,10 @@
                   <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
                     <i class="fa fa-pencil"></i> Update
                   </button>
-
                   <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
                     <i class="fa fa-trash"></i> Delete
                   </button>
-                </div>
               </div>
-              <div class="w3-half">
-                <div *ngIf="review.reviewerBusinessId !== undefined && reviewees[review.reviewerBusinessId]" class="w3-container">
-                  <img [src]="reviewees[review.reviewerBusinessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.reviewerBusinessId].businessLogo : '/assets/logo.png'" alt="Avatar" class="w3-circle w3-margin-right" style="width:60px">
-                  <h4 class="w3-opacity">{{ reviewees[review.reviewerBusinessId].bizname }}</h4>
-                  <hr class="w3-clear">
-                  <p>{{ review.description }}</p>
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
-                    <i class="fa fa-pencil"></i> Update
-                  </button>
-
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
-                    <i class="fa fa-trash"></i> Delete
-                  </button>
-                </div>
 
                 <!-- Modal or form to edit review -->
                 <div *ngIf="selectedReview && selectedReview.id === review.id" class="w3-modal" style="display: block;">
@@ -137,7 +105,6 @@
                   </div>
                 </div>
 
-
               </div>
             </div>
           </div>
@@ -147,4 +114,4 @@
       </div>
     </div>
   </div>
-</div>
+

@@ -239,13 +239,6 @@ export class EntrepreneursCommunityComponent implements OnInit{
   }
 
   submitReview() {
-    //  id?: number; // Making id property optional
-    //   title: string;
-    //   description: string;
-    //   rating: number;
-    //   businessId: number;//reviewer
-    //   reviewerBusinessId?: number;
-
 
     if (this.selectedBusinessId !== null ) {
       const review: Review = {

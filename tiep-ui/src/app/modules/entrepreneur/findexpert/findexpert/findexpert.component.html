@@ -1,104 +1,54 @@
 <div class="w3-light-grey" style="min-height: 100vh;">
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
-
     <!-- About Section -->
     <div class="w3-container w3-padding-32" id="about">
       <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Drive Business Growth</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
+      <p>Technology is the backbone of modern entrepreneurship, fueling innovation and driving businesses to new heights. IT experts play a pivotal role in this journey, leveraging their skills to streamline operations, enhance efficiency, and foster growth. With their guidance, businesses embrace innovation, optimize processes, and deliver exceptional customer experiences, propelling them toward success in the digital age.</p>
     </div>
 
     <div class="w3-row-padding w3-grayscale">
-      <div class="w3-quarter">
+      <div *ngFor="let business of businesses; let i = index" class="w3-quarter">
         <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
+          <img [src]="business.businessLogo ? 'data:image/png;base64,' + business.businessLogo : '/assets/default-avatar.png'" alt="{{ business.bizname }}" style="width:100%">
           <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
+            <h3>{{ business.bizname }}</h3>
+            <p class="w3-opacity">{{ business.industry }}</p>
+            <p>{{ getExpertiseList(business.id) }}</p>
             <div>
               <div class="w3-half">
                 <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-              </div >
+              </div>
               <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p><button class="w3-button w3-white w3-block">Rate</button></p>
-                <p> 10/10</p>
+                <h6>Give a Rate</h6>
+                <p><button class="w3-button w3-white w3-block" (click)="openReviewModal(business.id)">Rate</button></p>
+                <p>{{ businessRatings[business.id] ? businessRatings[business.id].toFixed(2) + '/5' : 'No rating available' }}</p>
               </div>
             </div>
           </div>
         </div>
+        <div *ngIf="i % 4 === 3" class="w3-clear" style="margin-bottom: 70px;"></div>
       </div>
-
-      <div class="w3-quarter">
-        <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
-          <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
-            <div>
-              <div class="w3-half">
-                <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-            </div >
-              <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p><button class="w3-button w3-white w3-block">Rate</button></p>
-                <p> 10/10</p>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="w3-quarter">
-        <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
-          <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
-            <div>
-              <div class="w3-half">
-                <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-              </div >
-              <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p><button class="w3-button w3-white w3-block">Rate</button></p>
-                <p> 10/10</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="w3-quarter">
-        <div class="w3-card-4">
-          <img src="/assets/sihemhsin.png" alt="Car" style="width:100%">
-          <div class="w3-container">
-            <h3>Jane Doe</h3>
-            <p class="w3-opacity">Architect</p>
-            <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-
-            <div>
-              <div class="w3-half">
-                <img src="/assets/logo.png" alt="Boss" style="width:45%" class="w3-circle w3-hover-opacity">
-              </div >
-              <div class="w3-half">
-                <h6>Name rating entrepreneur</h6>
-                <p><button class="w3-button w3-white w3-block">Rate</button></p>
-                <p> 10/10</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    </div>
+  </div>
 </div>
-</div>
+
+<div id="reviewModal" class="w3-modal" style="display: none;">
+  <div class="w3-modal-content w3-animate-top w3-card-4">
+    <header class="w3-container w3-black">
+      <span (click)="closeReviewModal()" class="w3-button w3-display-topright">&times;</span>
+      <h2 class="w3-margin-top">Add Review</h2>
+    </header>
+    <div class="w3-container">
+      <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+        <p>
+          <label for="rating">Rating (1-5)</label>
+          <input id="rating" type="number" formControlName="rating" class="w3-input w3-border" min="1" max="5" required>
+          <small class="text-muted">Please rate between 1 to 5.</small>
+        </p>
+        <p>
+          <button type="submit" class="w3-button w3-black" [disabled]="reviewForm.invalid">Submit</button>
+        </p>
+      </form>
+    </div>
+  </div>
 </div>
