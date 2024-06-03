@@ -9,6 +9,7 @@ import {GetUserByEmail$Params} from "../../../../services/fn/authentication/get-
 import {ExpertiseDTO, Review} from "../../../../services/expertise/expertise-dto.model";
 import {ExpertiseService} from "../../../../services/expertise/expertise.service";
 import {ReviewService} from "../../../../services/review/review.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-entrepreneur-profile',
@@ -16,6 +17,8 @@ import {ReviewService} from "../../../../services/review/review.service";
   styleUrls: ['./entrepreneur-profile.component.scss']
 })
 export class EntrepreneurProfileComponent implements OnInit {
+  selectedExpertId: number;
+
   businessInfo: BusinessDTO[];
   businessName: string;
   businessLocation: string;
@@ -26,22 +29,23 @@ export class EntrepreneurProfileComponent implements OnInit {
   firstName: string;
   showCreateForm: boolean = false;
   showUploadLogoForm: boolean = false;
-  showUpdateForm: boolean = false; // Add this property
+  showUpdateForm: boolean = false;
   createBusinessForm: FormGroup;
-  updateBusinessForm: FormGroup; // Add this property
+  updateBusinessForm: FormGroup;
   createdBusinessId: number;
   createSkillForm: FormGroup;
   showCreateSkillForm = false;
   skills: ExpertiseDTO[] = [];
   updateSkillForm: FormGroup;
   showUpdateSkillForm = false;
-  showUploadSkillForm = false; // Added property
+  showUploadSkillForm = false;
   selectedSkill: ExpertiseDTO | null = null;
 
   reviews: Review[] = [];
   reviewerBusinesses: { [key: number]: BusinessDTO } = {};
 
   constructor(
+    private router: Router,
     private businessService: BusinessService,
     private tokenService: TokenService,
     private authenticationService: AuthenticationService,
@@ -373,8 +377,10 @@ export class EntrepreneurProfileComponent implements OnInit {
   }
   private fetchReviewerBusiness(reviewerBusinessId: number): void {
     this.businessService.getBusinessById(reviewerBusinessId).subscribe(
-      (data: BusinessDTO) => {
-        this.reviewerBusinesses[reviewerBusinessId] = data;
+    (data: BusinessDTO) => {
+      console.log("reviewer", reviewerBusinessId);
+
+      this.reviewerBusinesses[reviewerBusinessId] = data;
       },
       (error) => {
         console.error(`Error fetching business details for ID ${reviewerBusinessId}:`, error);
@@ -391,4 +397,8 @@ export class EntrepreneurProfileComponent implements OnInit {
     return logo ? `data:image/png;base64,${logo}` : '/assets/default-avatar.png';
   }
 
+  makeOrder(selectedExpertId: number) {
+    this.router.navigate(['/entrepreneur/manage-orders'], { state: { selectedExpertId } });
+    console.log("state selectExpertId", selectedExpertId)
+  }
 }

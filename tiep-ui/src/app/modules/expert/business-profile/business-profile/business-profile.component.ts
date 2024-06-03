@@ -9,6 +9,10 @@ import { GetUserByEmail$Params } from "../../../../services/fn/authentication/ge
 import {ExpertiseService} from "../../../../services/expertise/expertise.service";
 import {ExpertiseDTO} from "../../../../services/expertise/expertise-dto.model";
 import {ReviewService} from "../../../../services/review/review.service";
+import {ConsultationService} from "../../../../services/consultation/consultation.service";
+import {Consultation} from "../../../../services/order/order.model";
+import {ConsultationDTO} from "../../../../services/consultation/consulaltion.model";
+
 
 @Component({
   selector: 'app-business-profile',
@@ -40,6 +44,7 @@ export class BusinessProfileComponent implements OnInit {
   reviews: any[] = [];
   reviewees: { [key: string]: any } = {};
 
+
   constructor(
     private businessService: BusinessService,
     private tokenService: TokenService,
@@ -47,7 +52,8 @@ export class BusinessProfileComponent implements OnInit {
     private reviewService: ReviewService,
     private fb: FormBuilder,
     private http: HttpClient,
-    private expertiseService: ExpertiseService
+    private expertiseService: ExpertiseService,
+    private consultationService: ConsultationService
   ) {
     this.createBusinessForm = this.fb.group({
       bizname: ['', Validators.required],
@@ -314,13 +320,34 @@ export class BusinessProfileComponent implements OnInit {
         ...this.createSkillForm.value,
         businessId: this.createdBusinessId
       };
-      console.log("newsKill", newSkill);
+      console.log("newsKillllllll", newSkill);
+
+      // create consultation when creating expertise
+      const consultationData= {
+        consultationName: newSkill.title,
+        consultationDescription: newSkill.description,
+        price: +newSkill.maxProposedPrice,
+        businessId: this.createdBusinessId
+      }
+      console.log("consultationData", consultationData);
+
       this.expertiseService.createExpertise(newSkill).subscribe(
         () => {
           // If skills are not already loaded, load them
           if (this.skills.length === 0) {
             this.loadSkills(this.createdBusinessId);
           }
+
+
+          this.consultationService.createConsultation(consultationData as ConsultationDTO).subscribe(
+            (response) => {
+              console.log('Consultation created successfully:', response);
+            },
+            (error) => {
+              console.error('Error creating consultation:', error);
+            }
+          );
+
 
           // Reset the form and hide it
           this.createSkillForm.reset();
@@ -342,7 +369,7 @@ export class BusinessProfileComponent implements OnInit {
 
   onUpdateSkill() {
     if (this.updateSkillForm.valid && this.selectedSkill) {
-      const updatedSkill: ExpertiseDTO = { ...this.selectedSkill, ...this.updateSkillForm.value };
+      const updatedSkill: ExpertiseDTO = {...this.selectedSkill, ...this.updateSkillForm.value};
       this.expertiseService.updateExpertise(updatedSkill.id, updatedSkill).subscribe(
         (response) => {
           const index = this.skills.findIndex(skill => skill.id === response.id);
@@ -367,10 +394,10 @@ export class BusinessProfileComponent implements OnInit {
       this.expertiseService.getAllExpertises().subscribe(
         data => {
           this.reviews = data.flatMap(expertise => expertise.reviews);
-          console.log("reviews from expertise in get business reviews",this.reviews );
+          console.log("reviews from expertise in get business reviews", this.reviews);
 
           this.reviews.forEach(review => {
-            console.log("review.businessId from expertise in get business reviews ",review.businessId );
+            console.log("review.businessId from expertise in get business reviews ", review.businessId);
 
             if (review.reviewerBusinessId == this.createdBusinessId) {
 
@@ -391,11 +418,12 @@ export class BusinessProfileComponent implements OnInit {
     this.expertiseService.getReviewee(businessId).subscribe(
       (data) => {
         this.reviewees[businessId] = data;
-        console.log("data from reviewee ",data );
 
       },
       (error) => console.error('Error fetching reviewee:', error)
     );
   }
+
+
 
 }

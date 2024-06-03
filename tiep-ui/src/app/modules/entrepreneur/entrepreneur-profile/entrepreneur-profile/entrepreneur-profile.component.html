@@ -99,7 +99,7 @@
                 <form [formGroup]="createSkillForm" (ngSubmit)="onCreateSkill()">
                   <p>
                     <label>My Job Needs</label>
-                    <input formControlName="title" class="w3-input w3-border" type="text" required>
+                    <input formControlName="title" class="w3-input w3-border w3-text-light-grey" type="text" required>
                   </p>
                   <p>
                     <label>Description</label>
@@ -180,7 +180,6 @@
                   <h4 class="w3-clear w3-margin"> Technology is best when it brings people together.</h4>
                   <p contenteditable="true" class="w3-border w3-padding w3-light-grey">Below is a list of experts who have given feedback on this profile.</p>
                   <h6 class="w3-clear w3-margin"><i class="fa fa-comment"></i> Comment</h6>
-
                 </div>
               </div>
             </div>
@@ -193,12 +192,14 @@
                 <h4 class="w3-opacity">{{ getBusinessName(reviews[i].reviewerBusinessId) }}</h4><br>
                 <hr class="w3-clear">
                 <p>{{ reviews[i].description }}</p>
+                <button class="w3-button w3-small w3-light-grey w3-margin-bottom" (click)="makeOrder(reviews[i].reviewerBusinessId)">Order</button>
               </div>
               <div class="w3-half" *ngIf="reviews[i + 1]">
                 <img [src]="getBusinessLogo(reviews[i + 1].reviewerBusinessId)" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
                 <h4 class="w3-opacity">{{ getBusinessName(reviews[i + 1].reviewerBusinessId) }}</h4><br>
                 <hr class="w3-clear">
                 <p>{{ reviews[i + 1].description }}</p>
+                <button class="w3-button w3-small w3-light-grey w3-margin-bottom" (click)="makeOrder(reviews[i+1].reviewerBusinessId)">Order</button>
               </div>
             </div>
           </div>

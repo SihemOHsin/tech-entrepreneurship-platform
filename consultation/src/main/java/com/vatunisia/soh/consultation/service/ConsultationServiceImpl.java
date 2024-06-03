@@ -46,8 +46,8 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
-    public void createConsultation(Consultation consultation) {
-        consultationRepository.save(consultation);
+    public Consultation createConsultation(Consultation consultation) {
+        return consultationRepository.save(consultation);
     }
 
     @Override

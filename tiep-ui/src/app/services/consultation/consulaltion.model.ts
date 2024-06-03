@@ -12,3 +12,12 @@ export interface ConsultationDTOs {
     location: string;
   };
 }
+
+export interface ConsultationDTO {
+  id?: number;
+  consultationName: string;
+  consultationDescription: string;
+  price: number;
+  businessId: number;
+}
+

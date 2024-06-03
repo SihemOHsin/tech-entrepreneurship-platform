@@ -28,10 +28,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.http.HttpHeaders;
-
-
-
 @Service
 public class OrderServiceImpl implements OrderService {
     @Value("${order.directory}")
@@ -159,40 +155,49 @@ public class OrderServiceImpl implements OrderService {
                 return ResponseEntity.badRequest().body("Required data not found.");
             }
 
-            // String fileName = "Order_Report_" + System.currentTimeMillis() + ".pdf";
-            //String fileName = reportDirectory + "Order_Report_" + System.currentTimeMillis() + ".pdf";
+            // Ensure that the reportDirectory ends with a file separator
+            if (!reportDirectory.endsWith(File.separator)) {
+                reportDirectory += File.separator;
+            }
 
-//OR
-            // Set the directory where you want to save the PDF file
-            //String directoryPath = "C:\\Users\\USER\\Desktop\\PFE\\ProjectCode\\order\\generated_files\\";
-            String directoryPath = reportDirectory ;
-            // Generate a unique file name for the report
-            String fileName =directoryPath+ "\\"+ "Order_Report_" + System.currentTimeMillis() + ".pdf";
+            // Create the directory if it doesn't exist
+            File directory = new File(reportDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
 
-            // Create a new PDF document
+            // Generate the file name
+            String fileName = "Order_Report_" + System.currentTimeMillis() + ".pdf";
+            String filePath = reportDirectory + fileName;
+
+            // Create the PDF document
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+/*
+            String directoryPath = reportDirectory;
+            String fileName = directoryPath + "\\" + "Order_Report_" + System.currentTimeMillis() + ".pdf";
+
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(fileName));
             document.open();
-
-            // Add title to the document
+*/
+            // Add title and details to the document
             Paragraph title = new Paragraph("Order Report");
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20);
             document.add(title);
 
-            // Add order details to the document
             addOrderDetails(document, requestMap);
-
-            // Close the document
             document.close();
 
-            // Return the file name in the response entity
-            return ResponseEntity.ok().body( fileName);
+            return ResponseEntity.ok().body(fileName);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to generate report.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to generate report: " + e.getMessage());
         }
     }
+
 
 
     private void addOrderDetails(Document document, Map<String, Object> requestMap) throws DocumentException {
@@ -338,5 +343,4 @@ public class OrderServiceImpl implements OrderService {
                 requestMap.containsKey("total");
     }
 }
-
 

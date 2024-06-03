@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface ConsultationService {
     List<ConsultationDTO> findAll();
-    void createConsultation(Consultation consultation);
+
+    Consultation createConsultation(Consultation consultation);
+
     ConsultationDTO getConsultationById(Long id);
 
     ResponseEntity<?> deleteConsultationById(Long id);

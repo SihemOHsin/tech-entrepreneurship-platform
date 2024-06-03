@@ -5,6 +5,7 @@ import { ConsultationService } from "../../../../services/consultation/consultat
 import { BusinessDTO } from "../../../../services/business/business-dto.model";
 import {Consultation, OrderDTO} from "../../../../services/order/order.model";
 import {ConsultationDTOs} from "../../../../services/consultation/consulaltion.model";
+import {ActivatedRoute, Router} from "@angular/router";
 //import { saveAs } from 'file-saver';
 
 @Component({
@@ -28,14 +29,37 @@ export class ManageOrdersComponent implements OnInit {
   totalAmount: number = 0;
   selectedConsultation: Consultation | undefined;
 
+  selectedExpertId: number;
+
   constructor(
+    private route: ActivatedRoute,
     private orderService: OrderService,
     private businessService: BusinessService,
     private consultationService: ConsultationService
   ) {}
 
   ngOnInit(): void {
-    this.loadBusinesses();
+
+    if (history.state && history.state.selectedExpertId) {
+      this.selectedExpertId = history.state.selectedExpertId;
+      console.log("selectedExpertId", this.selectedExpertId);
+      this.orderDTO.businessId = this.selectedExpertId;
+      this.loadBusinessesAndConsultations();
+    } else {
+      this.loadBusinesses();
+    }
+  }
+
+  loadBusinessesAndConsultations() {
+    this.businessService.getBusinessesByUserRole('itexpert').subscribe(
+      (data: BusinessDTO[]) => {
+        this.businesses = data;
+        this.loadConsultations(this.selectedExpertId); // Load consultations for the selected expert
+      },
+      (error) => {
+        console.error('Error fetching businesses:', error);
+      }
+    );
   }
 
   loadBusinesses() {
@@ -52,8 +76,12 @@ export class ManageOrdersComponent implements OnInit {
   onBusinessSelection(event: any) {
     const selectedBusinessId = +event.target.value;
     this.orderDTO.businessId = selectedBusinessId;
-    if (selectedBusinessId) {
-      this.consultationService.findConsultationByBusinessId(selectedBusinessId).subscribe(
+    this.loadConsultations(selectedBusinessId);
+  }
+
+  loadConsultations(businessId: number) {
+    if (businessId) {
+      this.consultationService.findConsultationByBusinessId(businessId).subscribe(
         (data: ConsultationDTOs[]) => {
           this.consultationServices = data.map((dto) => ({
             id: dto.id,
@@ -97,6 +125,9 @@ export class ManageOrdersComponent implements OnInit {
       this.orderDTO.consultationServices = [this.selectedConsultation];
       this.orderDTO.total = this.totalAmount;
 
+      // Set the businessId based on the selectedExpertId or the business selected in the component
+      this.orderDTO.businessId = this.selectedExpertId || this.orderDTO.businessId;
+
       if (this.validateOrderDTO(this.orderDTO)) {
         console.log('All required attributes exist in orderDTO. Proceeding to save order...', this.orderDTO);
 
@@ -105,26 +136,47 @@ export class ManageOrdersComponent implements OnInit {
             console.log('Order saved successfully:', savedOrder);
 
             const reportRequest = {
-              orderId: savedOrder.id
+              name: savedOrder.name,
+              contactNumber: savedOrder.contactNumber,
+              email: savedOrder.email,
+              paymentMethod: savedOrder.paymentMethod,
+              total: savedOrder.total,
+              businessId: savedOrder.businessId,
+              consultationServices: savedOrder.consultationServices
             };
 
-            this.orderService.generateReport(this.orderDTO).subscribe(
+            this.orderService.generateReport(reportRequest).subscribe(
               (reportResponse) => {
-                // Assuming reportResponse is a string URL
                 const reportUrl = reportResponse.replace(/\\/g, '/');
                 console.log('Report generated successfully:', reportResponse);
 
-                const pdfRequest = {
-                  orderId: savedOrder.id
-                };
+                // Ensure the URL is absolute
+                const absoluteReportUrl = new URL(reportUrl, window.location.origin).href;
+                console.log('Absolute report URL:', absoluteReportUrl);
+                // Create a link element to trigger file download
+                const link = document.createElement('a');
+                link.href = absoluteReportUrl;
+                link.setAttribute('download', 'Order_Report.pdf');
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                this.resetForm();
 
-                this.orderService.generatePdf(this.orderDTO).subscribe(
+                const pdfRequest = {
+                  name: savedOrder.name,
+                  business: savedOrder.businessId.name,
+                  description: savedOrder.consultationServices.description,
+                  price: savedOrder.consultationServices.price,
+                  total: savedOrder.total,
+                };
+                console.log("pdf request from pdf", pdfRequest);
+                this.orderService.generatePdf(pdfRequest).subscribe(
                   (blob) => {
                     console.log('PDF generated successfully');
                     const url = window.URL.createObjectURL(blob);
                     window.open(url);
 
-                    // Refresh order list or other actions after successful operations
                     this.resetForm();
                   },
                   (pdfError) => {

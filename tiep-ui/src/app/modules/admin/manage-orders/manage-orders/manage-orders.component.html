@@ -1,13 +1,12 @@
 <div class="w3-light-grey" style="min-height: 100vh;">
   <div class="w3-main" style="margin-left:300px;margin-top:43px;">
-
-    <div class="w3-container">
-      <hr />
+    <div class="w3-container w3-clear ">
+    <div class="w3-container"style="margin-top:60px;">
 
       <!-- Manage Orders Card -->
-      <div class="w3-container" >
+      <div class="w3-container">
         <h2>Manage Orders</h2>
-        <button class="w3-button w3-black w3-round-large w3-right" (click)="submitAction()">Submit & Get Bill</button>
+        <button class="w3-button w3-black  w3-right" (click)="submitAction()">Submit & Get Order</button>
       </div>
 
       <div>
@@ -73,14 +72,14 @@
       <div class="w3-container" style="margin-top:25px;">
         <div class="w3-row-padding">
           <div class="w3-twothird">
-            <button class="w3-button w3-light-grey w3-round-large w3-right w3-card-4" (click)="add()" [disabled]="validateProductAdd()">Add Service</button>
+            <button class="w3-button w3-light-grey w3-right w3-card-4" (click)="add()" [disabled]="validateProductAdd()">Add Service</button>
           </div>
           <div class="w3-third">
-            <button class="w3-button w3-light-grey w3-round-large  w3-card-4" (click)="handleDeleteAction()">Delete Order</button>
+            <button class="w3-button w3-light-grey  w3-card-4" (click)="handleDeleteAction()">Delete Order</button>
           </div>
         </div>
       </div>
-
+    </div>
     </div>
   </div>
 </div>

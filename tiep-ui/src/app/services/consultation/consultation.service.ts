@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ConsultationDTOs } from "./consulaltion.model";
+import {ConsultationDTO, ConsultationDTOs} from "./consulaltion.model";
 import { environment } from "../../environments/environment";
 import {Consultation} from "../order/order.model";
 
@@ -25,7 +25,7 @@ export class ConsultationService {
     return this.http.get<ConsultationDTOs[]>(`${this.baseUrl}`, this.httpOptions);
   }
 
-  createConsultation(consultation: ConsultationDTOs): Observable<string> {
+  createConsultation(consultation: ConsultationDTO): Observable<string> {
     return this.http.post<string>(`${this.baseUrl}`, consultation, this.httpOptions);
   }
 

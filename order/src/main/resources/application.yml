@@ -11,9 +11,9 @@ spring:
     name: ORDER
   data:
     mongodb:
-      uri: mongodb://localhost:27017/consultationorderdb
+      uri: mongodb://localhost:27017/orderdb
       host: localhost
       port: 27017
-      database: consultationorder
+      database: order
       repositories:
         enabled: true

@@ -9,6 +9,7 @@ const routes: Routes = [
     component: EntrepreneurProfileComponent,
     canActivate:[authGuard]
   }
+
 ];
 
 @NgModule({

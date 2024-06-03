@@ -101,7 +101,7 @@
                 <form [formGroup]="createSkillForm" (ngSubmit)="onCreateSkill()">
                   <p>
                     <label>Skill Title</label>
-                    <input formControlName="title" class="w3-input w3-border" type="text" required>
+                    <input formControlName="title" class="w3-input w3-border " type="text" required>
                   </p>
                   <p>
                     <label>Description</label>
@@ -129,7 +129,7 @@
             <div class="w3-container">
               <h4 class="w3-center w3-margin">Skills</h4>
               <div *ngFor="let skill of skills">
-                <h5>{{ skill.title }}</h5>
+                <h5 class="w3-text-grey">{{ skill.title }}</h5>
                 <p>{{ skill.description }}</p>
                 <button class="w3-button w3-small w3-margin-bottom w3-black" (click)="onEditSkill(skill)">Edit</button>
               </div>

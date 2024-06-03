@@ -25,10 +25,11 @@ public class ConsultationController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createConsultation(@RequestBody Consultation consultation) {
-        consultationService.createConsultation(consultation);
-        return new ResponseEntity<>("Consultation added successfully", HttpStatus.CREATED);
+    public ResponseEntity<Consultation> createConsultation(@RequestBody Consultation consultation) {
+        Consultation savedConsultation = consultationService.createConsultation(consultation);
+        return new ResponseEntity<>(savedConsultation, HttpStatus.CREATED);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ConsultationDTO> getConsultationById(@PathVariable Long id) {
@@ -57,14 +58,10 @@ public class ConsultationController {
     }
 
 
-
     @GetMapping("/business/{businessId}")
     public ResponseEntity<List<ConsultationDTO>> findConsultationByBusinessId(@PathVariable Integer businessId) {
         List<ConsultationDTO> consultationDTOs = consultationService.findConsultationByBusinessId(businessId);
-        if (!consultationDTOs.isEmpty()) {
-            return ResponseEntity.ok(consultationDTOs);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(consultationDTOs);
     }
+
 }

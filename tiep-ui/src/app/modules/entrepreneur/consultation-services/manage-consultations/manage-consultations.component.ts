@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ConsultationDTOs} from "../../../../services/consultation/consulaltion.model";
 import {ConsultationService} from "../../../../services/consultation/consultation.service";
+import {ExpertiseService} from "../../../../services/expertise/expertise.service";
+import {ExpertiseDTO} from "../../../../services/expertise/expertise-dto.model";
 
 @Component({
   selector: 'app-manage-consultations',
@@ -10,8 +12,11 @@ import {ConsultationService} from "../../../../services/consultation/consultatio
 export class ManageConsultationsComponent implements OnInit {
   consultations: ConsultationDTOs[] = [];
   consultation: ConsultationDTOs | undefined;
+  expertises: ExpertiseDTO[] = [];
 
-  constructor(private consultationService: ConsultationService) { }
+  constructor(private consultationService: ConsultationService,
+              private expertiseService: ExpertiseService
+  ) { }
 
   ngOnInit(): void {
     this.getAllConsultations();
@@ -42,5 +47,25 @@ export class ManageConsultationsComponent implements OnInit {
   getSecondHalfConsultations(): ConsultationDTOs[] {
     const mid = Math.ceil(this.consultations.length / 2);
     return this.consultations.slice(mid);
+  }
+
+  createConsultationFromExpertise(expertises: any) {
+
+    const consultationData = {
+      consultationName: expertises.title,
+      consultationDescription: expertises.description,
+      price: expertises.maxProposedPrice,
+      businessId: expertises.businessId
+    };
+
+    this.consultationService.createConsultation(consultationData).subscribe(
+      (response) => {
+        console.log('Consultation created successfully:', response);
+      },
+      (error) => {
+        console.error('Error creating consultation:', error);
+      }
+    );
+
   }
 }

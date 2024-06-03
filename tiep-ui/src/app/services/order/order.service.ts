@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {catchError, Observable, throwError} from 'rxjs';
 import { OrderDTO } from './order.model';
 import { environment } from "../../environments/environment";
-import {map} from "rxjs/operators";
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,8 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  saveOrder(orderDetails: OrderDTO): Observable<OrderDTO> {
-    return this.http.post<OrderDTO>(`${this.baseUrl}/saveOrder`, orderDetails, this.httpOptions);
+  saveOrder(orderDetails: OrderDTO): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/saveOrder`, orderDetails, this.httpOptions);
   }
 
   getOrderById(id: string): Observable<OrderDTO> {
@@ -36,10 +36,30 @@ export class OrderService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`, this.httpOptions);
   }
 
+ /* generateReport(orderId: string): Observable<any> {
+    const reportRequest = { orderId };
+    console.log("Report request payload:", reportRequest);
+
+    return this.http.post(`${this.baseUrl}/report`, reportRequest, this.httpOptions);
+
+  }*/
+
   generateReport(requestMap: any): Observable<string> {
-    return this.http.post<any>(`${this.baseUrl}/report`, requestMap, this.httpOptions)
+    const httpOptionsWithTextResponse = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'http://localhost:4200'
+      }),
+      responseType: 'text' as 'json' // Ensuring response is treated as text
+    };
+
+    return this.http.post<string>(`${this.baseUrl}/report`, requestMap, httpOptionsWithTextResponse)
       .pipe(
-        map(response => response && response.report) // Extract the report data from the response
+        map(response => response), // Directly return the string response
+        catchError((error: HttpErrorResponse) => {
+          console.error('Error generating report:', error);
+          return throwError(() => new Error('Error generating report: ' + error.message));
+        })
       );
   }
 
