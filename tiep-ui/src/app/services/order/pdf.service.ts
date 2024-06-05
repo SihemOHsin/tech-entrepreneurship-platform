@@ -21,7 +21,7 @@ export class PdfService {
     // Invoice Header
     // Set font style for the invoice number (centered and bold)
     doc.setFontSize(18);
-    const invoiceNumberText = 'Invoice N°: ' + order.id;
+    const invoiceNumberText = 'Order N°: ' + order.id;
     const invoiceNumberWidth = doc.getStringUnitWidth(invoiceNumberText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
 
 
