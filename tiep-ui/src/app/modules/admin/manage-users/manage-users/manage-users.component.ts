@@ -14,7 +14,7 @@ export class ManageUsersComponent implements OnInit{
     { firstName: '', lastName: '', email: '', authority: '' },
   ];
 
-  pageSize: number = 10;
+  pageSize: number = 8;
   currentPage: number = 1;
   totalPages: number = 0;
   pages: number[] = [];

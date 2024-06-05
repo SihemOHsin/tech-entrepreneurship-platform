@@ -1,6 +1,7 @@
 package com.vatunisia.soh.order.service;
 
 import com.vatunisia.soh.order.dto.OrderDTO;
+import com.vatunisia.soh.order.entity.Order;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -19,6 +20,4 @@ public interface OrderService {
     ResponseEntity<String> generateReport(Map<String, Object> requestMap);
 
     ResponseEntity<byte[]> getPdf(Map<String, Object> requestMap);
-
-
 }

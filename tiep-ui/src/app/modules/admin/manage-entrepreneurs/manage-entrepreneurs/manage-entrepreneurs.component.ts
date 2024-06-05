@@ -12,7 +12,7 @@ export class ManageEntrepreneursComponent implements OnInit {
   businesses: BusinessDTO[];
 
   // Pagination variables
-  pageSize: number = 4; // Number of items per page
+  pageSize: number = 8; // Number of items per page
   currentPage: number = 1; // Current page
   totalPages: number; // Total number of pages
   pages: number[]; // Array of page numbers

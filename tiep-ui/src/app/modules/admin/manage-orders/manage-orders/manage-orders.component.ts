@@ -7,6 +7,8 @@ import {Consultation, OrderDTO} from "../../../../services/order/order.model";
 import {ConsultationDTOs} from "../../../../services/consultation/consulaltion.model";
 import {ActivatedRoute, Router} from "@angular/router";
 //import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+import {PdfService} from "../../../../services/order/pdf.service";
 
 @Component({
   selector: 'app-manage-orders',
@@ -35,8 +37,10 @@ export class ManageOrdersComponent implements OnInit {
     private route: ActivatedRoute,
     private orderService: OrderService,
     private businessService: BusinessService,
-    private consultationService: ConsultationService
-  ) {}
+    private consultationService: ConsultationService,
+    private pdfService: PdfService
+  ) {
+  }
 
   ngOnInit(): void {
 
@@ -135,59 +139,11 @@ export class ManageOrdersComponent implements OnInit {
           (savedOrder) => {
             console.log('Order saved successfully:', savedOrder);
 
-            const reportRequest = {
-              name: savedOrder.name,
-              contactNumber: savedOrder.contactNumber,
-              email: savedOrder.email,
-              paymentMethod: savedOrder.paymentMethod,
-              total: savedOrder.total,
-              businessId: savedOrder.businessId,
-              consultationServices: savedOrder.consultationServices
-            };
+            //this.generatePDF(savedOrder); // Generate PDF after saving the order
+            this.pdfService.generateInvoice(savedOrder); // Generate PDF after saving the order
 
-            this.orderService.generateReport(reportRequest).subscribe(
-              (reportResponse) => {
-                const reportUrl = reportResponse.replace(/\\/g, '/');
-                console.log('Report generated successfully:', reportResponse);
+            this.resetForm();
 
-                // Ensure the URL is absolute
-                const absoluteReportUrl = new URL(reportUrl, window.location.origin).href;
-                console.log('Absolute report URL:', absoluteReportUrl);
-                // Create a link element to trigger file download
-                const link = document.createElement('a');
-                link.href = absoluteReportUrl;
-                link.setAttribute('download', 'Order_Report.pdf');
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                this.resetForm();
-
-                const pdfRequest = {
-                  name: savedOrder.name,
-                  business: savedOrder.businessId.name,
-                  description: savedOrder.consultationServices.description,
-                  price: savedOrder.consultationServices.price,
-                  total: savedOrder.total,
-                };
-                console.log("pdf request from pdf", pdfRequest);
-                this.orderService.generatePdf(pdfRequest).subscribe(
-                  (blob) => {
-                    console.log('PDF generated successfully');
-                    const url = window.URL.createObjectURL(blob);
-                    window.open(url);
-
-                    this.resetForm();
-                  },
-                  (pdfError) => {
-                    console.error('Error generating PDF:', pdfError);
-                  }
-                );
-              },
-              (reportError) => {
-                console.error('Error generating report:', reportError);
-              }
-            );
           },
           (saveError) => {
             console.error('Error saving order:', saveError);
@@ -248,3 +204,4 @@ export class ManageOrdersComponent implements OnInit {
     return false;
   }
 }
+

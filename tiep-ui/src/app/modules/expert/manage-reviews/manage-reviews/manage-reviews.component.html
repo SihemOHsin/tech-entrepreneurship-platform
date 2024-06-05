@@ -66,22 +66,9 @@
               </div>
             </div>
 
-          <!-- Default reviews list -->
+
+
           <div *ngFor="let review of reviews" class="w3-container w3-card w3-white w3-round w3-margin">
-            <br>
-              <div class="w3-col m-2 ">
-                <div *ngIf="reviewees[review.businessId]" class="w3-container">
-                  <img [src]="reviewees[review.businessId].businessLogo ? 'data:image/png;base64,' + reviewees[review.businessId].businessLogo : '/assets/logo.png'" class="w3-circle business-logo" alt="Business Logo">
-                  <h4 class="w3-opacity">{{ reviewees[review.businessId].bizname }}</h4>
-                  <hr class="w3-clear">
-                  <p>{{ review.description }}</p>
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="editReview(review)">
-                    <i class="fa fa-pencil"></i> Update
-                  </button>
-                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" (click)="deleteReview(review.id)">
-                    <i class="fa fa-trash"></i> Delete
-                  </button>
-              </div>
 
                 <!-- Modal or form to edit review -->
                 <div *ngIf="selectedReview && selectedReview.id === review.id" class="w3-modal" style="display: block;">
@@ -109,7 +96,7 @@
             </div>
           </div>
 
-        </div>
+
         <!-- End Middle Column -->
       </div>
     </div>

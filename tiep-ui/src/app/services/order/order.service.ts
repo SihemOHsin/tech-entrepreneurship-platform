@@ -36,13 +36,13 @@ export class OrderService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`, this.httpOptions);
   }
 
- /* generateReport(orderId: string): Observable<any> {
-    const reportRequest = { orderId };
-    console.log("Report request payload:", reportRequest);
+  /* generateReport(orderId: string): Observable<any> {
+     const reportRequest = { orderId };
+     console.log("Report request payload:", reportRequest);
 
-    return this.http.post(`${this.baseUrl}/report`, reportRequest, this.httpOptions);
+     return this.http.post(`${this.baseUrl}/report`, reportRequest, this.httpOptions);
 
-  }*/
+   }*/
 
   generateReport(requestMap: any): Observable<string> {
     const httpOptionsWithTextResponse = {
